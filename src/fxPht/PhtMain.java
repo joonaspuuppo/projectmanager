@@ -21,6 +21,8 @@ public class PhtMain extends Application {
 			scene.getStylesheets().add(getClass().getResource("pht.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
+		
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
