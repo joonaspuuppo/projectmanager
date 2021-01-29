@@ -1,12 +1,14 @@
 package fxPht;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import fi.jyu.mit.fxgui.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TextInputDialog;
 
 /**
  * @author Joonas Puuppo
@@ -39,7 +41,7 @@ public class PhtGUIController implements Initializable {
      * K‰sitell‰‰n teht‰v‰n poistaminen
      */
     @FXML private void handlePoistaTehtava() {
-        Dialogs.showMessageDialog("Ei osata viel‰ poistaa");
+        Dialogs.showQuestionDialog("Poisto?", "Poistetaanko teht‰v‰?", "Kyll‰", "Ei");
     }
      
     
@@ -52,18 +54,20 @@ public class PhtGUIController implements Initializable {
     
     
     /**
-     * K‰sitell‰‰n tallennus nimell‰
-     */
-    @FXML private void handleTallennaNimella() {
-        tallenna();
-    }
-    
-    
-    /**
      * K‰sitell‰‰n projektin poistaminen
      */
     @FXML private void handleAvaaProjekti() {
-        Dialogs.showMessageDialog("Ei osata viel‰ avata");
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Avaa projekti");
+        dialog.setHeaderText("Mik‰ projekti avataan");
+        dialog.setContentText("Projektin nimi:");
+        Optional<String> answer = dialog.showAndWait();
+        System.out.println(answer.isPresent() ?
+                answer.get() : "Ei ollut vastausta");
+        // V‰liaikainen ehtolause, jotta saadaan testattua dialogit
+        if (!answer.get().equals("projekti1")) {
+            Dialogs.showMessageDialog("Projektia ei lˆydetty");
+        }
     }
     
     
@@ -71,21 +75,33 @@ public class PhtGUIController implements Initializable {
      * K‰sitell‰‰n projektin luominen
      */
     @FXML private void handleLuoProjekti() {
-        Dialogs.showMessageDialog("Ei osata viel‰ luoda uutta projektia");
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Uusi projekti");
+        dialog.setHeaderText("Anna uuden projektin nimi");
+        dialog.setContentText("Projektin nimi:");
+        Optional<String> answer = dialog.showAndWait();
+        System.out.println(answer.isPresent() ?
+           answer.get() : "Ei ollut vastausta");
     }
     
     /**
      * K‰sitell‰‰n projektin nime‰minen uudelleen
      */
     @FXML private void handleNimeaUudelleen() {
-        Dialogs.showMessageDialog("Ei osata viel‰ nimet‰ uudelleen");
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Nime‰ uudelleen");
+        dialog.setHeaderText("Anna projektin uusi nimi");
+        dialog.setContentText("Uusi nimi:");
+        Optional<String> answer = dialog.showAndWait();
+        System.out.println(answer.isPresent() ?
+           answer.get() : "Ei ollut vastausta");
     }
     
     /**
-     * K‰sitell‰‰n projektin avaaminen
+     * K‰sitell‰‰n projektin poistaminen
      */
     @FXML private void handlePoistaProjekti() {
-        Dialogs.showMessageDialog("Ei osata viel‰ poistaa projektia");
+        Dialogs.showQuestionDialog("Poisto?", "Haluatko varmasti poistaa projektin?", "Kyll‰", "Ei");
     }
     
     

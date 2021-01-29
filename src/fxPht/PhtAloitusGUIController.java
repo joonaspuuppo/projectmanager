@@ -3,7 +3,6 @@ package fxPht;
 import java.net.URL;
 import java.util.ResourceBundle;
 import fi.jyu.mit.fxgui.*;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 

@@ -24,11 +24,10 @@
                <children>
                   <MenuBar prefHeight="30.0" HBox.hgrow="ALWAYS">
                     <menus>
-                      <Menu mnemonicParsing="false" text="Tallenna">
-                        <items>
-                          <MenuItem mnemonicParsing="false" onAction="#handleTallenna" text="Tallenna" />
-                              <MenuItem mnemonicParsing="false" onAction="#handleTallennaNimella" text="Tallenna nimellä..." />
-                        </items>
+                      <Menu mnemonicParsing="false" text="Tiedosto">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#handleTallenna" text="Tallenna" />
+                           </items>
                       </Menu>
                       <Menu mnemonicParsing="false" text="Avaa">
                         <items>
