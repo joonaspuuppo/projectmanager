@@ -38,7 +38,7 @@ public class PhtMain extends Application {
 	}
 	
 	/**
-	 * @param args ei k�yt�ss�
+	 * @param args ei käytässä
 	 */
 	public static void main(String[] args) {
 		launch(args);

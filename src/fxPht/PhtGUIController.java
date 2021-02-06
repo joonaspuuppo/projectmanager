@@ -37,29 +37,29 @@ public class PhtGUIController implements Initializable {
     }
     
     /**
-     * K�sitell��n uuden teht�v�n lis��minen
+     * Käsitellään uuden tehtävän lisääminen
      */
     @FXML private void handleLisaaTehtava() {
-        Dialogs.showMessageDialog("Ei osata viel� lis�t�");
+        Dialogs.showMessageDialog("Ei osata vielä lisätä");
     }
     
     /**
-     * K�sitell��n teht�v�n merkitseminen valmiiksi
+     * Käsitellään tehtävän merkitseminen valmiiksi
      */
     @FXML private void handleMerkitseValmiiksi() {
-        Dialogs.showMessageDialog("Ei osata viel� merkit� valmiiksi");
+        Dialogs.showMessageDialog("Ei osata vielä merkitä valmiiksi");
     }
     
     /**
-     * K�sitell��n teht�v�n poistaminen
+     * Käsitellään tehtävän poistaminen
      */
     @FXML private void handlePoistaTehtava() {
-        Dialogs.showQuestionDialog("Poisto?", "Poistetaanko teht�v�?", "Kyll�", "Ei");
+        Dialogs.showQuestionDialog("Poisto?", "Poistetaanko tehtävä?", "Kyllä", "Ei");
     }
      
     
     /**
-     * K�sitell��n tallennusk�sky
+     * Käsitellään tallennuskäsky
      */
     @FXML private void handleTallenna() {
         tallenna();
@@ -80,7 +80,7 @@ public class PhtGUIController implements Initializable {
         
     
     /**
-     * K�sitell��n projektin luominen
+     * Käsitellään projektin luominen
      */
     @FXML private void handleLuoProjekti() {
         TextInputDialog dialog = new TextInputDialog();
@@ -93,11 +93,11 @@ public class PhtGUIController implements Initializable {
     }
     
     /**
-     * K�sitell��n projektin nime�minen uudelleen
+     * Käsitellään projektin nimeäminen uudelleen
      */
     @FXML private void handleNimeaUudelleen() {
         TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Nime� uudelleen");
+        dialog.setTitle("Nimeä uudelleen");
         dialog.setHeaderText("Anna projektin uusi nimi");
         dialog.setContentText("Uusi nimi:");
         Optional<String> answer = dialog.showAndWait();
@@ -106,15 +106,15 @@ public class PhtGUIController implements Initializable {
     }
     
     /**
-     * K�sitell��n projektin poistaminen
+     * Käsitellään projektin poistaminen
      */
     @FXML private void handlePoistaProjekti() {
-        Dialogs.showQuestionDialog("Poisto?", "Haluatko varmasti poistaa projektin?", "Kyll�", "Ei");
+        Dialogs.showQuestionDialog("Poisto?", "Haluatko varmasti poistaa projektin?", "Kyllä", "Ei");
     }
     
     
     /**
-     * K�sitell��n lopetusk�sky
+     * Käsitellään lopetuskäsky
      */
     @FXML private void handleLopeta() {
         tallenna();
@@ -126,7 +126,7 @@ public class PhtGUIController implements Initializable {
      * Tietojen tallennus
      */
     private void tallenna() {
-        Dialogs.showMessageDialog("Tallennetetaan! Mutta ei toimi viel�");
+        Dialogs.showMessageDialog("Tallennetetaan! Mutta ei toimi vielä");
     }
 
 
