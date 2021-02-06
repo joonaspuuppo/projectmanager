@@ -8,7 +8,7 @@ import javafx.fxml.FXMLLoader;
 
 
 /**
- * @author joona
+ * @author Joonas Puuppo, Valtteri Rajalainen
  * @version Jan 21, 2021
  *
  */

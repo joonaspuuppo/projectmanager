@@ -15,7 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 /**
- * @author joona
+ * @author Joonas Puuppo, Valtteri Rajalainen
  * @version Jan 29, 2021
  *
  */
