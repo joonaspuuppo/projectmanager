@@ -1,5 +1,6 @@
 package fxPht;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -7,8 +8,14 @@ import java.util.ResourceBundle;
 import fi.jyu.mit.fxgui.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 /**
  * @author Joonas Puuppo
@@ -17,6 +24,12 @@ import javafx.scene.control.TextInputDialog;
  */
 public class PhtGUIController implements Initializable {
 
+    @FXML
+    private MenuItem menuAvaaProjekti;
+    
+    @FXML
+    private Button buttonLisaaTehtava;
+    
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         // TODO Auto-generated method stub
@@ -24,29 +37,29 @@ public class PhtGUIController implements Initializable {
     }
     
     /**
-     * Käsitellään uuden tehtävän lisääminen
+     * Kï¿½sitellï¿½ï¿½n uuden tehtï¿½vï¿½n lisï¿½ï¿½minen
      */
     @FXML private void handleLisaaTehtava() {
-        Dialogs.showMessageDialog("Ei osata vielä lisätä");
+        Dialogs.showMessageDialog("Ei osata vielï¿½ lisï¿½tï¿½");
     }
     
     /**
-     * Käsitellään tehtävän merkitseminen valmiiksi
+     * Kï¿½sitellï¿½ï¿½n tehtï¿½vï¿½n merkitseminen valmiiksi
      */
     @FXML private void handleMerkitseValmiiksi() {
-        Dialogs.showMessageDialog("Ei osata vielä merkitä valmiiksi");
+        Dialogs.showMessageDialog("Ei osata vielï¿½ merkitï¿½ valmiiksi");
     }
     
     /**
-     * Käsitellään tehtävän poistaminen
+     * Kï¿½sitellï¿½ï¿½n tehtï¿½vï¿½n poistaminen
      */
     @FXML private void handlePoistaTehtava() {
-        Dialogs.showQuestionDialog("Poisto?", "Poistetaanko tehtävä?", "Kyllä", "Ei");
+        Dialogs.showQuestionDialog("Poisto?", "Poistetaanko tehtï¿½vï¿½?", "Kyllï¿½", "Ei");
     }
      
     
     /**
-     * Käsitellään tallennuskäsky
+     * Kï¿½sitellï¿½ï¿½n tallennuskï¿½sky
      */
     @FXML private void handleTallenna() {
         tallenna();
@@ -54,25 +67,20 @@ public class PhtGUIController implements Initializable {
     
     
     /**
-     * Käsitellään projektin poistaminen
+     * KÃ¤sitellÃ¤Ã¤n projektin avaaminen
+     * @throws IOException 
      */
-    @FXML private void handleAvaaProjekti() {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Avaa projekti");
-        dialog.setHeaderText("Mikä projekti avataan");
-        dialog.setContentText("Projektin nimi:");
-        Optional<String> answer = dialog.showAndWait();
-        System.out.println(answer.isPresent() ?
-                answer.get() : "Ei ollut vastausta");
-        // Väliaikainen ehtolause, jotta saadaan testattua dialogit
-        if (!answer.get().equals("projekti1")) {
-            Dialogs.showMessageDialog("Projektia ei löydetty");
+    @FXML private void handleAvaaProjekti() throws IOException {
+        // TODO: Tallennus ennen siirtymistÃ¤ aloitukseen!
+        Stage primaryStage = (Stage) buttonLisaaTehtava.getScene().getWindow();
+        BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("PhtAloitusGUIView.fxml"));
+        Scene aloitusikkuna = new Scene(root);
+        primaryStage.setScene(aloitusikkuna);
         }
-    }
-    
+        
     
     /**
-     * Käsitellään projektin luominen
+     * Kï¿½sitellï¿½ï¿½n projektin luominen
      */
     @FXML private void handleLuoProjekti() {
         TextInputDialog dialog = new TextInputDialog();
@@ -85,11 +93,11 @@ public class PhtGUIController implements Initializable {
     }
     
     /**
-     * Käsitellään projektin nimeäminen uudelleen
+     * Kï¿½sitellï¿½ï¿½n projektin nimeï¿½minen uudelleen
      */
     @FXML private void handleNimeaUudelleen() {
         TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Nimeä uudelleen");
+        dialog.setTitle("Nimeï¿½ uudelleen");
         dialog.setHeaderText("Anna projektin uusi nimi");
         dialog.setContentText("Uusi nimi:");
         Optional<String> answer = dialog.showAndWait();
@@ -98,15 +106,15 @@ public class PhtGUIController implements Initializable {
     }
     
     /**
-     * Käsitellään projektin poistaminen
+     * Kï¿½sitellï¿½ï¿½n projektin poistaminen
      */
     @FXML private void handlePoistaProjekti() {
-        Dialogs.showQuestionDialog("Poisto?", "Haluatko varmasti poistaa projektin?", "Kyllä", "Ei");
+        Dialogs.showQuestionDialog("Poisto?", "Haluatko varmasti poistaa projektin?", "Kyllï¿½", "Ei");
     }
     
     
     /**
-     * Käsitellään lopetuskäsky
+     * Kï¿½sitellï¿½ï¿½n lopetuskï¿½sky
      */
     @FXML private void handleLopeta() {
         tallenna();
@@ -118,7 +126,7 @@ public class PhtGUIController implements Initializable {
      * Tietojen tallennus
      */
     private void tallenna() {
-        Dialogs.showMessageDialog("Tallennetetaan! Mutta ei toimi vielä");
+        Dialogs.showMessageDialog("Tallennetetaan! Mutta ei toimi vielï¿½");
     }
 
 

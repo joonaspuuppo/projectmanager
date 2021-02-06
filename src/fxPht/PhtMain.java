@@ -17,10 +17,19 @@ public class PhtMain extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("PhtGUIView.fxml"));
-			Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getResource("pht.css").toExternalForm());
-			primaryStage.setScene(scene);
+			Scene paaikkuna = new Scene(root);
+			
+			BorderPane root2 = (BorderPane)FXMLLoader.load(getClass().getResource("PhtAloitusGUIView.fxml"));
+            Scene aloitusikkuna = new Scene(root2);
+            
+			paaikkuna.getStylesheets().add(getClass().getResource("pht.css").toExternalForm());
+			aloitusikkuna.getStylesheets().add(getClass().getResource("pht.css").toExternalForm());
+			
+			primaryStage.setScene(aloitusikkuna);
 			primaryStage.show();
+			
+			// jos klikataan avaa tai luo projekti, avataan pÃ¤Ã¤ikkuna
+			
 		
 			
 		} catch(Exception e) {
@@ -29,7 +38,7 @@ public class PhtMain extends Application {
 	}
 	
 	/**
-	 * @param args ei käytössä
+	 * @param args ei kï¿½ytï¿½ssï¿½
 	 */
 	public static void main(String[] args) {
 		launch(args);
