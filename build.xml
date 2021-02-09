@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project pht">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <!--define folder properties-->
+    <property name="dir.buildfile" value="."/>
+    <property name="dir.workspace" value="H:/devel"/>
+    <property name="dir.jarfile" value="${dir.buildfile}"/>
+    <target name="create_run_jar">
+        <jar destfile="${dir.jarfile}/pht.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="fxPht.PhtMain"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="${dir.jarfile}/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/joona/.p2/pool/plugins/org.junit.jupiter.api_5.7.0.v20201026-1537.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/joona/.p2/pool/plugins/org.junit.jupiter.engine_5.7.0.v20201026-1537.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/joona/.p2/pool/plugins/org.junit.jupiter.migrationsupport_5.7.0.v20201026-1537.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/joona/.p2/pool/plugins/org.junit.jupiter.params_5.7.0.v20201026-1537.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/joona/.p2/pool/plugins/org.junit.platform.commons_1.7.0.v20201026-1537.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/joona/.p2/pool/plugins/org.junit.platform.engine_1.7.0.v20201026-1537.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/joona/.p2/pool/plugins/org.junit.platform.launcher_1.7.0.v20201026-1537.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/joona/.p2/pool/plugins/org.junit.platform.runner_1.7.0.v20201026-1537.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/joona/.p2/pool/plugins/org.junit.platform.suite.api_1.7.0.v20201026-1537.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/joona/.p2/pool/plugins/org.junit.vintage.engine_5.7.0.v20201026-1537.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/joona/.p2/pool/plugins/org.opentest4j_1.2.0.v20190826-0900.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/joona/.p2/pool/plugins/org.apiguardian_1.1.0.v20190826-0900.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/joona/.p2/pool/plugins/org.junit_4.13.0.v20200204-1500.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/Users/joona/.p2/pool/plugins/org.hamcrest.core_1.3.0.v20180420-1519.jar"/>
+        </jar>
+    </target>
+</project>
