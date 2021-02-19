@@ -16,7 +16,7 @@ public class DynamicList<T> {
     private final double SHRINK_TRESHOLD = 0.125;
     
     /**
-     * 
+     * Create an empty  list.
      */
     @SuppressWarnings("unchecked")
     public DynamicList() {
@@ -27,14 +27,15 @@ public class DynamicList<T> {
     
     
     /**
-     * @param items --
+     * Create list with items inside a give array.
+     * @param items Array of refrences to be copied to the created list.
      */
     @SuppressWarnings("unchecked")
     public DynamicList(T[] items) {
         this.count = items.length;
         this.size = Math.max(START_SIZE, items.length*2);
         this.data = (T[])new Object[this.size];
-        copyItems(items);
+        copyItemsFrom(items);
     }
 
 
@@ -47,7 +48,7 @@ public class DynamicList<T> {
     
     
     /**
-     * @param item Item to be appended to the list.
+     * @param item Refrence to be appended to the list.
      */
     public void append(T item) {
         data[count] = item;
@@ -59,6 +60,7 @@ public class DynamicList<T> {
     
     
     /**
+     * Return an item at the given position in the list.
      * @param index Index to access the item. If index is negative,
      * count is started from the end of the list. 
      * For example index "-1" refers to the last item of the list.
@@ -77,11 +79,13 @@ public class DynamicList<T> {
     
     
     /**
-     * @param index --
-     * @return --
+     * Remove and return an item in the list in the given index.
+     * @param index Index of the item.
+     * @return The item in the given index.
      * @throws IndexOutOfBoundsException -
      */
     public T pop(int index) throws IndexOutOfBoundsException{
+        if (index < 0) return popWithNegativeIndex(index);
         T item = data[index];
         if (shrinkNeeded()) {
             shrink(index);
@@ -94,10 +98,12 @@ public class DynamicList<T> {
     
     
     /**
-     * @param item --
+     * Remove the item from the list.
+     * Comaparison is done by using the '==' operator. 
+     * @param item An item to be removed from the list.
      */
     public void remove(T item) {
-        //
+        // TODO
     }
     
     
@@ -142,7 +148,7 @@ public class DynamicList<T> {
     
     @SuppressWarnings("unchecked")
     private void shrink(int index) {
-        int newSize = size / 2;
+        int newSize = Math.max(START_SIZE, size / 2);
         T[] temp = (T[])new Object[newSize];
         for (int i = 0; i < index; i++) {
             temp[i] = data[i];
@@ -162,10 +168,18 @@ public class DynamicList<T> {
     }
     
     
-    private void copyItems(T[] items) {
+    private void copyItemsFrom(T[] items) {
         for (int i = 0; i < items.length; i++) {
             data[i] = items[i];
         }
+    }
+    
+    
+    private T popWithNegativeIndex(int index) {
+        if (Math.abs(index) > count) {
+            throw new IndexOutOfBoundsException();
+        }
+        return pop(count + index);
     }
     
     
