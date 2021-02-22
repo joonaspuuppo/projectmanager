@@ -17,6 +17,9 @@ public class DynamicList<T> {
     
     /**
      * Create an empty  list.
+     * 
+     * NOTE: Internal array is not typecheked.
+     * It should never be exposed to the user.
      */
     @SuppressWarnings("unchecked")
     public DynamicList() {
@@ -29,6 +32,9 @@ public class DynamicList<T> {
     /**
      * Create list with items inside a give array.
      * @param items Array of refrences to be copied to the created list.
+     * 
+     * NOTE: Internal array is not typecheked.
+     * It should never be exposed to the user.
      */
     @SuppressWarnings("unchecked")
     public DynamicList(T[] items) {
@@ -134,6 +140,10 @@ public class DynamicList<T> {
     }
     
     
+    /**
+     * Copy items from the current array to 
+     * a new array with twice the size.
+     */
     @SuppressWarnings("unchecked")
     private void expand() {
         int newSize = size * 2;
@@ -146,6 +156,14 @@ public class DynamicList<T> {
     }
     
     
+    /**
+     * Shrink the internal array to a new array of
+     * half the size and copy the existing items. 
+     * This is called exclusively from deleting
+     * operations (pop, remove), so the internal array is copied
+     * in such a way that there are no gaps left.
+     * @param index Index where the removal occured.
+     */
     @SuppressWarnings("unchecked")
     private void shrink(int index) {
         int newSize = Math.max(START_SIZE, size / 2);
@@ -161,6 +179,10 @@ public class DynamicList<T> {
     }
     
     
+    /**
+     * Remove the gap from the internal array after deleting operation.
+     * @param index Index where the removal occured.
+     */
     private void repackItems(int index) {
         for (int i = index; i < count; i++) {
             data[i] = data[i+1];
