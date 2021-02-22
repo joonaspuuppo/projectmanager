@@ -9,11 +9,6 @@ public class Task {
     private int id;
     private String name, info;
     private Boolean done;
-    private enum Priority {
-        LOW,
-        MEDIUM,
-        HIGH
-    }
     private Priority priority;
     
     // TODO: Konstruktori
