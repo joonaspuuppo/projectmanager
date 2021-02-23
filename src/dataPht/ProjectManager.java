@@ -70,12 +70,22 @@ public class ProjectManager {
     
     
     /**
-     * @param name -
-     * @return -
+     * Create a blank Project if the name is valid.
+     * 
+     * TODO: Check if the name is already in use.
+     * 
+     * @param name Name for the Project.
+     * @return A Project instance.
+     * @throws IllegalArgumentException When name is invalid.
      */
-    public Project createNewProject(String name) {
-        return null;
-        // TODO
+    public Project createNewProject(String name) throws IllegalArgumentException {
+        if (!isValidProjectName(name)) {
+            String errorInfo = "Not a valid name for a project.";
+            throw new IllegalArgumentException(errorInfo);
+        }
+        Project project = new Project(name);
+        currentProject = project;
+        return project;
     }
     
     
