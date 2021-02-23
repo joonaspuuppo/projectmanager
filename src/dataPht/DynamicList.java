@@ -104,12 +104,22 @@ public class DynamicList<T> {
     
     
     /**
-     * Remove the item from the list.
-     * Comaparison is done by using the '==' operator. 
+     * Remove first instance of the item from the list.
+     * Comparison is done by using the '==' operator. 
      * @param item An item to be removed from the list.
      */
     public void remove(T item) {
-        // TODO
+        for (int i = 0; i < this.count(); i++) {
+            if (this.get(i) == item) {
+                if (shrinkNeeded()) {
+                    shrink(i);
+                } else {
+                    repackItems(i);
+                }
+                count -= 1;
+                return;
+            }
+        }
     }
     
     
