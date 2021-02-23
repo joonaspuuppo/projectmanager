@@ -1,6 +1,7 @@
 package dataPht;
 
 import java.util.Hashtable;
+import java.util.ArrayList;
 
 /**
  * @author varajala
@@ -59,29 +60,39 @@ public class Project {
     
     
     /**
+     * Lookup a specific task with the id of the task.
      * @param id -
+     * @return Task
      */
-    public void getTask(int id) {
-        // TODO
+    public Task getTask(int id) {
+        return tasks.get(Integer.valueOf(id));
     }
     
     
     /**
-     * @return -
+     * @return Array of all tasks in the Project.
      */
     public Task[] getAllTasks() {
-        return null;
-        // TODO
+        return (Task[]) tasks.values().toArray();
     }
     
     
     /**
-     * @param tagName - 
-     * @return -
+     * @param tagName Name of the Tag
+     * @return Array of Tasks associated with the given Tag.
      */
     public Task[] getAllTasksByTag(String tagName) {
-        return null;
-        // TODO
+        ArrayList<Task> results = new ArrayList<Task>();
+        for (int i = 0; i < relations.count(); i++) {
+            RelationEntry re = relations.get(i);
+            boolean tagNameMatches = re.getTagName().equals(tagName); 
+            if (tagNameMatches) {
+                Integer taskId = Integer.valueOf(re.getTaskId());
+                Task task = this.tasks.get(taskId);
+                results.add(task);
+            }
+        }
+        return (Task[]) results.toArray();
     }
     
     
@@ -96,41 +107,57 @@ public class Project {
     
     
     /**
-     * @param id -
-     * @return -
+     * @param id Task id.
+     * @return Array of Tags associated with the given Task.
      */
     public Tag[] getTagsFromTask(int id) {
-        return null;
-        // TODO
+        ArrayList<Tag> results = new ArrayList<Tag>();
+        for (int i = 0; i < relations.count(); i++) {
+            RelationEntry re = relations.get(i);
+            boolean taskIdMatches = re.getTaskId() == id; 
+            if (taskIdMatches) {
+                Tag tag = this.tags.get(re.getTagName());
+                results.add(tag);
+            }
+        }
+        return (Tag[]) results.toArray();
     }
     
     
     /**
-     * @return -
+     * @return All Tags in the Project.
      */
     public Tag[] getAllTags() {
-        return null;
-        // TODO
+        return (Tag[]) tags.values().toArray();
     }
     
     
     /**
-     * @param tagName - 
-     * @param task -
+     * Remove relation between the given Tag and the Task.
+     * @param tagName Name of the Tag.
+     * @param task Task instance.
      */
     public void removeTagFromTask(String tagName, Task task) {
-        // TODO
+        int id = task.getId();
+        for (int i = 0; i < relations.count(); i++) {
+            RelationEntry re = relations.get(i);
+            boolean tagNameMatches = re.getTagName().equals(tagName);
+            boolean taskIdMatches = re.getTaskId() == id; 
+            if (tagNameMatches && taskIdMatches) {
+                relations.pop(i);
+                break;
+            }
+        }
     }
     
     
     /**
-     * @param tagName - 
-     * @param t -
-     * @return -
-     * 
+     * Create a new relation between a Tag and a Task.
+     * @param tagName Name of the Tag.
+     * @param t Task instance.
      */
-    public Task[] addTagToTask(String tagName, Task t) {
-        return null;
-        // TODO
+    public void addTagToTask(String tagName, Task t) {
+        RelationEntry entry = new RelationEntry(t.getId(), tagName);
+        this.relations.append(entry);
     }
 }
