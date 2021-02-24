@@ -11,7 +11,12 @@ public class Task {
     private Boolean done;
     private Priority priority;
     
-    // TODO: Konstruktori
+    /**
+     * @param id Task id given by Project instance.
+     */
+    public Task(int id) {
+        this.id = id;
+    }
     
     /**
      * @return id

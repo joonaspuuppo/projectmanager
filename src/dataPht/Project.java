@@ -2,6 +2,7 @@ package dataPht;
 
 import java.util.Hashtable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author varajala
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 public class Project {
     
     private int currentTaskId;
+    private int currentTagId;
     private String name;
     private DynamicList<RelationEntry> relations;
     private Hashtable<Integer, Task> tasks;
@@ -44,10 +46,26 @@ public class Project {
     
     
     /**
-     * @param name -
+     * @return A blank task.
      */
-    public void createTask(String name) {
-        // TODO
+    public Task createTask() {
+        Task task = new Task(currentTaskId);
+        tasks.put(Integer.valueOf(currentTaskId), task);
+        currentTaskId += 1;
+        return task;
+    }
+    
+    
+    private Tag createTag(String tagName) {
+        Tag tag = new Tag(currentTagId, tagName);
+        tags.put(tagName, tag);
+        currentTagId += 1;
+        return tag;
+    }
+    
+    
+    private boolean tagExists(String tagName) {
+        return tags.containsKey(tagName);
     }
     
     
@@ -72,8 +90,34 @@ public class Project {
     /**
      * @return Array of all tasks in the Project.
      */
-    public Task[] getAllTasks() {
-        return (Task[]) tasks.values().toArray();
+    public List<Task> getAllTasks() {
+        List<Task> list = new ArrayList<Task>(tasks.values());
+        return list;
+    }
+    
+    
+    /**
+     * @return All Tags in the Project.
+     */
+    public List<Tag> getAllTags() {
+        List<Tag> list = new ArrayList<Tag>(tags.values());
+        return list;
+    }
+
+    
+    /**
+     * Create a new relation between a Tag and a Task.
+     * All tags are created this way.
+     * 
+     * @param tagName Name of the Tag.
+     * @param t Task instance.
+     */
+    public void addTagToTask(String tagName, Task t) {
+        if (!tagExists(tagName)) {
+            createTag(tagName);
+        }
+        RelationEntry entry = new RelationEntry(t.getId(), tagName);
+        this.relations.append(entry);
     }
     
     
@@ -81,8 +125,8 @@ public class Project {
      * @param tagName Name of the Tag
      * @return Array of Tasks associated with the given Tag.
      */
-    public Task[] getAllTasksByTag(String tagName) {
-        ArrayList<Task> results = new ArrayList<Task>();
+    public List<Task> getAllTasksByTag(String tagName) {
+        List<Task> results = new ArrayList<Task>();
         for (int i = 0; i < relations.count(); i++) {
             RelationEntry re = relations.get(i);
             boolean tagNameMatches = re.getTagName().equals(tagName); 
@@ -92,7 +136,7 @@ public class Project {
                 results.add(task);
             }
         }
-        return (Task[]) results.toArray();
+        return results;
     }
     
     
@@ -100,7 +144,7 @@ public class Project {
      * @param prio - 
      * @return -
      */
-    public Task[] getAllTasksByPriority(Priority prio) {
+    public List<Task> getAllTasksByPriority(Priority prio) {
         return null;
         // TODO
     }
@@ -110,8 +154,8 @@ public class Project {
      * @param id Task id.
      * @return Array of Tags associated with the given Task.
      */
-    public Tag[] getTagsFromTask(int id) {
-        ArrayList<Tag> results = new ArrayList<Tag>();
+    public List<Tag> getTagsFromTask(int id) {
+        List<Tag> results = new ArrayList<Tag>();
         for (int i = 0; i < relations.count(); i++) {
             RelationEntry re = relations.get(i);
             boolean taskIdMatches = re.getTaskId() == id; 
@@ -120,15 +164,7 @@ public class Project {
                 results.add(tag);
             }
         }
-        return (Tag[]) results.toArray();
-    }
-    
-    
-    /**
-     * @return All Tags in the Project.
-     */
-    public Tag[] getAllTags() {
-        return (Tag[]) tags.values().toArray();
+        return results;
     }
     
     
@@ -148,16 +184,5 @@ public class Project {
                 break;
             }
         }
-    }
-    
-    
-    /**
-     * Create a new relation between a Tag and a Task.
-     * @param tagName Name of the Tag.
-     * @param t Task instance.
-     */
-    public void addTagToTask(String tagName, Task t) {
-        RelationEntry entry = new RelationEntry(t.getId(), tagName);
-        this.relations.append(entry);
     }
 }
