@@ -28,6 +28,14 @@ public class ProjectTest {
         return new Project(PROJECT_NAME);
     }
     
+    private List<String> tagListToStringList(List<Tag> tagList) {
+        List<String> stringList = new ArrayList<String>();
+        for (Tag t : tagList) {
+            stringList.add(t.getName());
+        }
+        return stringList;
+    }
+    
     
     /**
      * Set up a dummy project wiht known relations
@@ -133,5 +141,83 @@ public class ProjectTest {
        expectedList.add(t3);
        taskList = p.getAllTasksByTag(TAG3);
        assertEquals(taskList, expectedList);
+   }
+   
+   
+   /**
+    * Test querying Tags associated with a specified task.
+    * 
+    *  See the generateDummyProject description for details on the
+    *  data relations.
+    */
+   @Test
+   public void testTagQueryByTask() {
+       Project p = generateDummyProject();
+       Task t1 = p.getTask(1);
+       Task t2 = p.getTask(2);
+       Task t3 = p.getTask(3);
+       Task t4 = p.getTask(4);
+       
+       List<String> expectedList = new ArrayList<String>();
+       expectedList.add(TAG1);
+       expectedList.add(TAG2);
+       List<Tag> tagList = p.getTagsFromTask(t1.getId());
+       assertEquals(tagListToStringList(tagList), expectedList);
+       
+       expectedList = new ArrayList<String>();
+       expectedList.add(TAG2);
+       expectedList.add(TAG3);
+       tagList = p.getTagsFromTask(t2.getId());
+       assertEquals(tagListToStringList(tagList), expectedList);
+       
+       expectedList = new ArrayList<String>();
+       expectedList.add(TAG3);
+       tagList = p.getTagsFromTask(t3.getId());
+       assertEquals(tagListToStringList(tagList), expectedList);
+       
+       expectedList = new ArrayList<String>();
+       tagList = p.getTagsFromTask(t4.getId());
+       assertEquals(tagListToStringList(tagList), expectedList);
+   }
+   
+   
+   /**
+    * Test removing single Tags from a specified Task.
+    */
+   @Test
+   public void testTagRemoval() {
+       Project p = generateDummyProject();
+       Task t1 = p.getTask(1);
+       Task t2 = p.getTask(2);
+       
+       List<String> expectedList = new ArrayList<String>();
+       expectedList.add(TAG2);
+       
+       // test 1
+       List<String> startCondition = new ArrayList<String>();
+       startCondition.add(TAG1);
+       startCondition.add(TAG2);
+       
+       List<Tag> tagList = p.getTagsFromTask(t1.getId());
+       assertEquals(startCondition, tagListToStringList(tagList));
+       
+       p.removeTagFromTask(TAG1, t1);
+       
+       tagList = p.getTagsFromTask(t1.getId());
+       assertEquals(tagListToStringList(tagList), expectedList);
+       
+       
+       // test 2
+       startCondition = new ArrayList<String>();
+       startCondition.add(TAG2);
+       startCondition.add(TAG3);
+       
+       tagList = p.getTagsFromTask(t2.getId());
+       assertEquals(startCondition, tagListToStringList(tagList));
+       
+       p.removeTagFromTask(TAG3, t2);
+       
+       tagList = p.getTagsFromTask(t2.getId());
+       assertEquals(tagListToStringList(tagList), expectedList);
    }
 }
