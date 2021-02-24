@@ -18,7 +18,6 @@ public class Project {
     private Hashtable<String, Tag> tags;
    
     
-    
     /**
      * Create new blank project.
      * 
