@@ -9,7 +9,14 @@ public class Tag {
     private int id;
     private String name;
     
-    // TODO: Konstruktori
+    /**
+     * @param id Tag id given by Project instance.
+     * @param name Tag name. This must be unique.
+     */
+    public Tag(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
     
     /**
      * @return id

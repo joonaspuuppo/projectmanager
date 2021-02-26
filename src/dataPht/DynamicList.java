@@ -92,7 +92,7 @@ public class DynamicList<T> {
      */
     public T pop(int index) throws IndexOutOfBoundsException{
         if (index < 0) return popWithNegativeIndex(index);
-        T item = data[index];
+        T item = this.get(index);
         if (shrinkNeeded()) {
             shrink(index);
         } else {
@@ -126,7 +126,7 @@ public class DynamicList<T> {
     @Override public String toString() {
         StringBuffer sb = new StringBuffer("[");
         for (int i = 0; i < count; i++) {
-            sb.append(data[i].toString());
+            sb.append(this.get(i).toString());
             if (i+1 < count) {
                 sb.append(", ");
             }
@@ -211,7 +211,7 @@ public class DynamicList<T> {
         if (Math.abs(index) > count) {
             throw new IndexOutOfBoundsException();
         }
-        return pop(count + index);
+        return this.pop(count + index);
     }
     
     
@@ -219,6 +219,6 @@ public class DynamicList<T> {
         if (Math.abs(index) > count) {
             throw new IndexOutOfBoundsException();
         }
-        return data[count + index];
+        return this.get(count + index);
     }
 }

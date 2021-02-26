@@ -9,14 +9,14 @@ public class Task {
     private int id;
     private String name, info;
     private Boolean done;
-    private enum Priority {
-        LOW,
-        MEDIUM,
-        HIGH
-    }
     private Priority priority;
     
-    // TODO: Konstruktori
+    /**
+     * @param id Task id given by Project instance.
+     */
+    public Task(int id) {
+        this.id = id;
+    }
     
     /**
      * @return id
@@ -36,7 +36,6 @@ public class Task {
      * @param newName name
      */
     public void rename(String newName) {
-        // TODO: pitääkö nimen olla uniikki?
         this.name = newName;
     }
     
