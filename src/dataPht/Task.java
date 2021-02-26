@@ -36,7 +36,6 @@ public class Task {
      * @param newName name
      */
     public void rename(String newName) {
-        // TODO: pitääkö nimen olla uniikki?
         this.name = newName;
     }
     

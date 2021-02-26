@@ -108,6 +108,8 @@ public class Project {
      * Create a new relation between a Tag and a Task.
      * All tags are created this way.
      * 
+     * TODO: prevent adding the same Tag twice?
+     * 
      * @param tagName Name of the Tag.
      * @param t Task instance.
      */
