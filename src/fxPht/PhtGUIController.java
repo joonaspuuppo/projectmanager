@@ -51,6 +51,20 @@ public class PhtGUIController implements Initializable {
     }
     
     /**
+     * @param event
+     */
+    @FXML private void handleNimeaTehtavaUudelleen() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Nimeä tehtävä uudelleen");
+        dialog.setHeaderText("Anna tehtävän uusi nimi");
+        dialog.setContentText("Uusi nimi:");
+        Optional<String> answer = dialog.showAndWait();
+        System.out.println(answer.isPresent() ?
+           answer.get() : "Ei ollut vastausta");
+
+    }
+    
+    /**
      * Käsitellään tehtävän poistaminen
      */
     @FXML private void handlePoistaTehtava() {
