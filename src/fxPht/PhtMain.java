@@ -17,15 +17,15 @@ public class PhtMain extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("PhtGUIView.fxml"));
-			Scene paaikkuna = new Scene(root);
+			Scene mainWindow = new Scene(root);
 			
-			BorderPane root2 = (BorderPane)FXMLLoader.load(getClass().getResource("PhtAloitusGUIView.fxml"));
-            Scene aloitusikkuna = new Scene(root2);
+			BorderPane root2 = (BorderPane)FXMLLoader.load(getClass().getResource("PhtStartGUIView.fxml"));
+            Scene startWindow = new Scene(root2);
             
-			paaikkuna.getStylesheets().add(getClass().getResource("pht.css").toExternalForm());
-			aloitusikkuna.getStylesheets().add(getClass().getResource("pht.css").toExternalForm());
+			mainWindow.getStylesheets().add(getClass().getResource("pht.css").toExternalForm());
+			startWindow.getStylesheets().add(getClass().getResource("pht.css").toExternalForm());
 			
-			primaryStage.setScene(aloitusikkuna);
+			primaryStage.setScene(startWindow);
 			primaryStage.show();
 			
 			// jos klikataan avaa tai luo projekti, avataan pääikkuna

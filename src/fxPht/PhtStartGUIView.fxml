@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPht.PhtAloitusGUIController">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPht.PhtStartGUIController">
    <top>
       <Label lineSpacing="5.0" text="Tervetuloa käyttämään Projektinhallintatyökalua!" textAlignment="CENTER" wrapText="true" BorderPane.alignment="CENTER">
          <BorderPane.margin>
@@ -35,7 +35,7 @@
                <children>
                   <AnchorPane>
                      <children>
-                        <Button fx:id="aloitusAvaaProjekti" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleAvaaProjekti" text="Avaa valittu projekti" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                        <Button fx:id="buttonOpenProject" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleOpenProject" text="Avaa valittu projekti" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
@@ -47,7 +47,7 @@
                   </AnchorPane>
                   <AnchorPane layoutX="10.0" layoutY="10.0">
                      <children>
-                        <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleLisaaProjekti" text="Luo uusi projekti..." textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                        <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleCreateNewProject" text="Luo uusi projekti..." textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
