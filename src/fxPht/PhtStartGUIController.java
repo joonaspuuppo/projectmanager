@@ -24,6 +24,9 @@ public class PhtStartGUIController implements Initializable {
     @FXML
     private Button buttonOpenProject;
     
+    @FXML
+    private ListChooser<String> listChooser;
+    
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         // TODO Auto-generated method stub
@@ -52,8 +55,10 @@ public class PhtStartGUIController implements Initializable {
         //Dialogs.showMessageDialog("Ei osata vielä avata valittua projektia");
         Stage primaryStage = (Stage) buttonOpenProject.getScene().getWindow();
         BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("PhtGUIView.fxml"));
-        Scene mainWIndow = new Scene(root);
-        primaryStage.setScene(mainWIndow);
+        PhtScene mainWindow = new PhtScene(root);
+        String projectName = listChooser.getSelectedText();
+        mainWindow.setProject(projectName);
+        primaryStage.setScene(mainWindow);
     }
     
     

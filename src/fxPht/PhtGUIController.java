@@ -62,6 +62,9 @@ public class PhtGUIController implements Initializable {
      * Käsitellään tallennuskäsky
      */
     @FXML private void handleSave() {
+        PhtScene s = (PhtScene) buttonAddTask.getScene();
+        String projectName = s.getCurrentProject();
+        System.out.printf("Project is: %s%n", projectName);
         save();
     }
     

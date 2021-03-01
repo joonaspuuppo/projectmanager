@@ -17,7 +17,7 @@ public class PhtMain extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("PhtGUIView.fxml"));
-			Scene mainWindow = new Scene(root);
+			Scene mainWindow = new PhtScene(root);
 			
 			BorderPane root2 = (BorderPane)FXMLLoader.load(getClass().getResource("PhtStartGUIView.fxml"));
             Scene startWindow = new Scene(root2);
