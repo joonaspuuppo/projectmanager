@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import fi.jyu.mit.fxgui.*;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -54,13 +55,8 @@ public class PhtGUIController implements Initializable {
      * @param event
      */
     @FXML private void handleMuokkaaTehtavaa() {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Nimeä tehtävä uudelleen");
-        dialog.setHeaderText("Anna tehtävän uusi nimi");
-        dialog.setContentText("Uusi nimi:");
-        Optional<String> answer = dialog.showAndWait();
-        System.out.println(answer.isPresent() ?
-           answer.get() : "Ei ollut vastausta");
+        // TODO: Vie valittu Task muokattavaksi
+        PhtEditTaskDialogController.editTask(null, null); // toisen null tilalle muokattava tehtävä
 
     }
     
