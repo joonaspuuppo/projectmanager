@@ -53,7 +53,7 @@ public class PhtGUIController implements Initializable {
     /**
      * @param event
      */
-    @FXML private void handleNimeaTehtavaUudelleen() {
+    @FXML private void handleMuokkaaTehtavaa() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Nimeä tehtävä uudelleen");
         dialog.setHeaderText("Anna tehtävän uusi nimi");
