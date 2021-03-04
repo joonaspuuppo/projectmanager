@@ -135,6 +135,20 @@ public class DynamicListTest {
         assertEquals(list.count(), 0);
     }
     
+    /**
+     * Test removing items and shrinking the list
+     */
+    @Test
+    public void testRemoving() {
+        String[] array1 = {"0", "1", "2", "1", "4"}; 
+        DynamicList<String> list1 = new DynamicList<String>(array1);
+        list1.remove("1");
+        String[] array2 = {"0", "2", "1", "4"};
+        DynamicList<String> list2 = new DynamicList<String>(array2);
+        assertEquals(list1.get(1), list2.get(1));
+        assertEquals(list1.count(), list2.count());
+    }
+    
     
     /**
      * Test the resizing and replacement of the items in the list

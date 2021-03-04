@@ -152,7 +152,7 @@
                                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <Label layoutX="20.0" layoutY="20.0" text="(kiireinen)">
+                                          <Label layoutX="20.0" layoutY="20.0" text="(kiireellinen)">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
@@ -212,7 +212,15 @@
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
                                        <HBox.margin>
-                                          <Insets right="50.0" />
+                                          <Insets right="30.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button mnemonicParsing="false" onAction="#handleNimeaTehtavaUudelleen" prefWidth="200.0" text="Nimeä uudelleen..." HBox.hgrow="ALWAYS">
+                                       <padding>
+                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                       </padding>
+                                       <HBox.margin>
+                                          <Insets right="30.0" />
                                        </HBox.margin>
                                     </Button>
                                     <Button mnemonicParsing="false" onAction="#handleDeleteTask" prefWidth="200.0" text="Poista tehtävä..." HBox.hgrow="ALWAYS">
