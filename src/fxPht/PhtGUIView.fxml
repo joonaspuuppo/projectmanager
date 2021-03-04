@@ -26,19 +26,19 @@
                     <menus>
                       <Menu mnemonicParsing="false" text="Tiedosto">
                            <items>
-                              <MenuItem mnemonicParsing="false" onAction="#handleTallenna" text="Tallenna" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleSave" text="Tallenna" />
                            </items>
                       </Menu>
                       <Menu mnemonicParsing="false" text="Avaa">
                         <items>
-                              <MenuItem fx:id="menuAvaaProjekti" mnemonicParsing="false" onAction="#handleAvaaProjekti" text="Avaa projekti..." />
-                          <MenuItem mnemonicParsing="false" onAction="#handleLuoProjekti" text="Uusi projekti..." />
+                              <MenuItem fx:id="menuOpenProject" mnemonicParsing="false" onAction="#handleOpenProject" text="Avaa projekti..." />
+                          <MenuItem mnemonicParsing="false" onAction="#handleCreateNewProject" text="Uusi projekti..." />
                         </items>
                       </Menu>
                       <Menu mnemonicParsing="false" text="Muokkaa">
                         <items>
-                              <MenuItem mnemonicParsing="false" onAction="#handleNimeaUudelleen" text="Nimeä uudelleen..." />
-                          <MenuItem mnemonicParsing="false" onAction="#handlePoistaProjekti" text="Poista projekti..." />
+                              <MenuItem mnemonicParsing="false" onAction="#handleRename" text="Nimeä uudelleen..." />
+                          <MenuItem mnemonicParsing="false" onAction="#handleDeleteProject" text="Poista projekti..." />
                         </items>
                       </Menu>
                     </menus>
@@ -101,7 +101,7 @@
                                           </AnchorPane>
                                           <AnchorPane VBox.vgrow="ALWAYS">
                                              <children>
-                                                <Button fx:id="buttonLisaaTehtava" mnemonicParsing="false" onAction="#handleLisaaTehtava" text="Lisää tehtävä" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="15.0">
+                                                <Button fx:id="buttonAddTask" mnemonicParsing="false" onAction="#handleAddTask" text="Lisää tehtävä" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="15.0">
                                                    <padding>
                                                       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                    </padding>
@@ -207,7 +207,7 @@
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </BorderPane.margin>
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#handleMerkitseValmiiksi" prefWidth="200.0" text="Merkitse valmiiksi" HBox.hgrow="ALWAYS">
+                                    <Button mnemonicParsing="false" onAction="#handleMarkAsDone" prefWidth="200.0" text="Merkitse valmiiksi" HBox.hgrow="ALWAYS">
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
@@ -223,7 +223,7 @@
                                           <Insets right="30.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" onAction="#handlePoistaTehtava" prefWidth="200.0" text="Poista tehtävä..." HBox.hgrow="ALWAYS">
+                                    <Button mnemonicParsing="false" onAction="#handleDeleteTask" prefWidth="200.0" text="Poista tehtävä..." HBox.hgrow="ALWAYS">
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>

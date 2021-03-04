@@ -11,7 +11,6 @@ import java.util.List;
 public class Project {
     
     private int currentTaskId;
-    private int currentTagId;
     private String name;
     private DynamicList<RelationEntry> relations;
     private Hashtable<Integer, Task> tasks;
@@ -56,9 +55,8 @@ public class Project {
     
     
     private Tag createTag(String tagName) {
-        Tag tag = new Tag(currentTagId, tagName);
+        Tag tag = new Tag(tagName);
         tags.put(tagName, tag);
-        currentTagId += 1;
         return tag;
     }
     

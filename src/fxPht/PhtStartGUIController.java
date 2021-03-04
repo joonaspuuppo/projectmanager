@@ -19,10 +19,13 @@ import javafx.stage.Stage;
  * @version Jan 29, 2021
  *
  */
-public class PhtAloitusGUIController implements Initializable {
+public class PhtStartGUIController implements Initializable {
 
     @FXML
-    private Button aloitusAvaaProjekti;
+    private Button buttonOpenProject;
+    
+    @FXML
+    private ListChooser<String> listChooser;
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -33,7 +36,7 @@ public class PhtAloitusGUIController implements Initializable {
     /**
      * Käsitellään uuden projektin lisääminen
      */
-    @FXML private void handleLisaaProjekti() {
+    @FXML private void handleCreateNewProject() {
         //Dialogs.showMessageDialog("Ei osata vielä lisätä uutta projektia");
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Uusi projekti");
@@ -48,12 +51,14 @@ public class PhtAloitusGUIController implements Initializable {
      * Käsitellään projektin avaaminen
      * @throws IOException 
      */
-    @FXML private void handleAvaaProjekti() throws IOException {
+    @FXML private void handleOpenProject() throws IOException {
         //Dialogs.showMessageDialog("Ei osata vielä avata valittua projektia");
-        Stage primaryStage = (Stage) aloitusAvaaProjekti.getScene().getWindow();
+        Stage primaryStage = (Stage) buttonOpenProject.getScene().getWindow();
         BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("PhtGUIView.fxml"));
-        Scene paaikkuna = new Scene(root);
-        primaryStage.setScene(paaikkuna);
+        PhtScene mainWindow = new PhtScene(root);
+        String projectName = listChooser.getSelectedText();
+        mainWindow.setProject(projectName);
+        primaryStage.setScene(mainWindow);
     }
     
     

@@ -36,4 +36,11 @@ public interface Storage {
      * @param project Project to be renamed.
      */
     public void renameProject(Project project);
+    
+   
+    /**
+     * @param name Name of the project.
+     * @return true/false
+     */
+    public boolean nameAlreadyExists(String name);
 }

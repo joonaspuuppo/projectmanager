@@ -26,10 +26,10 @@ import javafx.stage.Stage;
 public class PhtGUIController implements Initializable {
 
     @FXML
-    private MenuItem menuAvaaProjekti;
+    private MenuItem menuOpenProject;
     
     @FXML
-    private Button buttonLisaaTehtava;
+    private Button buttonAddTask;
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -40,14 +40,14 @@ public class PhtGUIController implements Initializable {
     /**
      * Käsitellään uuden tehtävän lisääminen
      */
-    @FXML private void handleLisaaTehtava() {
+    @FXML private void handleAddTask() {
         Dialogs.showMessageDialog("Ei osata vielä lisätä");
     }
     
     /**
      * Käsitellään tehtävän merkitseminen valmiiksi
      */
-    @FXML private void handleMerkitseValmiiksi() {
+    @FXML private void handleMarkAsDone() {
         Dialogs.showMessageDialog("Ei osata vielä merkitä valmiiksi");
     }
     
@@ -63,7 +63,7 @@ public class PhtGUIController implements Initializable {
     /**
      * Käsitellään tehtävän poistaminen
      */
-    @FXML private void handlePoistaTehtava() {
+    @FXML private void handleDeleteTask() {
         Dialogs.showQuestionDialog("Poisto?", "Poistetaanko tehtävä?", "Kyllä", "Ei");
     }
      
@@ -71,8 +71,11 @@ public class PhtGUIController implements Initializable {
     /**
      * Käsitellään tallennuskäsky
      */
-    @FXML private void handleTallenna() {
-        tallenna();
+    @FXML private void handleSave() {
+        PhtScene s = (PhtScene) buttonAddTask.getScene();
+        String projectName = s.getCurrentProject();
+        System.out.printf("Project is: %s%n", projectName);
+        save();
     }
     
     
@@ -80,19 +83,19 @@ public class PhtGUIController implements Initializable {
      * Käsitellään projektin avaaminen
      * @throws IOException 
      */
-    @FXML private void handleAvaaProjekti() throws IOException {
+    @FXML private void handleOpenProject() throws IOException {
         // TODO: Tallennus ennen siirtymistä aloitukseen!
-        Stage primaryStage = (Stage) buttonLisaaTehtava.getScene().getWindow();
-        BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("PhtAloitusGUIView.fxml"));
-        Scene aloitusikkuna = new Scene(root);
-        primaryStage.setScene(aloitusikkuna);
+        Stage primaryStage = (Stage) buttonAddTask.getScene().getWindow();
+        BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("PhtStartGUIView.fxml"));
+        Scene startWindow = new Scene(root);
+        primaryStage.setScene(startWindow);
         }
         
     
     /**
      * Käsitellään projektin luominen
      */
-    @FXML private void handleLuoProjekti() {
+    @FXML private void handleCreateNewProject() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Uusi projekti");
         dialog.setHeaderText("Anna uuden projektin nimi");
@@ -105,7 +108,7 @@ public class PhtGUIController implements Initializable {
     /**
      * Käsitellään projektin nimeäminen uudelleen
      */
-    @FXML private void handleNimeaUudelleen() {
+    @FXML private void handleRename() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Nimeä uudelleen");
         dialog.setHeaderText("Anna projektin uusi nimi");
@@ -118,7 +121,7 @@ public class PhtGUIController implements Initializable {
     /**
      * Käsitellään projektin poistaminen
      */
-    @FXML private void handlePoistaProjekti() {
+    @FXML private void handleDeleteProject() {
         Dialogs.showQuestionDialog("Poisto?", "Haluatko varmasti poistaa projektin?", "Kyllä", "Ei");
     }
     
@@ -126,8 +129,8 @@ public class PhtGUIController implements Initializable {
     /**
      * Käsitellään lopetuskäsky
      */
-    @FXML private void handleLopeta() {
-        tallenna();
+    @FXML private void handleExit() {
+        save();
         Platform.exit();
     }
 
@@ -135,7 +138,7 @@ public class PhtGUIController implements Initializable {
     /**
      * Tietojen tallennus
      */
-    private void tallenna() {
+    private void save() {
         Dialogs.showMessageDialog("Tallennetetaan! Mutta ei toimi vielä");
     }
 

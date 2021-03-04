@@ -40,5 +40,11 @@ public class FileStorage implements Storage {
         // TODO Auto-generated method stub
 
     }
+    
+    
+    @Override
+    public boolean nameAlreadyExists(String name) {
+        return false;
+    }
 
 }

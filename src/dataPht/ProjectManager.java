@@ -72,8 +72,6 @@ public class ProjectManager {
     /**
      * Create a blank Project if the name is valid.
      * 
-     * TODO: Check if the name is already in use.
-     * 
      * @param name Name for the Project.
      * @return A Project instance.
      * @throws IllegalArgumentException When name is invalid.
@@ -111,7 +109,13 @@ public class ProjectManager {
         if (endsWithDot(name))                  return false;
         if (containsReservedCharacters(name))   return false;
         if (containsReservedNames(name))        return false;
+        if (nameAlreadyExists(name))            return false;
         return true;
+    }
+    
+    
+    private boolean nameAlreadyExists(String name) {
+        return storage.nameAlreadyExists(name);
     }
 
 
