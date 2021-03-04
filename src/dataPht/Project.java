@@ -69,10 +69,18 @@ public class Project {
     
     
     /**
-     * @param id -
+     * Removes task from tasks and relations.
+     * @param id task id
+     * TODO: should unused tags be removed from this.tags?
      */
     public void removeTask(int id) {
-        // TODO
+        if (this.tasks.containsKey(id)) {
+            while (!this.getTagsFromTask(id).isEmpty()) {
+                this.removeTagFromTask(this.getTagsFromTask(id).get(0).getName(), this.getTask(id));
+            }
+            this.tasks.remove(id);
+        }
+        
     }
     
     
@@ -142,12 +150,17 @@ public class Project {
     
     
     /**
-     * @param prio - 
-     * @return -
+     * @param prio priority
+     * @return a list containing all tasks with specified priority
      */
     public List<Task> getAllTasksByPriority(Priority prio) {
-        return null;
-        // TODO
+        List <Task> results = new ArrayList<Task>();
+        for (Task task : tasks.values()) {
+            if (task.getPriority() == prio) {
+                results.add(task);
+            }
+        }
+        return results;
     }
     
     
@@ -173,6 +186,7 @@ public class Project {
      * Remove relation between the given Tag and the Task.
      * @param tagName Name of the Tag.
      * @param task Task instance.
+     * TODO: should unused tags be removed from this.tags?
      */
     public void removeTagFromTask(String tagName, Task task) {
         int id = task.getId();
