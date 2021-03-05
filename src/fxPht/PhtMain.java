@@ -10,14 +10,13 @@ import javafx.fxml.FXMLLoader;
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
  * @version Jan 21, 2021
- *
  */
 public class PhtMain extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("PhtGUIView.fxml"));
-			Scene mainWindow = new PhtScene(root);
+			Scene mainWindow = new Scene(root);
 			
 			BorderPane root2 = (BorderPane)FXMLLoader.load(getClass().getResource("PhtStartGUIView.fxml"));
             Scene startWindow = new Scene(root2);
@@ -27,11 +26,6 @@ public class PhtMain extends Application {
 			
 			primaryStage.setScene(startWindow);
 			primaryStage.show();
-			
-			// jos klikataan avaa tai luo projekti, avataan pääikkuna
-			
-		
-			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

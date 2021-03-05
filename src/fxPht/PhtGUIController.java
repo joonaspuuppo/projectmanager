@@ -16,11 +16,13 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import dataPht.ProjectManager;
+import dataPht.Project;
+
 
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
  * @version Jan 21, 2021
- *
  */
 public class PhtGUIController implements Initializable {
 
@@ -29,6 +31,20 @@ public class PhtGUIController implements Initializable {
     
     @FXML
     private Button buttonAddTask;
+    
+    private Project currentProject;
+    
+    
+    public void setCurrentProject(Project p) {
+        this.currentProject = p;
+        // TODO clear data from previous project and 
+        //load tasks from project to the listchooser
+        System.out.println(p.getName());
+    }
+    
+    public Project getCurrentProject() {
+        return this.currentProject;
+    }
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -73,12 +89,9 @@ public class PhtGUIController implements Initializable {
      
     
     /**
-     * Käsitellään tallennuskäsky
+     * Handle saving.
      */
     @FXML private void handleSave() {
-        PhtScene s = (PhtScene) buttonAddTask.getScene();
-        String projectName = s.getCurrentProject();
-        System.out.printf("Project is: %s%n", projectName);
         save();
     }
     
@@ -88,16 +101,16 @@ public class PhtGUIController implements Initializable {
      * @throws IOException 
      */
     @FXML private void handleOpenProject() throws IOException {
-        // TODO: Tallennus ennen siirtymistä aloitukseen!
+        // TODO: verify saving
         Stage primaryStage = (Stage) buttonAddTask.getScene().getWindow();
         BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("PhtStartGUIView.fxml"));
         Scene startWindow = new Scene(root);
         primaryStage.setScene(startWindow);
-        }
+    }
         
     
     /**
-     * Käsitellään projektin luominen
+     * Handle creation of a new Project.
      */
     @FXML private void handleCreateNewProject() {
         TextInputDialog dialog = new TextInputDialog();
@@ -105,12 +118,21 @@ public class PhtGUIController implements Initializable {
         dialog.setHeaderText("Anna uuden projektin nimi");
         dialog.setContentText("Projektin nimi:");
         Optional<String> answer = dialog.showAndWait();
-        System.out.println(answer.isPresent() ?
-           answer.get() : "Ei ollut vastausta");
+        
+        String projectName = answer.isPresent() ? answer.get() : null;
+        if (projectName == null) {
+            displayError("Insert a name to create new project.");
+        }
+        try {
+            Project project = ProjectManager.getInstance().createNewProject(projectName);
+            setCurrentProject(project);
+        } catch (IllegalArgumentException e) {
+            displayError("Invalid name for a Project.");
+        }
     }
     
     /**
-     * Käsitellään projektin nimeäminen uudelleen
+     * Handle renaming the Project.
      */
     @FXML private void handleRename() {
         TextInputDialog dialog = new TextInputDialog();
@@ -118,8 +140,16 @@ public class PhtGUIController implements Initializable {
         dialog.setHeaderText("Anna projektin uusi nimi");
         dialog.setContentText("Uusi nimi:");
         Optional<String> answer = dialog.showAndWait();
-        System.out.println(answer.isPresent() ?
-           answer.get() : "Ei ollut vastausta");
+        
+        String projectName = answer.isPresent() ? answer.get() : null;
+        if (projectName == null) {
+            displayError("Insert a name to rename the project.");
+        }
+        try {
+            ProjectManager.getInstance().renameCurrentProject(projectName);
+        } catch (IllegalArgumentException e) {
+            displayError("Invalid name for a Project.");
+        }
     }
     
     /**
@@ -140,10 +170,19 @@ public class PhtGUIController implements Initializable {
 
     
     /**
-     * Tietojen tallennus
+     * Save modifications to the current Project.
      */
     private void save() {
-        Dialogs.showMessageDialog("Tallennetetaan! Mutta ei toimi vielä");
+        ProjectManager.getInstance().saveCurrentProject();
+    }
+    
+    
+    /**
+     * Display error to the user.
+     */
+    private void displayError(String info) {
+        //TODO show error
+        System.out.println("ERROR: " + info);
     }
 
 
