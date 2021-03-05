@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
@@ -32,6 +33,10 @@ public class PhtGUIController implements Initializable {
     @FXML
     private Button buttonAddTask;
     
+    @FXML
+    private Label projectNameLabel;
+    
+    
     private Project currentProject;
     
     
@@ -39,7 +44,7 @@ public class PhtGUIController implements Initializable {
         this.currentProject = p;
         // TODO clear data from previous project and 
         //load tasks from project to the listchooser
-        System.out.println(p.getName());
+        projectNameLabel.setText(p.getName());
     }
     
     public Project getCurrentProject() {
@@ -101,11 +106,7 @@ public class PhtGUIController implements Initializable {
      * @throws IOException 
      */
     @FXML private void handleOpenProject() throws IOException {
-        // TODO: verify saving
-        Stage primaryStage = (Stage) buttonAddTask.getScene().getWindow();
-        BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("PhtStartGUIView.fxml"));
-        Scene startWindow = new Scene(root);
-        primaryStage.setScene(startWindow);
+        // TODO
     }
         
     
@@ -122,6 +123,7 @@ public class PhtGUIController implements Initializable {
         String projectName = answer.isPresent() ? answer.get() : null;
         if (projectName == null) {
             displayError("Insert a name to create new project.");
+            return;
         }
         try {
             Project project = ProjectManager.getInstance().createNewProject(projectName);
@@ -144,6 +146,7 @@ public class PhtGUIController implements Initializable {
         String projectName = answer.isPresent() ? answer.get() : null;
         if (projectName == null) {
             displayError("Insert a name to rename the project.");
+            return;
         }
         try {
             ProjectManager.getInstance().renameCurrentProject(projectName);

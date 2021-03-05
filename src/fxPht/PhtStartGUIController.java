@@ -47,15 +47,17 @@ public class PhtStartGUIController implements Initializable {
         
         String projectName = answer.isPresent() ? answer.get() : null;
         if (projectName == null) {
-         // TODO handle errors in the name, display error
+            // TODO handle errors in the name, display error
+            return;   
         }
         ProjectManager pm = ProjectManager.getInstance();
         try {
             Project project = pm.createNewProject(projectName);
             openProjectToMainWindow(project);
         } catch (IllegalArgumentException e) {
-            // TODO handle possible IO exceptions
-            e.printStackTrace();
+            // TODO handle possible
+            displayError("Invalid name for a Project");
+            return;
         } catch (IOException e) {
             // TODO handle possible IO exceptions
             e.printStackTrace();
@@ -67,6 +69,10 @@ public class PhtStartGUIController implements Initializable {
      */
     @FXML private void handleOpenProject() {
         String projectName = listChooser.getSelectedText();
+        if (projectName == null) {
+            // TODO handle errors in the name, display error
+            return;   
+        }
         Project project = ProjectManager.getInstance().openProject(projectName);
         try {
             openProjectToMainWindow(project);
@@ -88,5 +94,13 @@ public class PhtStartGUIController implements Initializable {
         
         Stage primaryStage = (Stage) buttonOpenProject.getScene().getWindow();
         primaryStage.setScene(mainWindow);
+    }
+    
+    /**
+     * Display error to the user.
+     */
+    private void displayError(String info) {
+        //TODO show error
+        System.out.println("ERROR: " + info);
     }
 }
