@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import dataPht.Task;
 import fi.jyu.mit.fxgui.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -25,6 +26,9 @@ import javafx.stage.Stage;
  */
 public class PhtGUIController implements Initializable {
 
+    @FXML
+    private ListChooser<Task> taskList;
+    
     @FXML
     private MenuItem menuOpenProject;
     

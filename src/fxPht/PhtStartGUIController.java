@@ -25,7 +25,7 @@ public class PhtStartGUIController implements Initializable {
     private Button buttonOpenProject;
     
     @FXML
-    private ListChooser<String> listChooser;
+    private ListChooser<String> projectList;
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -56,7 +56,7 @@ public class PhtStartGUIController implements Initializable {
         Stage primaryStage = (Stage) buttonOpenProject.getScene().getWindow();
         BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("PhtGUIView.fxml"));
         PhtScene mainWindow = new PhtScene(root);
-        String projectName = listChooser.getSelectedText();
+        String projectName = projectList.getSelectedText();
         mainWindow.setProject(projectName);
         primaryStage.setScene(mainWindow);
     }

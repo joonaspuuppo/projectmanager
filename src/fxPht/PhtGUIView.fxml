@@ -81,7 +81,7 @@
                                           </MenuBar>
                                        </children>
                                     </HBox>
-                                    <ListChooser prefHeight="352.0" prefWidth="282.0" rivit="Päivitä GUI-kuvat suunnitelmaan&#10;Lisää tagi 2. vaiheelle&#10;Varaa ohjaajalta aika näyttöön&#10;Sovi palaveriaika työparin kanssa&#10;Muokkaa dialogeista toimivia&#10;Piirrä kuva tietorakenteesta" />
+                                    <ListChooser fx:id="taskList" prefHeight="352.0" prefWidth="282.0" rivit="" />
                                  </children>
                               </VBox>
                            </center>
