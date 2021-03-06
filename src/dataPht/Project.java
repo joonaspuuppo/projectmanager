@@ -198,4 +198,34 @@ public class Project {
             }
         }
     }
+    
+    /**
+     * Creates a string of tagnames from given list of Tags.
+     * @param tags list of tags
+     * @return comma-separated string of tagNames
+     */
+    public static String getTagsAsString(List<Tag> tags) {
+        if (tags.isEmpty()) return "";
+        StringBuilder sb = new StringBuilder();
+        for (Tag tag : tags) {
+            sb.append(tag.getName() + ", ");
+        }
+        sb.delete(sb.length() - 2, sb.length());
+        
+        return sb.toString();
+    }
+    
+    /**
+     * Reads tags from a comma-separated string of tagNames and returns them as a list of Tags
+     * @param tagString string of tagNames
+     * @return List of tags
+     */
+    public List<Tag> readTagsFromString(String tagString) {
+        String[] tagNames = tagString.split(",");
+        ArrayList<Tag> tagsFromString = new ArrayList<>();
+        for (String tagName : tagNames) {
+            tagsFromString.add(new Tag(tagName.trim()));
+        }
+        return tagsFromString;
+    }
 }
