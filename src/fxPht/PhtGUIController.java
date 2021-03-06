@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import dataPht.Priority;
 import dataPht.Project;
 import dataPht.ProjectManager;
 import dataPht.Task;
@@ -17,9 +18,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 /**
@@ -29,22 +32,20 @@ import javafx.stage.Stage;
  */
 public class PhtGUIController implements Initializable {
 
-    @FXML
-    private ListChooser<Task> taskList;
-    
-    @FXML
-    private TextField taskNameField;
-    
-    @FXML
-    private MenuItem menuOpenProject;
-    
-    @FXML
-    private Label projectNameLabel;
 
-    @FXML
-    private Button buttonAddTask;
+    @FXML private MenuItem menuOpenProject;
+    @FXML private TextField taskSearchTextField;
+    @FXML private ListChooser<Task> taskList;
+    @FXML private TextField taskNameField;
+    @FXML private Button buttonAddTask;
+    @FXML private Label projectNameLabel;
+    @FXML private Label taskNameLabel;
+    @FXML private Label taskPriorityLabel;
+    @FXML private HBox tagLabelHBox;
+    @FXML private TextArea taskInfoTextArea;
     
     private Project currentProject;
+    
     
     
     /**
@@ -56,8 +57,17 @@ public class PhtGUIController implements Initializable {
         // TODO clear data from previous project
         projectNameLabel.setText(p.getName());
         loadTasks();
+        
     }
     
+
+    @FXML private void handletaskListSelection() {
+        Task t = taskList.getSelectedObject();
+        taskNameLabel.setText(t.getName());
+        taskInfoTextArea.setText(t.getInfo());
+    }
+  
+
     /**
      * Getter for current project
      * @return current project
@@ -70,10 +80,29 @@ public class PhtGUIController implements Initializable {
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        // TODO Auto-generated method stub
-        
+        //
     }
     
+    /**
+     * Filter Tasks list by name of task
+     */
+    @FXML private void handleFilterTasksByName() {
+        // TODO
+    }
+
+    /**
+     * Filter Tasks list by Task priority
+     */
+    @FXML private void handleFilterTasksByPriority() {
+        // TODO
+    }
+
+    /**
+     * Filter Tasks list by tag
+     */
+    @FXML private void handleFilterTasksByTag() {
+        // TODO
+    }
     
     /**
      * Käsitellään uuden tehtävän lisääminen
@@ -81,7 +110,10 @@ public class PhtGUIController implements Initializable {
     @FXML private void handleAddTask() {
         Task task = this.getCurrentProject().createTask();
         // if task name is given by user then rename task, otherwise keep default task name
-        if (!taskNameField.getText().isBlank()) task.rename(taskNameField.getText());
+        if (!taskNameField.getText().isBlank()) {
+            task.rename(taskNameField.getText());
+            taskNameField.setText("");
+        }
         loadTasks();
         
         
@@ -93,6 +125,7 @@ public class PhtGUIController implements Initializable {
      */
     @FXML private void handleMarkAsDone() {
         taskList.getSelectedObject().markAsDone();
+        // TODO: Add visual indication of task being done
         loadTasks();
         
         //Dialogs.showMessageDialog("Ei osata vielä merkitä valmiiksi");
@@ -108,8 +141,41 @@ public class PhtGUIController implements Initializable {
         PhtEditTaskDialogController.editTask(null, selectedTask, p);
         
         loadTasks();
+        for (int i = 0; i < p.getAllTasks().size(); i++) {
+            if (taskList.getObjects().get(i).getId() == selectedTask.getId()) {
+                taskList.setSelectedIndex(i);
+                refresh();
+                break;
+            }
+        }
     }
     
+    /**
+     * Refreshes main window right side to show selected Task's information
+     */
+    private void refresh() {
+        if (taskList.getObjects().isEmpty()) {
+            taskNameLabel.setText("");
+            taskInfoTextArea.setText("");
+            taskPriorityLabel.setText("");
+            return;
+            // TODO: hide tags
+        }
+        
+        Task t = taskList.getSelectedObject();
+        taskNameLabel.setText(t.getName());
+        taskInfoTextArea.setText(t.getInfo());
+        if (t.getPriority() == Priority.LOW) {
+            taskPriorityLabel.setText("(kiireetön)");
+        } else if (t.getPriority() == Priority.MEDIUM) {
+            taskPriorityLabel.setText("");
+        } else {
+            taskPriorityLabel.setText("(kiireellinen)");
+        }
+        // TODO: tags, markAsDone
+    }
+
+
     /**
      * Käsitellään tehtävän poistaminen
      */
@@ -119,6 +185,7 @@ public class PhtGUIController implements Initializable {
             this.getCurrentProject().removeTask(taskList.getSelectedObject().getId());
         }
         loadTasks();
+        refresh();
     }
      
     
@@ -216,6 +283,12 @@ public class PhtGUIController implements Initializable {
         Project p = this.getCurrentProject();
         for (Task task : p.getAllTasks()) {
             taskList.add(task.getName(), task);
+        }
+        if (!p.getAllTasks().isEmpty()) {
+            taskList.setSelectedIndex(0);
+            Task t = taskList.getSelectedObject();
+            taskNameLabel.setText(t.getName());
+            taskInfoTextArea.setText(t.getInfo());
         }
     }
 

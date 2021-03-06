@@ -57,7 +57,7 @@
                                  <children>
                                     <HBox alignment="CENTER">
                                        <children>
-                                          <TextField promptText="Haku..." HBox.hgrow="ALWAYS">
+                                          <TextField fx:id="taskSearchTextField" promptText="Haku..." HBox.hgrow="ALWAYS">
                                              <padding>
                                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </padding>
@@ -69,9 +69,9 @@
                                             <menus>
                                               <Menu mnemonicParsing="false" text="Suodata">
                                                 <items>
-                                                  <MenuItem mnemonicParsing="false" text="Nimi" />
-                                                      <MenuItem mnemonicParsing="false" text="Tagi" />
-                                                      <MenuItem mnemonicParsing="false" text="Prioriteetti" />
+                                                  <MenuItem mnemonicParsing="false" onAction="#handleFilterTasksByName" text="Nimi" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#handleFilterTasksByTag" text="Tagi" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#handleFilterTasksByPriority" text="Prioriteetti" />
                                                 </items>
                                               </Menu>
                                             </menus>
@@ -81,7 +81,7 @@
                                           </MenuBar>
                                        </children>
                                     </HBox>
-                                    <ListChooser fx:id="taskList" prefHeight="352.0" prefWidth="282.0" rivit="" />
+                                    <ListChooser fx:id="taskList" onMouseClicked="#handletaskListSelection" prefHeight="352.0" prefWidth="282.0" rivit="" />
                                  </children>
                               </VBox>
                            </center>
@@ -144,7 +144,7 @@
                                  <children>
                                     <HBox>
                                        <children>
-                                          <Label text="Päivitä GUI-kuvat suunnitelmaan">
+                                          <Label fx:id="taskNameLabel" text="Päivitä GUI-kuvat suunnitelmaan">
                                              <font>
                                                 <Font name="System Bold" size="22.0" />
                                              </font>
@@ -152,7 +152,7 @@
                                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <Label layoutX="20.0" layoutY="20.0" text="(kiireellinen)">
+                                          <Label fx:id="taskPriorityLabel" layoutX="20.0" layoutY="20.0" text="(kiireellinen)">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
@@ -162,7 +162,7 @@
                                           </Label>
                                        </children>
                                     </HBox>
-                                    <HBox prefWidth="200.0">
+                                    <HBox fx:id="tagLabelHBox" prefWidth="200.0">
                                        <children>
                                           <Label text="#itsenäinen">
                                              <HBox.margin>
@@ -192,7 +192,7 @@
                               </VBox>
                            </top>
                            <center>
-                              <TextArea prefHeight="370.0" prefWidth="670.0" promptText="Kirjoita tehtävä tähän..." text="TIM-suunnitelman käyttöliittymäkuviin pitää lisätä esimerkkidataa ennen seuraavan vaiheen näyttöä. &#10;" wrapText="true" BorderPane.alignment="CENTER">
+                              <TextArea fx:id="taskInfoTextArea" prefHeight="370.0" prefWidth="670.0" promptText="Kirjoita tehtävä tähän..." wrapText="true" BorderPane.alignment="CENTER">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
