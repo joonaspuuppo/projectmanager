@@ -7,7 +7,6 @@ import java.util.ResourceBundle;
 
 import dataPht.Project;
 import dataPht.ProjectManager;
-import dataPht.Tag;
 import dataPht.Task;
 import fi.jyu.mit.fxgui.*;
 import javafx.application.Platform;
@@ -48,6 +47,10 @@ public class PhtGUIController implements Initializable {
     private Project currentProject;
     
     
+    /**
+     * Setter for current project
+     * @param p current project
+     */
     public void setCurrentProject(Project p) {
         this.currentProject = p;
         // TODO clear data from previous project
@@ -197,6 +200,7 @@ public class PhtGUIController implements Initializable {
      * Display error to the user.
      * @param info error info
      */
+    @SuppressWarnings("unused")
     private void displayError(String info) {
         //TODO show error
         System.out.println("ERROR: " + info);
