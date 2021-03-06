@@ -9,8 +9,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<BorderPane prefHeight="300.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/15.0.1" fx:controller="fxPht.PhtEditTaskDialogController">
+<BorderPane prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxPht.PhtEditTaskDialogController">
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
@@ -21,7 +20,7 @@
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                      </HBox.margin>
                   </Label>
-                  <TextField promptText="kirjoita tähän tehtävän nimi" HBox.hgrow="ALWAYS">
+                  <TextField fx:id="editedTaskNameField" promptText="kirjoita tähän tehtävän nimi" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="15.0" />
                      </HBox.margin>
@@ -35,7 +34,7 @@
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                      </HBox.margin>
                   </Label>
-                  <TextField promptText="tehtävän tagit, pilkulla erotettuina" HBox.hgrow="ALWAYS">
+                  <TextField fx:id="editedTagsField" promptText="tehtävän tagit, pilkulla erotettuina" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="15.0" />
                      </HBox.margin>
@@ -49,7 +48,7 @@
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                      </HBox.margin>
                   </Label>
-                  <RadioButtonChooser rivit="kiireellinen&#10;normaali&#10;kiireetön">
+                  <RadioButtonChooser fx:id="taskPriorityChooser" rivit="kiireellinen&#10;normaali&#10;kiireetön">
                      <HBox.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
                      </HBox.margin>
@@ -62,12 +61,12 @@
    <bottom>
       <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" text="Hyväksy muutokset">
+            <Button fx:id="confirmChangesButton" mnemonicParsing="false" onAction="#handleConfirmChanges" text="Hyväksy muutokset">
                <HBox.margin>
                   <Insets right="30.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" text="Peru muutokset" />
+            <Button mnemonicParsing="false" onAction="#handleCancel" text="Peru muutokset" />
          </children>
       </HBox>
    </bottom>

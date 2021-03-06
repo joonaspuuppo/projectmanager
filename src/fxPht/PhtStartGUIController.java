@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import dataPht.Project;
+import dataPht.ProjectManager;
 import fi.jyu.mit.fxgui.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +20,6 @@ import javafx.stage.Stage;
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
  * @version Jan 29, 2021
- *
  */
 public class PhtStartGUIController implements Initializable {
 
@@ -25,12 +27,11 @@ public class PhtStartGUIController implements Initializable {
     private Button buttonOpenProject;
     
     @FXML
-    private ListChooser<String> projectList;
+    private ListChooser<String> listChooser;
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         // TODO Auto-generated method stub
-        
     }
     
     /**
@@ -43,24 +44,63 @@ public class PhtStartGUIController implements Initializable {
         dialog.setHeaderText("Anna uuden projektin nimi");
         dialog.setContentText("Projektin nimi:");
         Optional<String> answer = dialog.showAndWait();
-        System.out.println(answer.isPresent() ?
-           answer.get() : "Ei ollut vastausta");
+        
+        String projectName = answer.isPresent() ? answer.get() : null;
+        if (projectName == null) {
+            // TODO handle errors in the name, display error
+            return;   
+        }
+        ProjectManager pm = ProjectManager.getInstance();
+        try {
+            Project project = pm.createNewProject(projectName);
+            openProjectToMainWindow(project);
+        } catch (IllegalArgumentException e) {
+            // TODO handle possible
+            displayError("Invalid name for a Project");
+            return;
+        } catch (IOException e) {
+            // TODO handle possible IO exceptions
+            e.printStackTrace();
+        }
     }
     
     /**
-     * Käsitellään projektin avaaminen
-     * @throws IOException 
+     * Handle opening an existing Project
      */
-    @FXML private void handleOpenProject() throws IOException {
-        //Dialogs.showMessageDialog("Ei osata vielä avata valittua projektia");
-        Stage primaryStage = (Stage) buttonOpenProject.getScene().getWindow();
-        BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("PhtGUIView.fxml"));
-        PhtScene mainWindow = new PhtScene(root);
-        String projectName = projectList.getSelectedText();
-        mainWindow.setProject(projectName);
-        primaryStage.setScene(mainWindow);
+    @FXML private void handleOpenProject() {
+        String projectName = listChooser.getSelectedText();
+        if (projectName == null) {
+            // TODO handle errors in the name, display error
+            return;   
+        }
+        Project project = ProjectManager.getInstance().openProject(projectName);
+        try {
+            openProjectToMainWindow(project);
+        } catch (IOException e) {
+            // TODO handle possible IO exceptions
+            e.printStackTrace();
+        }
     }
     
     
+    private void openProjectToMainWindow(Project p) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("PhtGUIView.fxml"));
+        
+        BorderPane root = (BorderPane)loader.load();
+        Scene mainWindow = new Scene(root);
+        PhtGUIController mainWindowController = (PhtGUIController) loader.getController();
+        mainWindowController.setCurrentProject(p);
+        Stage primaryStage = (Stage) buttonOpenProject.getScene().getWindow();
+        primaryStage.setScene(mainWindow);
 
+    }
+    
+    /**
+     * Display error to the user.
+     */
+    private void displayError(String info) {
+        //TODO show error
+        System.out.println("ERROR: " + info);
+    }
 }

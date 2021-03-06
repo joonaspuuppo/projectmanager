@@ -5,16 +5,20 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import dataPht.Project;
+import dataPht.ProjectManager;
+import dataPht.Tag;
 import dataPht.Task;
 import fi.jyu.mit.fxgui.*;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -30,10 +34,36 @@ public class PhtGUIController implements Initializable {
     private ListChooser<Task> taskList;
     
     @FXML
+    private TextField taskNameField;
+    
+    @FXML
     private MenuItem menuOpenProject;
     
     @FXML
+    private Label projectNameLabel;
+
+    @FXML
     private Button buttonAddTask;
+    
+    private Project currentProject;
+    
+    
+    public void setCurrentProject(Project p) {
+        this.currentProject = p;
+        // TODO clear data from previous project
+        projectNameLabel.setText(p.getName());
+        loadTasks();
+    }
+    
+    /**
+     * Getter for current project
+     * @return current project
+     */
+    public Project getCurrentProject() {
+        return this.currentProject;
+    }
+
+
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -41,34 +71,51 @@ public class PhtGUIController implements Initializable {
         
     }
     
+    
     /**
      * Käsitellään uuden tehtävän lisääminen
      */
     @FXML private void handleAddTask() {
-        Dialogs.showMessageDialog("Ei osata vielä lisätä");
+        Task task = this.getCurrentProject().createTask();
+        // if task name is given by user then rename task, otherwise keep default task name
+        if (!taskNameField.getText().isBlank()) task.rename(taskNameField.getText());
+        loadTasks();
+        
+        
+        //Dialogs.showMessageDialog("Ei osata vielä lisätä");
     }
     
     /**
      * Käsitellään tehtävän merkitseminen valmiiksi
      */
     @FXML private void handleMarkAsDone() {
-        Dialogs.showMessageDialog("Ei osata vielä merkitä valmiiksi");
+        taskList.getSelectedObject().markAsDone();
+        loadTasks();
+        
+        //Dialogs.showMessageDialog("Ei osata vielä merkitä valmiiksi");
     }
     
     /**
      * @param event
      */
-    @FXML private void handleMuokkaaTehtavaa() {
-        // TODO: Vie valittu Task muokattavaksi
-        PhtEditTaskDialogController.editTask(null, null); // toisen null tilalle muokattava tehtävä
-
+    @FXML private void handleEditTask() {
+        Task selectedTask = taskList.getSelectedObject();
+        Project p = this.getCurrentProject();
+        
+        PhtEditTaskDialogController.editTask(null, selectedTask, p);
+        
+        loadTasks();
     }
     
     /**
      * Käsitellään tehtävän poistaminen
      */
     @FXML private void handleDeleteTask() {
-        Dialogs.showQuestionDialog("Poisto?", "Poistetaanko tehtävä?", "Kyllä", "Ei");
+        Boolean confirmed = Dialogs.showQuestionDialog("Poisto?", "Poistetaanko tehtävä?", "Kyllä", "Ei");
+        if (confirmed) {
+            this.getCurrentProject().removeTask(taskList.getSelectedObject().getId());
+        }
+        loadTasks();
     }
      
     
@@ -140,10 +187,32 @@ public class PhtGUIController implements Initializable {
 
     
     /**
-     * Tietojen tallennus
+     * Save modifications to the current Project.
      */
     private void save() {
-        Dialogs.showMessageDialog("Tallennetetaan! Mutta ei toimi vielä");
+        ProjectManager.getInstance().saveCurrentProject();
+    }
+    
+    /**
+     * Display error to the user.
+     * @param info error info
+     */
+    private void displayError(String info) {
+        //TODO show error
+        System.out.println("ERROR: " + info);
+    }
+
+
+    
+    /**
+     * Loads tasks to taskList
+     */
+    private void loadTasks() {
+        taskList.clear();
+        Project p = this.getCurrentProject();
+        for (Task task : p.getAllTasks()) {
+            taskList.add(task.getName(), task);
+        }
     }
 
 

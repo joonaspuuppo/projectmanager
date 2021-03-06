@@ -201,13 +201,13 @@ public class Project {
     
     /**
      * Creates a string of tagnames from given list of Tags.
-     * @param tags list of tags
+     * @param tagList list of tags
      * @return comma-separated string of tagNames
      */
-    public static String getTagsAsString(List<Tag> tags) {
-        if (tags.isEmpty()) return "";
+    public String getTagsAsString(List<Tag> tagList) {
+        if (tagList.isEmpty()) return "";
         StringBuilder sb = new StringBuilder();
-        for (Tag tag : tags) {
+        for (Tag tag : tagList) {
             sb.append(tag.getName() + ", ");
         }
         sb.delete(sb.length() - 2, sb.length());

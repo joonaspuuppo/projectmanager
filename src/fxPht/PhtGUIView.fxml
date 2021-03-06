@@ -92,7 +92,7 @@
                                        <children>
                                           <AnchorPane VBox.vgrow="ALWAYS">
                                              <children>
-                                                <TextField alignment="TOP_LEFT" promptText="Tehtävän nimi..." AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                                <TextField fx:id="taskNameField" alignment="TOP_LEFT" promptText="Tehtävän nimi..." AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                                    <padding>
                                                       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                    </padding>
@@ -119,7 +119,7 @@
                            <top>
                               <AnchorPane BorderPane.alignment="CENTER">
                                  <children>
-                                    <Label alignment="TOP_LEFT" prefHeight="46.0" text="Ohj2 harjoitustyö valmiiksi" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <Label fx:id="projectNameLabel" alignment="TOP_LEFT" prefHeight="46.0" text="Ohj2 harjoitustyö valmiiksi" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <font>
                                           <Font size="22.0" />
                                        </font>
@@ -215,7 +215,7 @@
                                           <Insets right="30.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" onAction="#handleMuokkaaTehtavaa" prefWidth="200.0" text="Muokkaa tehtävää..." HBox.hgrow="ALWAYS">
+                                    <Button mnemonicParsing="false" onAction="#handleEditTask" prefWidth="200.0" text="Muokkaa tehtävää..." HBox.hgrow="ALWAYS">
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
