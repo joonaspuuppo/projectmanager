@@ -15,17 +15,24 @@ public class PhtMain extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("PhtGUIView.fxml"));
-			Scene mainWindow = new Scene(root);
-			
-			BorderPane root2 = (BorderPane)FXMLLoader.load(getClass().getResource("PhtStartGUIView.fxml"));
-            Scene startWindow = new Scene(root2);
+		    
+		    FXMLLoader startWindowLoader = new FXMLLoader();
+		    startWindowLoader.setLocation(getClass().getResource("PhtStartGUIView.fxml"));
+	        
+	        BorderPane startPane = (BorderPane)startWindowLoader.load();
+	        Scene startWindow = new Scene(startPane);
+	        PhtStartGUIController startWindowController = (PhtStartGUIController) startWindowLoader.getController();
+	        startWindowController.loadProjects();
+	        
+			BorderPane mainPane = (BorderPane)FXMLLoader.load(getClass().getResource("PhtGUIView.fxml"));
+			Scene mainWindow = new Scene(mainPane);
             
 			mainWindow.getStylesheets().add(getClass().getResource("pht.css").toExternalForm());
 			startWindow.getStylesheets().add(getClass().getResource("pht.css").toExternalForm());
 			
 			primaryStage.setScene(startWindow);
 			primaryStage.show();
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

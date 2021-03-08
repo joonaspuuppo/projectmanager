@@ -35,6 +35,14 @@ public class ProjectManager {
     
     
     /**
+     * @return An array of all Project names created.
+     */
+    public String[] listAllProjects() {
+        return new String[] {};
+    }
+    
+    
+    /**
      * @param name -
      * @return -
      */

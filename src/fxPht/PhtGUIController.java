@@ -2,6 +2,7 @@ package fxPht;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -11,13 +12,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import dataPht.ProjectManager;
+import dataPht.Task;
 import dataPht.Project;
 
 
@@ -37,15 +41,32 @@ public class PhtGUIController implements Initializable {
     private Label projectNameLabel;
     
     
+    @FXML
+    private ListChooser<Task> taskListChooser;
+    
+    
     private Project currentProject;
+    private Task currentTask;
     
     
     public void setCurrentProject(Project p) {
         this.currentProject = p;
-        // TODO clear data from previous project and 
-        //load tasks from project to the listchooser
+        taskListChooser.clear();
+        List<Task> tasks = p.getAllTasks();
+        for (Task task : tasks) {
+            taskListChooser.add(task.getName(), task);
+        }
+        // TODO clear the task view in the UI and set currentTask to null
         projectNameLabel.setText(p.getName());
     }
+    
+    
+    private void setCurrentTask(Task t) {
+        // TODO update the task view
+        currentTask = t;
+        System.out.println("Selected task is: " + t.getName());
+    }
+    
     
     public Project getCurrentProject() {
         return this.currentProject;
@@ -57,11 +78,20 @@ public class PhtGUIController implements Initializable {
         
     }
     
+    @FXML private void handleOpenTask() {
+        Task task = taskListChooser.getSelectedObject();
+        if (task != null) {
+            setCurrentTask(task);
+        }
+    }
+    
     /**
      * Käsitellään uuden tehtävän lisääminen
      */
     @FXML private void handleAddTask() {
-        Dialogs.showMessageDialog("Ei osata vielä lisätä");
+        Task t = currentProject.createTask();
+        t.rename("tehtävä");
+        taskListChooser.add(t.getName(), t);
     }
     
     /**
@@ -106,7 +136,18 @@ public class PhtGUIController implements Initializable {
      * @throws IOException 
      */
     @FXML private void handleOpenProject() throws IOException {
-        // TODO
+        // TODO verify saving
+        
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("PhtStartGUIView.fxml"));
+        
+        BorderPane root = (BorderPane)loader.load();
+        Scene startWindow = new Scene(root);
+        PhtStartGUIController startWindowController = (PhtStartGUIController) loader.getController();
+        startWindowController.loadProjects();
+        
+        Stage primaryStage = (Stage) buttonAddTask.getScene().getWindow();
+        primaryStage.setScene(startWindow);
     }
         
     
@@ -184,10 +225,10 @@ public class PhtGUIController implements Initializable {
      * Display error to the user.
      */
     private void displayError(String info) {
-        //TODO show error
-        System.out.println("ERROR: " + info);
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(info);
+        alert.showAndWait();
     }
-
-
-
 }

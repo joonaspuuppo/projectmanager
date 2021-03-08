@@ -12,6 +12,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
@@ -28,6 +30,15 @@ public class PhtStartGUIController implements Initializable {
     
     @FXML
     private ListChooser<String> listChooser;
+    
+    /**
+     * Load all Projcets to the  listchooser.
+     */
+    public void loadProjects() {
+        String[] rows = ProjectManager.getInstance().listAllProjects(); 
+        listChooser.setRivit(rows);
+    }
+    
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -100,7 +111,10 @@ public class PhtStartGUIController implements Initializable {
      * Display error to the user.
      */
     private void displayError(String info) {
-        //TODO show error
-        System.out.println("ERROR: " + info);
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(info);
+        alert.showAndWait();
     }
 }
