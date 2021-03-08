@@ -57,6 +57,7 @@ public class PhtGUIController implements Initializable {
         // TODO clear data from previous project
         projectNameLabel.setText(p.getName());
         loadTasks();
+        refresh();
         
     }
     
@@ -115,6 +116,7 @@ public class PhtGUIController implements Initializable {
             taskNameField.setText("");
         }
         loadTasks();
+        refresh();
         
         
         //Dialogs.showMessageDialog("Ei osata vielä lisätä");
@@ -127,6 +129,7 @@ public class PhtGUIController implements Initializable {
         taskList.getSelectedObject().markAsDone();
         // TODO: Add visual indication of task being done
         loadTasks();
+        refresh();
         
         //Dialogs.showMessageDialog("Ei osata vielä merkitä valmiiksi");
     }
@@ -161,7 +164,7 @@ public class PhtGUIController implements Initializable {
             return;
             // TODO: hide tags
         }
-        
+        taskList.setSelectedIndex(0);
         Task t = taskList.getSelectedObject();
         taskNameLabel.setText(t.getName());
         taskInfoTextArea.setText(t.getInfo());
@@ -283,12 +286,6 @@ public class PhtGUIController implements Initializable {
         Project p = this.getCurrentProject();
         for (Task task : p.getAllTasks()) {
             taskList.add(task.getName(), task);
-        }
-        if (!p.getAllTasks().isEmpty()) {
-            taskList.setSelectedIndex(0);
-            Task t = taskList.getSelectedObject();
-            taskNameLabel.setText(t.getName());
-            taskInfoTextArea.setText(t.getInfo());
         }
     }
 

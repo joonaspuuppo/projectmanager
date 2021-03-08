@@ -109,8 +109,8 @@ public class PhtEditTaskDialogController implements ModalControllerInterface<Tas
             p.addTagToTask(tag.getName(), t);
         }
         
-        // resetting priority
-        if (taskPriorityChooser.getSelectedIndex() == 0) {
+        // updating priority
+        if (taskPriorityChooser.getSelectedIndex() == 2) {
             t.setPriority(Priority.LOW);
         } else if (taskPriorityChooser.getSelectedIndex() == 1) {
             t.setPriority(Priority.MEDIUM);
@@ -135,11 +135,11 @@ public class PhtEditTaskDialogController implements ModalControllerInterface<Tas
         editedTaskNameField.setText(task.getName());
         
         if (task.getPriority() == Priority.LOW) {
-            taskPriorityChooser.setSelectedIndex(0);
+            taskPriorityChooser.setSelectedIndex(2);
         } else if (task.getPriority() == Priority.MEDIUM) {
             taskPriorityChooser.setSelectedIndex(1);
         } else {
-            taskPriorityChooser.setSelectedIndex(2);
+            taskPriorityChooser.setSelectedIndex(0);
         }
         
         
