@@ -181,7 +181,7 @@
                               </VBox>
                            </top>
                            <center>
-                              <TextArea fx:id="taskInfoTextArea" prefHeight="370.0" prefWidth="670.0" promptText="Kirjoita tehtävän kuvaus tähän..." wrapText="true" BorderPane.alignment="CENTER">
+                              <TextArea fx:id="taskInfoTextArea" onKeyReleased="#handleUpdateTaskInfo" prefHeight="370.0" prefWidth="670.0" promptText="Kirjoita tehtävän kuvaus tähän..." wrapText="true" BorderPane.alignment="CENTER">
                                  <font>
                                     <Font size="15.0" />
                                  </font>

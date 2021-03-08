@@ -26,6 +26,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import dataPht.ProjectManager;
 import dataPht.Task;
@@ -87,12 +88,14 @@ public class PhtGUIController implements Initializable {
             tagsLabel.setText("#" + this.currentProject.getTagsAsString(this.currentProject.getTagsFromTask(t.getId())).replace(", ", "   #"));
         }
         if (t.isDone()) {
+            taskNameLabel.setTextFill(Color.GRAY);
             buttonMarkAsDone.setText("Merkitse keskeneräiseksi");
         } else {
+            taskNameLabel.setTextFill(Color.BLACK);
             buttonMarkAsDone.setText("Merkitse valmiiksi");
         }
     }
-  
+    
 
     /**
      * Getter for current project
@@ -146,33 +149,22 @@ public class PhtGUIController implements Initializable {
         refresh();
     }
     
+    @FXML private void handleUpdateTaskInfo() {
+        Task t = taskList.getSelectedObject();
+        t.setInfo(taskInfoTextArea.getText()); 
+    }
+  
+    
     
     @FXML private void handleMarkAsDone() {
         Task t = taskList.getSelectedObject();
         if (t.isDone()) {
             t.markAsIncomplete();
-            buttonMarkAsDone.setText("Merkitse valmiiksi");
         } else {
             t.markAsDone();
-            buttonMarkAsDone.setText("Merkitse keskeneräiseksi");
         }
-        // TODO: Add visual indication of task being done
-        loadTasks();
         refresh();
     }
-    
-    
-    @FXML private void handleNimeaTehtavaUudelleen() {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Nimeä tehtävä uudelleen");
-        dialog.setHeaderText("Anna tehtävän uusi nimi");
-        dialog.setContentText("Uusi nimi:");
-        Optional<String> answer = dialog.showAndWait();
-        System.out.println(answer.isPresent() ?
-           answer.get() : "Ei ollut vastausta");
-
-    }
-    
     
     /**
      * @param event
@@ -204,7 +196,6 @@ public class PhtGUIController implements Initializable {
             tagsLabel.setText("");
             return;
         }
-        taskList.setSelectedIndex(0);
         Task t = taskList.getSelectedObject();
         taskNameLabel.setText(t.getName());
         taskInfoTextArea.setText(t.getInfo());
@@ -221,8 +212,10 @@ public class PhtGUIController implements Initializable {
             tagsLabel.setText("#" + this.currentProject.getTagsAsString(this.currentProject.getTagsFromTask(t.getId())).replace(", ", "   #"));
         }
         if (t.isDone()) {
+            taskNameLabel.setTextFill(Color.GRAY);
             buttonMarkAsDone.setText("Merkitse keskeneräiseksi");
         } else {
+            taskNameLabel.setTextFill(Color.BLACK);
             buttonMarkAsDone.setText("Merkitse valmiiksi");
         }
     }
@@ -335,5 +328,6 @@ public class PhtGUIController implements Initializable {
         for (Task task : p.getAllTasks()) {
             taskList.add(task.getName(), task);
         }
+        if (!taskList.getObjects().isEmpty()) taskList.setSelectedIndex(0);
     }
 }
