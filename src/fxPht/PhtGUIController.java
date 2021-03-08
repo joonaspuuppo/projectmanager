@@ -47,7 +47,6 @@ public class PhtGUIController implements Initializable {
     
     
     private Project currentProject;
-    private Task currentTask;
     
     
     @Override
@@ -63,21 +62,9 @@ public class PhtGUIController implements Initializable {
      */
     public void setCurrentProject(Project p) {
         this.currentProject = p;
-        taskListChooser.clear();
-        List<Task> tasks = p.getAllTasks();
-        for (Task task : tasks) {
-            taskListChooser.add(task.getName(), task);
-        }
         // TODO clear the task view in the UI and set currentTask to null
         projectNameLabel.setText(p.getName());
-    }
-    
-    
-    private void setCurrentTask(Task t) {
-        // TODO update the task view
-        currentTask = t;
-        System.out.println("Selected task is: " + t.getName());
-    }
+    }    
     
     
     public Project getCurrentProject() {
@@ -86,17 +73,12 @@ public class PhtGUIController implements Initializable {
     
     
     @FXML private void handleOpenTask() {
-        Task task = taskListChooser.getSelectedObject();
-        if (task != null) {
-            setCurrentTask(task);
-        }
+        // pass
     }
     
     
     @FXML private void handleAddTask() {
-        Task t = currentProject.createTask();
-        t.rename("tehtävä");
-        taskListChooser.add(t.getName(), t);
+        // pass
     }
     
     
