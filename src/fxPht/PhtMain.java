@@ -9,7 +9,8 @@ import javafx.fxml.FXMLLoader;
 
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
- * @version Jan 21, 2021
+ * @version 0.5 Mar 8, 2021
+ * Main entrypoint to the application.
  */
 public class PhtMain extends Application {
 	@Override
@@ -39,7 +40,7 @@ public class PhtMain extends Application {
 	}
 	
 	/**
-	 * @param args ei käytässä
+	 * @param args Not in use.
 	 */
 	public static void main(String[] args) {
 		launch(args);

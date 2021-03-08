@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author varajala
- * @version Feb 19, 2021
+ * @author Joonas Puuppo, Valtteri Rajalainen
+ * @version 0.5 Mar 8, 2021
  */
 public class Project {
     

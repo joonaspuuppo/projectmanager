@@ -21,7 +21,8 @@ import javafx.stage.Stage;
 
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
- * @version Jan 29, 2021
+ * @version 0.5 Mar 8, 2021
+ * Controller of the start window.
  */
 public class PhtStartGUIController implements Initializable {
 
@@ -32,7 +33,7 @@ public class PhtStartGUIController implements Initializable {
     private ListChooser<String> listChooser;
     
     /**
-     * Load all Projcets to the  listchooser.
+     * Load all project names stored to the UI.
      */
     public void loadProjects() {
         String[] rows = ProjectManager.getInstance().listAllProjects(); 
@@ -45,11 +46,8 @@ public class PhtStartGUIController implements Initializable {
         // TODO Auto-generated method stub
     }
     
-    /**
-     * Käsitellään uuden projektin lisääminen
-     */
+    
     @FXML private void handleCreateNewProject() {
-        //Dialogs.showMessageDialog("Ei osata vielä lisätä uutta projektia");
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Uusi projekti");
         dialog.setHeaderText("Anna uuden projektin nimi");
@@ -58,26 +56,24 @@ public class PhtStartGUIController implements Initializable {
         
         String projectName = answer.isPresent() ? answer.get() : null;
         if (projectName == null) {
-            // TODO handle errors in the name, display error
-            return;   
+            displayError("Please enter a name for a Project");
+            return;
         }
         ProjectManager pm = ProjectManager.getInstance();
         try {
             Project project = pm.createNewProject(projectName);
             openProjectToMainWindow(project);
         } catch (IllegalArgumentException e) {
-            // TODO handle possible
             displayError("Invalid name for a Project");
-            return;
         } catch (IOException e) {
             // TODO handle possible IO exceptions
+            // This is raised only when the .fxml - file isn't found,
+            // exit the program and show error explicitly...
             e.printStackTrace();
         }
     }
     
-    /**
-     * Handle opening an existing Project
-     */
+    
     @FXML private void handleOpenProject() {
         String projectName = listChooser.getSelectedText();
         if (projectName == null) {
@@ -89,11 +85,18 @@ public class PhtStartGUIController implements Initializable {
             openProjectToMainWindow(project);
         } catch (IOException e) {
             // TODO handle possible IO exceptions
+            // This is raised only when the .fxml - file isn't found,
+            // exit the program and show error explicitly...
             e.printStackTrace();
         }
     }
     
     
+    /**
+     * Switch to the main window and set the current Project instance to be modified.
+     * @param p The Project instance to be opened.
+     * @throws IOException if the .fxml file isn't found.
+     */
     private void openProjectToMainWindow(Project p) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("PhtGUIView.fxml"));
@@ -107,9 +110,7 @@ public class PhtStartGUIController implements Initializable {
         primaryStage.setScene(mainWindow);
     }
     
-    /**
-     * Display error to the user.
-     */
+    
     private void displayError(String info) {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Error");

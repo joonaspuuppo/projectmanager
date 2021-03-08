@@ -1,9 +1,8 @@
 package dataPht;
 
 /**
- * @author Joonas Puuppo
- * @version Feb 22, 2021
- *
+ * @author Joonas Puuppo, Valtteri Rajalainen
+ * @version 0.5 Mar 8, 2021
  */
 public class Task {
     private int id;

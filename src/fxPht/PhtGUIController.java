@@ -27,7 +27,8 @@ import dataPht.Project;
 
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
- * @version Jan 21, 2021
+ * @version 0.5 Mar 8, 2021
+ * Controller of the main window.
  */
 public class PhtGUIController implements Initializable {
 
@@ -49,6 +50,17 @@ public class PhtGUIController implements Initializable {
     private Task currentTask;
     
     
+    @Override
+    public void initialize(URL arg0, ResourceBundle arg1) {
+        // pass
+    }
+    
+    
+    /**
+     * Set the current Project to be modified in the main window.
+     * This should only be called from PhtStartGUIController or inside this class.
+     * @param p Project instance.
+     */
     public void setCurrentProject(Project p) {
         this.currentProject = p;
         taskListChooser.clear();
@@ -72,11 +84,6 @@ public class PhtGUIController implements Initializable {
         return this.currentProject;
     }
     
-    @Override
-    public void initialize(URL arg0, ResourceBundle arg1) {
-        // TODO Auto-generated method stub
-        
-    }
     
     @FXML private void handleOpenTask() {
         Task task = taskListChooser.getSelectedObject();
@@ -85,25 +92,19 @@ public class PhtGUIController implements Initializable {
         }
     }
     
-    /**
-     * Käsitellään uuden tehtävän lisääminen
-     */
+    
     @FXML private void handleAddTask() {
         Task t = currentProject.createTask();
         t.rename("tehtävä");
         taskListChooser.add(t.getName(), t);
     }
     
-    /**
-     * Käsitellään tehtävän merkitseminen valmiiksi
-     */
+    
     @FXML private void handleMarkAsDone() {
         Dialogs.showMessageDialog("Ei osata vielä merkitä valmiiksi");
     }
     
-    /**
-     * @param event
-     */
+    
     @FXML private void handleNimeaTehtavaUudelleen() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Nimeä tehtävä uudelleen");
@@ -115,25 +116,20 @@ public class PhtGUIController implements Initializable {
 
     }
     
-    /**
-     * Käsitellään tehtävän poistaminen
-     */
+    
     @FXML private void handleDeleteTask() {
         Dialogs.showQuestionDialog("Poisto?", "Poistetaanko tehtävä?", "Kyllä", "Ei");
     }
      
     
-    /**
-     * Handle saving.
-     */
     @FXML private void handleSave() {
         save();
     }
     
     
     /**
-     * Käsitellään projektin avaaminen
-     * @throws IOException 
+     * "Move" back to the starting windpw to open a Project.
+     * @throws IOException if the .fxml file is not found.
      */
     @FXML private void handleOpenProject() throws IOException {
         // TODO verify saving
@@ -151,9 +147,6 @@ public class PhtGUIController implements Initializable {
     }
         
     
-    /**
-     * Handle creation of a new Project.
-     */
     @FXML private void handleCreateNewProject() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Uusi projekti");
@@ -174,9 +167,7 @@ public class PhtGUIController implements Initializable {
         }
     }
     
-    /**
-     * Handle renaming the Project.
-     */
+    
     @FXML private void handleRename() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Nimeä uudelleen");
@@ -196,34 +187,23 @@ public class PhtGUIController implements Initializable {
         }
     }
     
-    /**
-     * Käsitellään projektin poistaminen
-     */
+    
     @FXML private void handleDeleteProject() {
         Dialogs.showQuestionDialog("Poisto?", "Haluatko varmasti poistaa projektin?", "Kyllä", "Ei");
     }
     
     
-    /**
-     * Käsitellään lopetuskäsky
-     */
     @FXML private void handleExit() {
         save();
         Platform.exit();
     }
 
     
-    /**
-     * Save modifications to the current Project.
-     */
     private void save() {
         ProjectManager.getInstance().saveCurrentProject();
     }
     
     
-    /**
-     * Display error to the user.
-     */
     private void displayError(String info) {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Error");
