@@ -125,13 +125,10 @@ public class PhtGUIController implements Initializable {
             taskNameField.setText("");
         }
         loadTasks();
-<<<<<<< HEAD
         refresh();
         
         
         //Dialogs.showMessageDialog("Ei osata vielä lisätä");
-=======
->>>>>>> branch 'tyo5' of https://gitlab.jyu.fi/joanjupu/ohj2
     }
     
     
