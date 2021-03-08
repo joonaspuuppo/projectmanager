@@ -1,8 +1,8 @@
 package dataPht;
 
 /**
- * @author varajala
- * @version Feb 22, 2021
+ * @author Joonas Puuppo, Valtteri Rajalainen
+ * @version 0.5 Mar 8, 2021
  * Concrete storage class. Saves data to files.
  */
 public class FileStorage implements Storage {

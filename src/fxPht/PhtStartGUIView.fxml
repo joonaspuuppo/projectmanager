@@ -23,7 +23,7 @@
    <center>
       <VBox BorderPane.alignment="CENTER">
          <children>
-            <ListChooser fx:id="projectList" prefHeight="223.0" prefWidth="360.0" rivit="">
+            <ListChooser fx:id="listChooser" prefHeight="223.0" prefWidth="360.0">
                <VBox.margin>
                   <Insets bottom="20.0" left="20.0" right="20.0" />
                </VBox.margin>

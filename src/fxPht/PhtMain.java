@@ -9,18 +9,24 @@ import javafx.fxml.FXMLLoader;
 
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
- * @version Jan 21, 2021
- *
+ * @version 0.5 Mar 8, 2021
+ * Main entrypoint to the application.
  */
 public class PhtMain extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("PhtGUIView.fxml"));
-			Scene mainWindow = new PhtScene(root);
-			
-			BorderPane root2 = (BorderPane)FXMLLoader.load(getClass().getResource("PhtStartGUIView.fxml"));
-            Scene startWindow = new Scene(root2);
+		    
+		    FXMLLoader startWindowLoader = new FXMLLoader();
+		    startWindowLoader.setLocation(getClass().getResource("PhtStartGUIView.fxml"));
+	        
+	        BorderPane startPane = (BorderPane)startWindowLoader.load();
+	        Scene startWindow = new Scene(startPane);
+	        PhtStartGUIController startWindowController = (PhtStartGUIController) startWindowLoader.getController();
+	        startWindowController.loadProjects();
+	        
+			BorderPane mainPane = (BorderPane)FXMLLoader.load(getClass().getResource("PhtGUIView.fxml"));
+			Scene mainWindow = new Scene(mainPane);
             
 			mainWindow.getStylesheets().add(getClass().getResource("pht.css").toExternalForm());
 			startWindow.getStylesheets().add(getClass().getResource("pht.css").toExternalForm());
@@ -28,17 +34,13 @@ public class PhtMain extends Application {
 			primaryStage.setScene(startWindow);
 			primaryStage.show();
 			
-			// jos klikataan avaa tai luo projekti, avataan pääikkuna
-			
-		
-			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	/**
-	 * @param args ei käytässä
+	 * @param args Not in use.
 	 */
 	public static void main(String[] args) {
 		launch(args);

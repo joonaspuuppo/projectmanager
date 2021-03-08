@@ -4,8 +4,9 @@ import java.util.regex.*;
 
 
 /**
- * @author varajala
- * @version Feb 19, 2021
+ * @author Joonas Puuppo, Valtteri Rajalainen
+ * @version 0.5 Mar 8, 2021
+ * Controller of the main window.
  */
 public class ProjectManager {
     
@@ -31,6 +32,14 @@ public class ProjectManager {
      */
     public static ProjectManager getInstance() {
         return ProjectManager.INSTANCE;
+    }
+    
+    
+    /**
+     * @return An array of all Project names created.
+     */
+    public String[] listAllProjects() {
+        return new String[] {};
     }
     
     
