@@ -58,6 +58,7 @@ public class PhtStartGUIController implements Initializable {
         if (projectName == null) {
             displayError("Please enter a name for a Project");
             return;
+            // TODO handle errors in the name, display error 
         }
         ProjectManager pm = ProjectManager.getInstance();
         try {
@@ -69,7 +70,7 @@ public class PhtStartGUIController implements Initializable {
             // TODO handle possible IO exceptions
             // This is raised only when the .fxml - file isn't found,
             // exit the program and show error explicitly...
-            e.printStackTrace();
+            displayError("Invalid name for a Project");
         }
     }
     
@@ -93,6 +94,7 @@ public class PhtStartGUIController implements Initializable {
     
     
     /**
+<<<<<<< HEAD
      * Switch to the main window and set the current Project instance to be modified.
      * @param p The Project instance to be opened.
      * @throws IOException if the .fxml file isn't found.

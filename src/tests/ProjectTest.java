@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import dataPht.Priority;
 import dataPht.Project;
 import dataPht.Task;
 import dataPht.Tag;
@@ -180,6 +181,25 @@ public class ProjectTest {
        assertEquals(tagListToStringList(tagList), expectedList);
    }
    
+   /**
+    * Test querying tasks with specified priority
+    */
+   @Test
+   public void testTaskQueryByPriority() {
+       Project p = generateDummyProject();
+       Task t1 = p.getTask(1);
+       Task t2 = p.getTask(2);
+       Task t3 = p.getTask(3);
+       t1.setPriority(Priority.HIGH);
+       t2.setPriority(Priority.HIGH);
+       t3.setPriority(Priority.LOW);
+       List<Task> resultsByPriority = p.getAllTasksByPriority(Priority.HIGH);
+       List<Task> expectedResults = new ArrayList<Task>();
+       expectedResults.add(t2);
+       expectedResults.add(t1);
+       assertEquals(expectedResults, resultsByPriority);
+       
+   }
    
    /**
     * Test removing single Tags from a specified Task.
@@ -220,4 +240,21 @@ public class ProjectTest {
        tagList = p.getTagsFromTask(t2.getId());
        assertEquals(tagListToStringList(tagList), expectedList);
    }
+   
+    /**
+     * Test removing a task.
+     */
+    @Test
+    public void testTaskRemoval() {
+        Project p = generateDummyProject();
+        List<Task> taskList = p.getAllTasks();
+        assertEquals(4, taskList.size());
+        p.removeTask(4); 
+        taskList = p.getAllTasks();
+        assertEquals(3, taskList.size());
+        p.removeTask(5); // not a task so nothing should be removed
+        taskList = p.getAllTasks();
+        assertEquals(3, taskList.size());
+
+    }
 }

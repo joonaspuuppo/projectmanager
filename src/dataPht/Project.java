@@ -67,10 +67,18 @@ public class Project {
     
     
     /**
-     * @param id -
+     * Removes task from tasks and relations.
+     * @param id task id
+     * TODO: should unused tags be removed from this.tags?
      */
     public void removeTask(int id) {
-        // TODO
+        if (this.tasks.containsKey(id)) {
+            while (!this.getTagsFromTask(id).isEmpty()) {
+                this.removeTagFromTask(this.getTagsFromTask(id).get(0).getName(), this.getTask(id));
+            }
+            this.tasks.remove(id);
+        }
+        
     }
     
     
@@ -140,12 +148,17 @@ public class Project {
     
     
     /**
-     * @param prio - 
-     * @return -
+     * @param prio priority
+     * @return a list containing all tasks with specified priority
      */
     public List<Task> getAllTasksByPriority(Priority prio) {
-        return null;
-        // TODO
+        List <Task> results = new ArrayList<Task>();
+        for (Task task : tasks.values()) {
+            if (task.getPriority() == prio) {
+                results.add(task);
+            }
+        }
+        return results;
     }
     
     
@@ -171,6 +184,7 @@ public class Project {
      * Remove relation between the given Tag and the Task.
      * @param tagName Name of the Tag.
      * @param task Task instance.
+     * TODO: should unused tags be removed from this.tags?
      */
     public void removeTagFromTask(String tagName, Task task) {
         int id = task.getId();
@@ -183,5 +197,35 @@ public class Project {
                 break;
             }
         }
+    }
+    
+    /**
+     * Creates a string of tagnames from given list of Tags.
+     * @param tagList list of tags
+     * @return comma-separated string of tagNames
+     */
+    public String getTagsAsString(List<Tag> tagList) {
+        if (tagList.isEmpty()) return "";
+        StringBuilder sb = new StringBuilder();
+        for (Tag tag : tagList) {
+            sb.append(tag.getName() + ", ");
+        }
+        sb.delete(sb.length() - 2, sb.length());
+        
+        return sb.toString();
+    }
+    
+    /**
+     * Reads tags from a comma-separated string of tagNames and returns them as a list of Tags
+     * @param tagString string of tagNames
+     * @return List of tags
+     */
+    public List<Tag> readTagsFromString(String tagString) {
+        String[] tagNames = tagString.split(",");
+        ArrayList<Tag> tagsFromString = new ArrayList<>();
+        for (String tagName : tagNames) {
+            tagsFromString.add(new Tag(tagName.trim()));
+        }
+        return tagsFromString;
     }
 }

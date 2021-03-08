@@ -57,7 +57,7 @@
                                  <children>
                                     <HBox alignment="CENTER">
                                        <children>
-                                          <TextField promptText="Haku..." HBox.hgrow="ALWAYS">
+                                          <TextField fx:id="taskSearchTextField" promptText="Haku..." HBox.hgrow="ALWAYS">
                                              <padding>
                                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </padding>
@@ -69,9 +69,9 @@
                                             <menus>
                                               <Menu mnemonicParsing="false" text="Suodata">
                                                 <items>
-                                                  <MenuItem mnemonicParsing="false" text="Nimi" />
-                                                      <MenuItem mnemonicParsing="false" text="Tagi" />
-                                                      <MenuItem mnemonicParsing="false" text="Prioriteetti" />
+                                                  <MenuItem mnemonicParsing="false" onAction="#handleFilterTasksByName" text="Nimi" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#handleFilterTasksByTag" text="Tagi" />
+                                                      <MenuItem mnemonicParsing="false" onAction="#handleFilterTasksByPriority" text="Prioriteetti" />
                                                 </items>
                                               </Menu>
                                             </menus>
@@ -81,7 +81,7 @@
                                           </MenuBar>
                                        </children>
                                     </HBox>
-                                    <ListChooser fx:id="taskListChooser" onMouseClicked="#handleOpenTask" prefHeight="352.0" prefWidth="282.0" />
+                                    <ListChooser fx:id="taskList" onMouseClicked="#handletaskListSelection" prefHeight="352.0" prefWidth="282.0" rivit="" />
                                  </children>
                               </VBox>
                            </center>
@@ -92,7 +92,7 @@
                                        <children>
                                           <AnchorPane VBox.vgrow="ALWAYS">
                                              <children>
-                                                <TextField alignment="TOP_LEFT" promptText="Tehtävän nimi..." AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                                <TextField fx:id="taskNameField" alignment="TOP_LEFT" promptText="Tehtävän nimi..." AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                                    <padding>
                                                       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                    </padding>
@@ -144,7 +144,7 @@
                                  <children>
                                     <HBox>
                                        <children>
-                                          <Label>
+                                          <Label fx:id="taskNameLabel" text="Päivitä GUI-kuvat suunnitelmaan">
                                              <font>
                                                 <Font name="System Bold" size="22.0" />
                                              </font>
@@ -152,7 +152,7 @@
                                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <Label layoutX="20.0" layoutY="20.0">
+                                          <Label fx:id="taskPriorityLabel" layoutX="20.0" layoutY="20.0" text="(kiireellinen)">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
@@ -162,7 +162,7 @@
                                           </Label>
                                        </children>
                                     </HBox>
-                                    <HBox prefWidth="200.0">
+                                    <HBox fx:id="tagLabelHBox" prefWidth="200.0">
                                        <children>
                                           <Label>
                                              <HBox.margin>
@@ -192,7 +192,7 @@
                               </VBox>
                            </top>
                            <center>
-                              <TextArea prefHeight="370.0" prefWidth="670.0" promptText="Kirjoita tehtävä tähän..." wrapText="true" BorderPane.alignment="CENTER">
+                              <TextArea fx:id="taskInfoTextArea" prefHeight="370.0" prefWidth="670.0" promptText="Kirjoita tehtävä tähän..." wrapText="true" BorderPane.alignment="CENTER">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
@@ -215,7 +215,7 @@
                                           <Insets right="30.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" onAction="#handleNimeaTehtavaUudelleen" prefWidth="200.0" text="Nimeä uudelleen..." HBox.hgrow="ALWAYS">
+                                    <Button mnemonicParsing="false" onAction="#handleEditTask" prefWidth="200.0" text="Muokkaa tehtävää..." HBox.hgrow="ALWAYS">
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
