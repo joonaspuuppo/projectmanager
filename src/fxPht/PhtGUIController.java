@@ -45,10 +45,11 @@ public class PhtGUIController implements Initializable {
     @FXML private ListChooser<Task> taskList;
     @FXML private TextField taskNameField;
     @FXML private Button buttonAddTask;
+    @FXML private Button buttonMarkAsDone;
     @FXML private Label projectNameLabel;
     @FXML private Label taskNameLabel;
     @FXML private Label taskPriorityLabel;
-    @FXML private HBox tagLabelHBox;
+    @FXML private Label tagsLabel;
     @FXML private TextArea taskInfoTextArea;
     
     private Project currentProject;
@@ -73,6 +74,23 @@ public class PhtGUIController implements Initializable {
         Task t = taskList.getSelectedObject();
         taskNameLabel.setText(t.getName());
         taskInfoTextArea.setText(t.getInfo());
+        if (t.getPriority() == Priority.LOW) {
+            taskPriorityLabel.setText("(kiireetön)");
+        } else if (t.getPriority() == Priority.MEDIUM) {
+            taskPriorityLabel.setText("");
+        } else {
+            taskPriorityLabel.setText("(kiireellinen)");
+        }
+        if (this.currentProject.getTagsFromTask(t.getId()).isEmpty()) {
+            tagsLabel.setText("");
+        } else {
+            tagsLabel.setText("#" + this.currentProject.getTagsAsString(this.currentProject.getTagsFromTask(t.getId())).replace(", ", "   #"));
+        }
+        if (t.isDone()) {
+            buttonMarkAsDone.setText("Merkitse keskeneräiseksi");
+        } else {
+            buttonMarkAsDone.setText("Merkitse valmiiksi");
+        }
     }
   
 
@@ -126,19 +144,21 @@ public class PhtGUIController implements Initializable {
         }
         loadTasks();
         refresh();
-        
-        
-        //Dialogs.showMessageDialog("Ei osata vielä lisätä");
     }
     
     
     @FXML private void handleMarkAsDone() {
-        taskList.getSelectedObject().markAsDone();
+        Task t = taskList.getSelectedObject();
+        if (t.isDone()) {
+            t.markAsIncomplete();
+            buttonMarkAsDone.setText("Merkitse valmiiksi");
+        } else {
+            t.markAsDone();
+            buttonMarkAsDone.setText("Merkitse keskeneräiseksi");
+        }
         // TODO: Add visual indication of task being done
         loadTasks();
         refresh();
-        
-        //Dialogs.showMessageDialog("Ei osata vielä merkitä valmiiksi");
     }
     
     
@@ -181,8 +201,8 @@ public class PhtGUIController implements Initializable {
             taskNameLabel.setText("");
             taskInfoTextArea.setText("");
             taskPriorityLabel.setText("");
+            tagsLabel.setText("");
             return;
-            // TODO: hide tags
         }
         taskList.setSelectedIndex(0);
         Task t = taskList.getSelectedObject();
@@ -195,7 +215,16 @@ public class PhtGUIController implements Initializable {
         } else {
             taskPriorityLabel.setText("(kiireellinen)");
         }
-        // TODO: tags, markAsDone
+        if (this.currentProject.getTagsFromTask(t.getId()).isEmpty()) {
+            tagsLabel.setText("");
+        } else {
+            tagsLabel.setText("#" + this.currentProject.getTagsAsString(this.currentProject.getTagsFromTask(t.getId())).replace(", ", "   #"));
+        }
+        if (t.isDone()) {
+            buttonMarkAsDone.setText("Merkitse keskeneräiseksi");
+        } else {
+            buttonMarkAsDone.setText("Merkitse valmiiksi");
+        }
     }
 
 
