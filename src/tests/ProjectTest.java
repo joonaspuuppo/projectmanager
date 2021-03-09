@@ -257,4 +257,28 @@ public class ProjectTest {
         assertEquals(3, taskList.size());
 
     }
+    
+    /**
+     * Test getting a list of tags as a comma-separated string
+     */
+    @Test
+    public void testGetTagsAsString() {
+        Project p = generateDummyProject();
+        List<Tag> tagList = p.getAllTags();
+        String tagsAsString = p.getTagsAsString(tagList);
+        String expected = "tag3, tag2, tag1";
+        assertEquals(expected, tagsAsString);
+    }
+    
+    /**
+     * Test reading tags from a comma-separated string.
+     */
+    @Test
+    public void testReadTagsFromString() {
+        Project p = generateDummyProject();
+        String tagsAsString = "tag3, tag2, tag1";
+        List<Tag> expected = p.getAllTags();
+        List<Tag> tagList = p.readTagsFromString(tagsAsString);
+        assertEquals(tagListToStringList(expected), tagListToStringList(tagList));
+    }
 }
