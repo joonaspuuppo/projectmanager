@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import dataPht.Priority;
 import dataPht.Project;
 import dataPht.ProjectManager;
+import dataPht.Tag;
 import dataPht.Task;
 import fi.jyu.mit.fxgui.*;
 import javafx.application.Platform;
@@ -72,6 +73,8 @@ public class PhtGUIController implements Initializable {
     
 
     @FXML private void handletaskListSelection() {
+        if (taskList.getObjects().isEmpty()) return;
+        
         Task t = taskList.getSelectedObject();
         taskNameLabel.setText(t.getName());
         taskInfoTextArea.setText(t.getInfo());
@@ -115,21 +118,56 @@ public class PhtGUIController implements Initializable {
      * Filter Tasks list by name of task
      */
     @FXML private void handleFilterTasksByName() {
-        // TODO
+        taskList.clear(); 
+        String search = taskSearchTextField.getText().toLowerCase().trim();
+        
+        
+        // lists all tasks with names starting with the string user has typed into the search field
+        for (Task task : this.currentProject.getAllTasks()) {
+            if (task.getName().toLowerCase().startsWith(search)) {
+                taskList.add(task.getName(), task);
+            }
+            
+        }
+    }
+    
+    /**
+     * When user has typed a key into taskSearchTextField, 
+     * list any tasks starting with the search string. 
+     */
+    @FXML private void handleSearchTasks() {
+        handleFilterTasksByName();
     }
 
     /**
      * Filter Tasks list by Task priority
      */
     @FXML private void handleFilterTasksByPriority() {
-        // TODO
+        taskList.clear();
+        
+        // tasks listed from highest priority to lowest
+        for(Task task : this.currentProject.getAllTasksByPriority(Priority.HIGH)) {
+            taskList.add(task.getName(), task);
+        }
+        for(Task task : this.currentProject.getAllTasksByPriority(Priority.MEDIUM)) {
+            taskList.add(task.getName(), task);
+        }
+        for(Task task : this.currentProject.getAllTasksByPriority(Priority.LOW)) {
+            taskList.add(task.getName(), task);
+        }
+        
     }
 
     /**
      * Filter Tasks list by tag
      */
     @FXML private void handleFilterTasksByTag() {
-        // TODO
+        taskList.clear(); 
+        
+        // lists all tasks associated with a tag that user is searching for
+        for (Task task : this.currentProject.getAllTasksByTag(taskSearchTextField.getText().toLowerCase().trim())) {
+            taskList.add(task.getName(), task);
+        }
     }
     
     
