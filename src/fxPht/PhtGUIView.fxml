@@ -144,7 +144,7 @@
                                  <children>
                                     <HBox>
                                        <children>
-                                          <Label fx:id="taskNameLabel" text="Päivitä GUI-kuvat suunnitelmaan">
+                                          <Label fx:id="taskNameLabel">
                                              <font>
                                                 <Font name="System Bold" size="22.0" />
                                              </font>
@@ -152,7 +152,7 @@
                                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <Label fx:id="taskPriorityLabel" layoutX="20.0" layoutY="20.0" text="(kiireellinen)">
+                                          <Label fx:id="taskPriorityLabel" layoutX="20.0" layoutY="20.0">
                                              <font>
                                                 <Font size="22.0" />
                                              </font>
