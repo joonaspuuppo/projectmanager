@@ -36,7 +36,7 @@ import dataPht.Project;
 
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
- * @version 0.5 Mar 8, 2021
+ * @version 0.5 Mar 11, 2021
  * Controller of the main window.
  */
 public class PhtGUIController implements Initializable {
@@ -57,14 +57,12 @@ public class PhtGUIController implements Initializable {
     private Project currentProject;
     
     
-    
     /**
      * Setter for current project
      * @param p current project
      */
     public void setCurrentProject(Project p) {
         this.currentProject = p;
-        // TODO clear data from previous project
         projectNameLabel.setText(p.getName());
         loadTasks();
         refresh();
@@ -303,14 +301,14 @@ public class PhtGUIController implements Initializable {
         
         String projectName = answer.isPresent() ? answer.get() : null;
         if (projectName == null) {
-            displayError("Insert a name to create new project.");
+            displayError("Ole hyvä ja syötä nimi, jotta voit luoda uuden projektin.");
             return;
         }
         try {
             Project project = ProjectManager.getInstance().createNewProject(projectName);
             setCurrentProject(project);
         } catch (IllegalArgumentException e) {
-            displayError("Invalid name for a Project.");
+            displayError("Virheellinen nimi projektille");
         }
     }
     
@@ -324,13 +322,13 @@ public class PhtGUIController implements Initializable {
         
         String projectName = answer.isPresent() ? answer.get() : null;
         if (projectName == null) {
-            displayError("Insert a name to rename the project.");
             return;
         }
         try {
             ProjectManager.getInstance().renameCurrentProject(projectName);
+            this.projectNameLabel.setText(projectName);
         } catch (IllegalArgumentException e) {
-            displayError("Invalid name for a Project.");
+            displayError("Virheellinen nimi projektille");
         }
     }
     
@@ -353,7 +351,7 @@ public class PhtGUIController implements Initializable {
 
     private void displayError(String info) {
         Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Error");
+        alert.setTitle("Virhe");
         alert.setHeaderText(null);
         alert.setContentText(info);
         alert.showAndWait();

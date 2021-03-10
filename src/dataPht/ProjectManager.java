@@ -5,8 +5,7 @@ import java.util.regex.*;
 
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
- * @version 0.5 Mar 8, 2021
- * Controller of the main window.
+ * @version 0.5 Mar 10, 2021
  */
 public class ProjectManager {
     

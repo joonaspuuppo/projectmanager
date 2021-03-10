@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
- * @version 0.5 Mar 8, 2021
+ * @version 0.5 Mar 11, 2021
  */
 public class Project {
     
@@ -68,8 +68,8 @@ public class Project {
     
     /**
      * Removes task from tasks and relations.
+     * Unused tags are removed when saving.
      * @param id task id
-     * TODO: should unused tags be removed from this.tags?
      */
     public void removeTask(int id) {
         if (this.tasks.containsKey(id)) {
@@ -78,13 +78,12 @@ public class Project {
             }
             this.tasks.remove(id);
         }
-        
     }
     
     
     /**
      * Lookup a specific task with the id of the task.
-     * @param id -
+     * @param id TaskID
      * @return Task
      */
     public Task getTask(int id) {
@@ -93,7 +92,7 @@ public class Project {
     
     
     /**
-     * @return Array of all tasks in the Project.
+     * @return List of all tasks in the Project.
      */
     public List<Task> getAllTasks() {
         List<Task> list = new ArrayList<Task>(tasks.values());
@@ -102,7 +101,7 @@ public class Project {
     
     
     /**
-     * @return All Tags in the Project.
+     * @return List of all Tags in the Project.
      */
     public List<Tag> getAllTags() {
         List<Tag> list = new ArrayList<Tag>(tags.values());
@@ -114,7 +113,7 @@ public class Project {
      * Create a new relation between a Tag and a Task.
      * All tags are created this way.
      * 
-     * TODO: prevent adding the same Tag twice?
+     * TODO: prevent adding the same Tag twice
      * 
      * @param tagName Name of the Tag.
      * @param t Task instance.
@@ -130,7 +129,7 @@ public class Project {
     
     /**
      * @param tagName Name of the Tag
-     * @return Array of Tasks associated with the given Tag.
+     * @return List of Tasks associated with the given Tag.
      */
     public List<Task> getAllTasksByTag(String tagName) {
         List<Task> results = new ArrayList<Task>();
@@ -164,7 +163,7 @@ public class Project {
     
     /**
      * @param id Task id.
-     * @return Array of Tags associated with the given Task.
+     * @return List of Tags associated with the given Task.
      */
     public List<Tag> getTagsFromTask(int id) {
         List<Tag> results = new ArrayList<Tag>();
@@ -182,9 +181,9 @@ public class Project {
     
     /**
      * Remove relation between the given Tag and the Task.
+     * Unused tags are removed when saving.
      * @param tagName Name of the Tag.
      * @param task Task instance.
-     * TODO: should unused tags be removed from this.tags?
      */
     public void removeTagFromTask(String tagName, Task task) {
         int id = task.getId();

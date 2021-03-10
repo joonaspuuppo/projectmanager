@@ -19,9 +19,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 /**
- * @author Joonas Puuppo
- * @version Mar 3, 2021
- *
+ * @author Joonas Puuppo, Valtteri Rajalainen
+ * @version Mar 11, 2021
  */
 public class PhtEditTaskDialogController implements ModalControllerInterface<Task>, Initializable {
    
@@ -39,7 +38,7 @@ public class PhtEditTaskDialogController implements ModalControllerInterface<Tas
     
     private Project currentProject;
     private Task task;
-    private Boolean confirmChanges;
+    private Boolean confirmChanges = false;
     
     
     /**

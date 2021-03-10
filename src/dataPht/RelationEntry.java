@@ -2,7 +2,7 @@ package dataPht;
 
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
- * @version 0.5 Mar 8, 2021
+ * @version 0.5 Mar 11, 2021
  */
 public class RelationEntry {
     private int taskId;
@@ -19,13 +19,19 @@ public class RelationEntry {
     }
 
 
-    @SuppressWarnings("javadoc")
+    
+    /**
+     * @return Tag name
+     */
     public String getTagName() {
         return tagName;
     }
 
 
-    @SuppressWarnings("javadoc")
+    
+    /**
+     * @return taskID
+     */
     public int getTaskId() {
         return taskId;
     }
