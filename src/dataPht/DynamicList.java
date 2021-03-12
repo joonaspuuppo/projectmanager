@@ -12,8 +12,8 @@ public class DynamicList<T> {
     private int size;
     
     private final int START_SIZE = 16;
-    private final double EXPAND_TRESHOLD = 0.75;
-    private final double SHRINK_TRESHOLD = 0.125;
+    private final double EXPAND_THRESHOLD = 0.75;
+    private final double SHRINK_THRESHOLD = 0.125;
     
     /**
      * Create an empty  list.
@@ -137,13 +137,13 @@ public class DynamicList<T> {
     
     
     private boolean expansionNeeded() {
-        return (double)count / (double)size > EXPAND_TRESHOLD;
+        return (double)count / (double)size > EXPAND_THRESHOLD;
     }
     
     
     private boolean shrinkNeeded() {
         boolean result = false;
-        if ((double)count / (double)size < SHRINK_TRESHOLD && size > START_SIZE) {
+        if ((double)count / (double)size < SHRINK_THRESHOLD && size > START_SIZE) {
             result = true;
         }
         return result;
