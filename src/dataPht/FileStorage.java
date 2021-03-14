@@ -22,6 +22,13 @@ public class FileStorage implements Storage {
     protected final String STORAGE_DIRECTORY = ".data";
     protected final String FILE_SEPARATOR = System.getProperty("file.separator");
     
+    protected final String PROJECT_NAME_ESCAPE = "<<PROJECT_NAME>>";
+    protected final String[] FILE_PATH_FORMATS = {
+            PROJECT_NAME_ESCAPE + ".tasks.dat",
+            PROJECT_NAME_ESCAPE + ".tags.dat",
+            PROJECT_NAME_ESCAPE + ".relations.dat"
+    };
+    
     
     public FileStorage() {
         setupStorageDirectory();
@@ -58,7 +65,6 @@ public class FileStorage implements Storage {
     @Override
     public void renameProject(Project project) {
         // TODO Auto-generated method stub
-
     }
     
     
@@ -68,8 +74,13 @@ public class FileStorage implements Storage {
     }
     
     
-    private void setupStorageDirectory() {
-        File storageDir = new File(STORAGE_DIRECTORY); 
+    public String getDirectory() {
+        return STORAGE_DIRECTORY;
+    }
+    
+    
+    protected void setupStorageDirectory() {
+        File storageDir = new File(getDirectory()); 
         if (!storageDir.exists()) {
             boolean OK = storageDir.mkdir();
             if (!OK) {
@@ -77,10 +88,21 @@ public class FileStorage implements Storage {
                 throw new RuntimeException(info);
             }
         }
-    } 
+    }
     
     
     protected String joinpath(String filename) {
-        return STORAGE_DIRECTORY + FILE_SEPARATOR + filename;
+        return getDirectory() + FILE_SEPARATOR + filename;
+    }
+    
+    
+    public String[] generateFilePaths(Project p) {
+        int numberOfPaths = FILE_PATH_FORMATS.length;
+        String[] paths = new String[numberOfPaths];
+        for (int i = 0; i < numberOfPaths; i++) {
+            String filename = FILE_PATH_FORMATS[i].replace(PROJECT_NAME_ESCAPE, p.getName());
+            paths[i] = joinpath(filename);
+        }
+        return paths;
     }
 }

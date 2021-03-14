@@ -2,17 +2,67 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.File;
+import java.util.Arrays;
+
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.*;
 
 import dataPht.FileStorage;
 import dataPht.Priority;
+import dataPht.Project;
 import dataPht.Task;
 import dataPht.TaskSerializer;
 
 
 public class FileStorageTests {
     
-    private final FileStorage fs = new FileStorage();
+    private static final FileStorage FS = new TestFileStorage();
+    
+    
+    @AfterAll
+    public static void cleanup() {
+        TestFileStorage testfs = (TestFileStorage)FS;
+        testfs.removeStorageDir();
+        
+        File testPath = new File(FS.getDirectory());
+        assertFalse(testPath.exists());
+    }
+    
+    
+    @Test
+    public void testSetup() {
+        assertEquals(FS.getDirectory(), TestFileStorage.TEST_DIRECTORY);
+        File testPath = new File(FS.getDirectory());
+        assertTrue(testPath.exists());
+    }
+    
+    
+    @Test
+    @EnabledOnOs({OS.LINUX, OS.MAC})
+    public void testFilePathsPOSIX() {
+        Project p = new Project("test_project");
+        String expected = "["
+                + ".testing/test_project.tasks.dat, "
+                + ".testing/test_project.tags.dat, "
+                + ".testing/test_project.relations.dat"
+                + "]";
+        assertEquals(expected, Arrays.toString(FS.generateFilePaths(p)));
+    }
+    
+    
+    @Test
+    @EnabledOnOs(OS.WINDOWS)
+    public void testFilePathsWIN() {
+        Project p = new Project("test_project");
+        String expected = "["
+                + ".testing\\test_project.tasks.dat, "
+                + ".testing\\test_project.tags.dat, "
+                + ".testing\\test_project.relations.dat"
+                + "]";
+        assertEquals(expected, Arrays.toString(FS.generateFilePaths(p)));
+    }
     
     
     @Test
