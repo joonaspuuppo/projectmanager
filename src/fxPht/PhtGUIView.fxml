@@ -37,7 +37,7 @@
                       </Menu>
                       <Menu mnemonicParsing="false" text="Muokkaa">
                         <items>
-                              <MenuItem mnemonicParsing="false" onAction="#handleRename" text="Nimeä uudelleen..." />
+                              <MenuItem mnemonicParsing="false" onAction="#handleRenameProject" text="Nimeä uudelleen..." />
                           <MenuItem mnemonicParsing="false" onAction="#handleDeleteProject" text="Poista projekti..." />
                         </items>
                       </Menu>
@@ -81,7 +81,7 @@
                                           </MenuBar>
                                        </children>
                                     </HBox>
-                                    <ListChooser fx:id="taskList" onMouseClicked="#handletaskListSelection" prefHeight="352.0" prefWidth="282.0" rivit="" />
+                                    <ListChooser fx:id="taskList" onMouseClicked="#handleTaskListSelection" prefHeight="352.0" prefWidth="282.0" rivit="" />
                                  </children>
                               </VBox>
                            </center>
