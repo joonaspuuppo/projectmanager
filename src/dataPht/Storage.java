@@ -1,5 +1,7 @@
 package dataPht;
 
+import java.util.List;
+
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
  * @version 0.5 Mar 11, 2021
@@ -23,7 +25,7 @@ public interface Storage {
     /**
      * @return String array of all saved projects.
      */
-    public String[] listAllProjects();
+    public List<String> listAllProjects();
     
     
     /**

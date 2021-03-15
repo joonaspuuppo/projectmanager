@@ -3,6 +3,7 @@ package tests;
 import java.io.File;
 
 import dataPht.FileStorage;
+import dataPht.Project;
 
 public class TestFileStorage extends FileStorage {
 
@@ -15,8 +16,13 @@ public class TestFileStorage extends FileStorage {
     
     
     @Override
-    public String getDirectory() {
+    protected String getDirectory() {
         return TEST_DIRECTORY;
+    }
+    
+    
+    public String getTestDirectory() {
+        return this.getDirectory();
     }
     
     
@@ -27,4 +33,15 @@ public class TestFileStorage extends FileStorage {
         }
         dir.delete();
     }
+    
+    
+    public String[] getFilepathsForProject(Project p) {
+        return super.generateFilePaths(p);
+    }
+    
+    
+    public String getProjectNameFromFilepath(String filepath) {
+        File f = new File(filepath);
+        return super.extractProjectName(f);
+    } 
 }
