@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.*;
 
@@ -31,6 +32,12 @@ public class FileStorageTests {
     }
     
     
+    @AfterEach
+    public void clearTestDirectory() {
+        FS.deleteAllFiles();
+    }
+    
+    
     @Test
     public void testSetup() {
         File testPath = new File(FS.getTestDirectory());
@@ -42,33 +49,37 @@ public class FileStorageTests {
     public void testProjectListing() {
         assertTrue(FS.listAllProjects().size() == 0);
         
-        String[] testNames = new String[] {"test_project1", "test_project2"}; 
-        
-        Project p1 = new Project(testNames[0]);
-        Project p2 = new Project(testNames[1]);
-        String[] filepaths1 = FS.getFilepathsForProject(p1);
-        String[] filepaths2 = FS.getFilepathsForProject(p2);
-        for (String fp : filepaths1) {
-            try {
-                new File(fp).createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        
-        for (String fp : filepaths2) {
-            try {
-                new File(fp).createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        String[] testNames = new String[] {"test_project1", "test_project2"};
+        FS.makeTestFiles(testNames);
         
         List<String> names = FS.listAllProjects();
         assertEquals(testNames.length, names.size());
         for (String name : testNames) {
             assertTrue(names.contains(name));
         }
+    }
+    
+    
+    @Test
+    public void testNameValidation() {
+        String[] testNames = new String[] {
+                "project001",
+                "project002",
+                "project003",
+                "project004",
+                "project005",
+                };
+        FS.makeTestFiles(testNames);
+        
+        assertTrue(FS.nameAlreadyExists("project001"));
+        assertTrue(FS.nameAlreadyExists("project002"));
+        assertTrue(FS.nameAlreadyExists("project003"));
+        assertTrue(FS.nameAlreadyExists("project004"));
+        assertTrue(FS.nameAlreadyExists("project005"));
+        
+        assertFalse(FS.nameAlreadyExists("project006"));
+        assertFalse(FS.nameAlreadyExists("project000"));
+        assertFalse(FS.nameAlreadyExists("asd"));
     }
     
     

@@ -96,7 +96,8 @@ public class FileStorage implements Storage {
     
     @Override
     public boolean nameAlreadyExists(String name) {
-        return false;
+        List<String> projectNames = listAllProjects();
+        return projectNames.contains(name);
     }
     
     
