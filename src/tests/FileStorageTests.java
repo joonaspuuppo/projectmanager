@@ -15,14 +15,21 @@ import org.junit.jupiter.api.condition.*;
 import dataPht.Priority;
 import dataPht.Project;
 import dataPht.Task;
-import dataPht.TaskSerializer;
 
 
+/**
+ * @author Valtteri Rajalainen, Joonas Puuppo
+ * @version Mar 15, 2021
+ * Unittests for Storing data in files.
+ */
 public class FileStorageTests {
     
     private static final TestFileStorage FS = new TestFileStorage();
     
     
+    /**
+     * Remove the testing directory and all of its contents.
+     */
     @AfterAll
     public static void cleanup() {
         FS.removeStorageDir();
@@ -32,12 +39,18 @@ public class FileStorageTests {
     }
     
     
+    /**
+     * Remove all files from the testing directory.
+     */
     @AfterEach
     public void clearTestDirectory() {
         FS.deleteAllFiles();
     }
     
     
+    /**
+     * Test the directory creation.
+     */
     @Test
     public void testSetup() {
         File testPath = new File(FS.getTestDirectory());
@@ -45,6 +58,9 @@ public class FileStorageTests {
     }
     
     
+    /**
+     * Test listing the project names.
+     */
     @Test
     public void testProjectListing() {
         assertTrue(FS.listAllProjects().size() == 0);
@@ -60,6 +76,9 @@ public class FileStorageTests {
     }
     
     
+    /**
+     * Test the checking of existance of a given name.
+     */
     @Test
     public void testNameValidation() {
         String[] testNames = new String[] {
@@ -83,6 +102,10 @@ public class FileStorageTests {
     }
     
     
+    /**
+     * Test the utility function which extracts Project's name from
+     * different filenames.
+     */
     @Test
     public void testProjectNameExtracting() {
         String filename = "test_project.tasks.dat";
@@ -96,6 +119,9 @@ public class FileStorageTests {
     }
     
     
+    /**
+     * Test filepath creation for POSIX
+     */
     @Test
     @EnabledOnOs({OS.LINUX, OS.MAC})
     public void testFilePathsPOSIX() {
@@ -109,6 +135,9 @@ public class FileStorageTests {
     }
     
     
+    /**
+     * Test filepath creation for WINDOWS
+     */
     @Test
     @EnabledOnOs(OS.WINDOWS)
     public void testFilePathsWIN() {
@@ -119,48 +148,5 @@ public class FileStorageTests {
                 + ".testing\\test_project.relations.dat"
                 + "]";
         assertEquals(expected, Arrays.toString(FS.getFilepathsForProject(p)));
-    }
-    
-    
-    @Test
-    public void testTaskStringParsing() {
-        Task t = new Task(1);
-        t.rename("task1");
-        t.setPriority(Priority.HIGH);
-        t.setInfo("some task to be done");
-        t.markAsDone();
-        
-        String expectedResult = "1|task1|3|true|some task to be done";
-        assertEquals(expectedResult, TaskSerializer.parseString(t));
-        
-        t.rename("do something");
-        t.setPriority(Priority.LOW);
-        t.markAsIncomplete();
-        expectedResult = "1|do something|1|false|some task to be done";
-        assertEquals(expectedResult, TaskSerializer.parseString(t));
-        
-        t.setInfo("This is a String\\nwith multiple lines");
-        expectedResult = "1|do something|1|false|This is a String<<newline>>with multiple lines";
-        assertEquals(expectedResult, TaskSerializer.parseString(t));
-    }
-    
-    
-    @Test
-    public void testTaskParsing() {
-        String str = "1|do something|1|false|some task to be done";
-        Task t = TaskSerializer.parseTask(str);
-        assertEquals(t.getId(), 1);
-        assertEquals(t.getName(), "do something");
-        assertEquals(t.getPriority(), Priority.LOW);
-        assertEquals(t.isDone(), false);
-        assertEquals(t.getInfo(), "some task to be done");
-        
-        str = "1|task1|2|true|This is a String<<newline>>with multiple lines";
-        t = TaskSerializer.parseTask(str);
-        assertEquals(t.getId(), 1);
-        assertEquals(t.getName(), "task1");
-        assertEquals(t.getPriority(), Priority.MEDIUM);
-        assertEquals(t.isDone(), true);
-        assertEquals(t.getInfo(), "This is a String\\nwith multiple lines");
     }
 }

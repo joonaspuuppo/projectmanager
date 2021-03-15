@@ -28,22 +28,41 @@ public class FileStorage implements Storage {
     }
     
     
+    /**
+     * The directory used to store all data.
+     */
     protected final String STORAGE_DIRECTORY = ".data";
+    /**
+     * A separator String used to separate 'columns' inside the files.
+     */
     protected final String FILE_SEPARATOR = System.getProperty("file.separator");
     
+    /**
+     * Regular expressions to extract Project names out of the  different filenames.
+     */
     protected final String PATH_EXPRESSIONS = "(.+(?=\\.tasks\\.dat))"
             + "|(.+(?=\\.tags\\.dat))"
             + "|(.+(?=\\.relations\\.dat))";
     
+    /**
+     * Placeholder String replaced with the actual Project's name to form
+     * the different filenames.
+     */
     protected final String PROJECT_NAME_ESCAPE  = "<<PROJECT_NAME>>";
-    protected final String TASKS_FILE_NAME      = PROJECT_NAME_ESCAPE + ".tasks.dat";
-    protected final String TAGS_FILE_NAME       = PROJECT_NAME_ESCAPE + ".tags.dat";
-    protected final String RELATIONS_FILE_NAME  = PROJECT_NAME_ESCAPE + ".relations.dat";
     
+    /**
+     * Filenames.
+     * 
+     * [0] = task file path
+     * [1] = tag file path
+     * [2] = relations file path
+     * 
+     * KEEP THIS ORDER
+     */
     protected final String[] FILE_PATH_FORMATS = {
-            TASKS_FILE_NAME,
-            TAGS_FILE_NAME,
-            RELATIONS_FILE_NAME
+            PROJECT_NAME_ESCAPE + ".tasks.dat",
+            PROJECT_NAME_ESCAPE + ".tags.dat",
+            PROJECT_NAME_ESCAPE + ".relations.dat"
     };
     
     
