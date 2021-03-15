@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-
+import java.io.PrintStream;
 import java.util.regex.*;
 import java.util.HashSet;
 import java.util.List;
@@ -73,7 +73,17 @@ public class FileStorage implements Storage {
     
     @Override
     public void save(Project project) {
-        // TODO Auto-generated method stub
+        List<Task> tasks = project.getAllTasks();
+        DynamicList<RelationEntry> relations = project.getRelations();
+        String[] filepaths = generateFilePaths(project);
+        
+        String taskFile      = filepaths[0];
+        String tagFile       = filepaths[1];
+        String relationsFile = filepaths[2];
+        
+        saveTasks(tasks, taskFile);
+        HashSet<String> usedTags = saveRelations(relations, relationsFile);
+        saveTags(usedTags, tagFile);
     }
 
 
@@ -162,6 +172,40 @@ public class FileStorage implements Storage {
     
     protected String joinpath(String filename) {
         return getDirectory() + FILE_SEPARATOR + filename;
+    }
+    
+    
+    protected void saveTasks(List<Task> tasks, String filepath) {
+        FileOutputStream stream = openWriteStream(filepath);
+        try (PrintStream out = new PrintStream(stream)) {
+            for (Task t : tasks) {
+                String line = PhtSerializer.parseString(t);
+                out.println(line);
+            }
+        }
+    }
+    
+    protected HashSet<String> saveRelations(DynamicList<RelationEntry> entries, String filepath) {
+        HashSet<String> usedTags = new HashSet<String>();
+        FileOutputStream stream = openWriteStream(filepath);
+        try (PrintStream out = new PrintStream(stream)) {
+            for (int i = 0; i < entries.count(); i++) {
+                RelationEntry e = entries.get(i);
+                usedTags.add(e.getTagName());
+                String line = PhtSerializer.parseString(e);
+                out.println(line);
+            }
+        }
+        return usedTags;
+    }
+    
+    protected void saveTags(HashSet<String> usedTags, String filepath) {
+        FileOutputStream stream = openWriteStream(filepath);
+        try (PrintStream out = new PrintStream(stream)) {
+            for (String tag : usedTags) {
+                out.println(tag);
+            }
+        }
     }
     
     

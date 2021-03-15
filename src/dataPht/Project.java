@@ -107,6 +107,16 @@ public class Project {
         List<Tag> list = new ArrayList<Tag>(tags.values());
         return list;
     }
+    
+    
+    /**
+     * This should only be called from Storage implementations
+     * while saving the Project.
+     * @return The relations between Tags and Tasks.
+     */
+    public DynamicList<RelationEntry> getRelations() {
+        return relations;
+    }
 
     
     /**
