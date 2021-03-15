@@ -1,7 +1,13 @@
 package tests;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 import dataPht.FileStorage;
 import dataPht.Project;
@@ -109,5 +115,24 @@ public class TestFileStorage extends FileStorage {
                 }
             }
         }
+    }
+    
+    /**
+     * @param filename Filename
+     * @return List of lines in the file
+     */
+    public List<String> readFile(String filename) {
+        List<String> lines = new ArrayList<String>();
+        String filepath = joinpath(filename);
+        try (FileInputStream stream = openReadStream(filepath);
+             Scanner in = new Scanner(stream)) {
+            while (in.hasNextLine()) {
+                String line = in.nextLine();
+                lines.add(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return lines;
     }
 }

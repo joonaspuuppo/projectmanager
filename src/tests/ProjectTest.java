@@ -39,7 +39,7 @@ public class ProjectTest {
     
     
     /**
-     * Set up a dummy project wiht known relations
+     * Set up a dummy project with known relations
      * between data to test the queries.
      * 
      * Project data:
@@ -53,6 +53,7 @@ public class ProjectTest {
      * TASK3 -> TAG3
      * 
      * TASK4 -> (no tags)
+     *  
      */
     private Project generateDummyProject() {
         Project p = new Project(PROJECT_NAME);

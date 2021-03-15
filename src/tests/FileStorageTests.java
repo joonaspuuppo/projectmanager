@@ -26,6 +26,12 @@ public class FileStorageTests {
     
     private static final TestFileStorage FS = new TestFileStorage();
     
+    //DUMMY PROJECT ATTRIBUTES
+    private static final String PROJECT_NAME = "test";
+    private static final String TAG1 = "tag1";
+    private static final String TAG2 = "tag2";
+    private static final String TAG3 = "tag3";
+    
     
     /**
      * Remove the testing directory and all of its contents.
@@ -45,6 +51,49 @@ public class FileStorageTests {
     @AfterEach
     public void clearTestDirectory() {
         FS.deleteAllFiles();
+    }
+    
+    
+    @Test
+    public void testSaving() {
+        Project p = generateDummyProject();
+        FS.save(p);
+        
+        String[] tasks = {
+                "1|task1|2|false|info1",
+                "2|task2|2|false|info2",
+                "3|task3|2|false|info3",
+                "4|task4|2|false|info4",
+        };
+        String[] relations = {
+                "1|" + TAG1,
+                "1|" + TAG2,
+                "2|" + TAG2,
+                "2|" + TAG3,
+                "3|" + TAG3,
+        };
+        String[] tags = {TAG1, TAG2, TAG3};
+        String taskFile = PROJECT_NAME + ".tasks.dat";
+        String tagFile = PROJECT_NAME + ".tags.dat";
+        String relationsFile = PROJECT_NAME + ".relations.dat";
+        
+        List<String> fileContent = FS.readFile(taskFile);
+        assertEquals(tasks.length, fileContent.size());
+        for (String line : tasks) {
+            assertTrue(fileContent.contains(line));
+        }
+        
+        fileContent = FS.readFile(tagFile);
+        assertEquals(tags.length, fileContent.size());
+        for (String line : tags) {
+            assertTrue(fileContent.contains(line));
+        }
+        
+        fileContent = FS.readFile(relationsFile);
+        assertEquals(relations.length, fileContent.size());
+        for (String line : relations) {
+            assertTrue(fileContent.contains(line), line);
+        }
     }
     
     
@@ -148,5 +197,46 @@ public class FileStorageTests {
                 + ".testing\\test_project.relations.dat"
                 + "]";
         assertEquals(expected, Arrays.toString(FS.getFilepathsForProject(p)));
+    }
+    
+    
+    /**
+     * Set up a dummy project with known relations
+     * between data to test the queries.
+     * 
+     * Project data:
+     * 
+     * TASK1 -> TAG1
+     * TASK1 -> TAG2
+     * 
+     * TASK2 -> TAG2
+     * TASK2 -> TAG3
+     * 
+     * TASK3 -> TAG3
+     * 
+     * TASK4 -> (no tags)
+     * 
+     * TASK1 = NAME:"task1",INFO:"info1"
+     * TASK2 = NAME:"task2",INFO:"info2"
+     * TASK3 = NAME:"task3",INFO:"info3"
+     * TASK4 = NAME:"task4",INFO:"info4" 
+     *  
+     */
+    private Project generateDummyProject() {
+        Project p = new Project(PROJECT_NAME);
+        
+        Task t1 = p.createTask(); t1.rename("task1"); t1.setInfo("info1");
+        Task t2 = p.createTask(); t2.rename("task2"); t2.setInfo("info2");
+        Task t3 = p.createTask(); t3.rename("task3"); t3.setInfo("info3");
+        Task t4 = p.createTask(); t4.rename("task4"); t4.setInfo("info4");
+        
+        p.addTagToTask(TAG1, t1);
+        p.addTagToTask(TAG2, t1);
+        
+        p.addTagToTask(TAG2, t2);
+        p.addTagToTask(TAG3, t2);
+        
+        p.addTagToTask(TAG3, t3);
+        return p;
     }
 }
