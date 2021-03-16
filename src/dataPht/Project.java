@@ -54,6 +54,19 @@ public class Project {
     }
     
     
+    /**
+     * This method is used ONLY to construct the Project
+     * as it is being loaded from Storage implementations.
+     * @param task Task to be inserted
+     */
+    public void insertTask(Task task) {
+        Integer taskId = Integer.valueOf(task.getId());
+        if (tasks.containsKey(taskId)) throw new IllegalArgumentException();
+        if (task.getId() >= currentTaskId) currentTaskId = task.getId() + 1;
+        tasks.put(taskId, task);
+    }
+    
+    
     private Tag createTag(String tagName) {
         Tag tag = new Tag(tagName);
         tags.put(tagName, tag);

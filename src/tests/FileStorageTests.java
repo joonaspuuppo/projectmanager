@@ -97,6 +97,52 @@ public class FileStorageTests {
     }
     
     
+    @Test
+    public void testLoading() {
+        String taskFile = FS.generateTestFilepath(PROJECT_NAME + ".tasks.dat");
+        String relationsFile = FS.generateTestFilepath(PROJECT_NAME + ".relations.dat");
+        
+        String[] tasks = {
+                "1|task1|2|false|info1",
+                "2|task2|2|false|info2",
+                "3|task3|2|false|info3",
+                "4|task4|2|false|info4",
+        };
+        String[] relations = {
+                "1|" + TAG1,
+                "1|" + TAG2,
+                "2|" + TAG2,
+                "2|" + TAG3,
+                "3|" + TAG3,
+        };
+        FS.writeLinesToFile(tasks, taskFile);
+        FS.writeLinesToFile(relations, relationsFile);
+        Project p = FS.getProject(PROJECT_NAME);
+        assertEquals(PROJECT_NAME, p.getName());
+        
+        assertEquals(4, p.getAllTasks().size());
+        Task t1 = p.getTask(1);
+        Task t2 = p.getTask(2);
+        Task t3 = p.getTask(3);
+        assertTrue(p.getTask(4) != null);
+        
+        List<Task> tagList1 = p.getAllTasksByTag(TAG1);
+        List<Task> tagList2 = p.getAllTasksByTag(TAG2);
+        List<Task> tagList3 = p.getAllTasksByTag(TAG3);
+        
+        assertEquals(1, tagList1.size());
+        assertTrue(tagList1.contains(t1));
+        
+        assertEquals(2, tagList2.size());
+        assertTrue(tagList2.contains(t1));
+        assertTrue(tagList2.contains(t2));
+        
+        assertEquals(2, tagList3.size());
+        assertTrue(tagList3.contains(t2));
+        assertTrue(tagList3.contains(t3));
+    }
+    
+    
     /**
      * Test the directory creation.
      */

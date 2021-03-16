@@ -119,7 +119,7 @@ public class PhtSerializer {
         final int I_TASK_ID     = 0;
         final int I_TAG_NAME    = 1;
         
-        final int COLUMNS       = 5;
+        final int COLUMNS       = 2;
         
         String[] parts = line.split(SEPARATOR_RE);
         if (parts.length != COLUMNS) {

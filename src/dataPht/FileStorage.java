@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.regex.*;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Scanner;
 import java.util.ArrayList;
 
 
@@ -66,6 +68,11 @@ public class FileStorage implements Storage {
     };
     
     
+    /**
+     * Setup the storage directory.
+     * This means that a new directory is created if
+     * existing ones aren't found.
+     */
     public FileStorage() {
         setupStorageDirectory();
     }
@@ -89,8 +96,20 @@ public class FileStorage implements Storage {
 
     @Override
     public Project getProject(String name) {
-        // TODO Auto-generated method stub
-        return null;
+        if (!nameAlreadyExists(name)) {
+            String info = "Project could not be opened";
+            throw new StorageException(info);    
+        }
+        Project project = new Project(name);
+        String[] filepaths = generateFilePaths(project);
+        
+        String taskFile      = filepaths[0];
+        //String tagFile       = filepaths[1];
+        String relationsFile = filepaths[2];
+        
+        loadTasks(taskFile, project);
+        generateRelations(relationsFile, project);
+        return project;
     }
 
 
@@ -199,6 +218,7 @@ public class FileStorage implements Storage {
         return usedTags;
     }
     
+    
     protected void saveTags(HashSet<String> usedTags, String filepath) {
         FileOutputStream stream = openWriteStream(filepath);
         try (PrintStream out = new PrintStream(stream)) {
@@ -206,6 +226,35 @@ public class FileStorage implements Storage {
                 out.println(tag);
             }
         }
+    }
+    
+    
+    protected void loadTasks(String filepath, Project p) {
+        try (FileInputStream stream = openReadStream(filepath);
+               Scanner in = new Scanner(stream)) {
+               while (in.hasNextLine()) {
+                   String line = in.nextLine();
+                   Task t = PhtSerializer.parseTask(line);
+                   p.insertTask(t);
+               }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    
+    protected void generateRelations(String filepath, Project p) {
+        try (FileInputStream stream = openReadStream(filepath);
+                Scanner in = new Scanner(stream)) {
+                while (in.hasNextLine()) {
+                    String line = in.nextLine();
+                    RelationEntry entry = PhtSerializer.parseRelationEntry(line);
+                    Task t = p.getTask(entry.getTaskId());
+                    p.addTagToTask(entry.getTagName(), t);
+                }
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
     }
     
     

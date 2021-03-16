@@ -97,6 +97,11 @@ public class TestFileStorage extends FileStorage {
     } 
     
     
+    public String generateTestFilepath(String filename) {
+        return joinpath(filename);
+    }
+    
+    
     /**
      * @param names String array of name for projects
      * <b>THESE NEED TO BE SAFE FOR THE FILESYSYTEM</b>, as no checks
@@ -134,5 +139,15 @@ public class TestFileStorage extends FileStorage {
             e.printStackTrace();
         }
         return lines;
+    }
+    
+    
+    public void writeLinesToFile(String[] lines, String filepath) {
+        FileOutputStream stream = openWriteStream(filepath);
+        try (PrintStream out = new PrintStream(stream)) {
+            for (String line : lines) {
+                out.println(line);
+            }
+        }
     }
 }
