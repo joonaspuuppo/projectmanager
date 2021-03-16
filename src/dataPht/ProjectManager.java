@@ -1,5 +1,6 @@
 package dataPht;
 
+import java.util.List;
 import java.util.regex.*;
 
 
@@ -38,17 +39,18 @@ public class ProjectManager {
      * @return An array of all Project names created.
      */
     public String[] listAllProjects() {
-        return new String[] {};
+        return this.storage.listAllProjects();
     }
     
     
     /**
-     * @param name -
-     * @return -
+     * @param name Name of the Project.
+     * @return Project loaded form storage.
      */
     public Project openProject(String name) {
-        return null;
-        // TODO
+        Project project = this.storage.getProject(name);
+        this.currentProject = project;
+        return project;
     }
     
     
@@ -62,10 +64,10 @@ public class ProjectManager {
     
     
     /**
-     * -
+     * Writes the current Prject to Storage device.
      */
     public void saveCurrentProject() {
-        // TODO
+        this.storage.save(currentProject);
     }
     
     

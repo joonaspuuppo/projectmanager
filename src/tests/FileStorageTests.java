@@ -158,15 +158,22 @@ public class FileStorageTests {
      */
     @Test
     public void testProjectListing() {
-        assertTrue(FS.listAllProjects().size() == 0);
+        assertTrue(FS.listAllProjects().length == 0);
         
         String[] testNames = new String[] {"test_project1", "test_project2"};
         FS.makeTestFiles(testNames);
         
-        List<String> names = FS.listAllProjects();
-        assertEquals(testNames.length, names.size());
+        String[] names = FS.listAllProjects();
+        assertEquals(testNames.length, names.length);
         for (String name : testNames) {
-            assertTrue(names.contains(name));
+            boolean found = false;
+            for (String pName : names) {
+                if (pName.equals(name)) {
+                    found = true;
+                    break;
+                }
+            }
+            assertTrue(found);
         }
     }
     

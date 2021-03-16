@@ -40,6 +40,11 @@ public class SerializerTests {
         expectedResult = "1|some <<separator>> task|1|false"
                 + "|This is <<separator>> a String <<separator>> with multiple <<separator>> separators";
         assertEquals(expectedResult, PhtSerializer.parseString(t));
+        
+        t = new Task(2);
+        expectedResult = "2|Uusi tehtävä 2|2|false|<<default>>";
+        assertEquals(expectedResult, PhtSerializer.parseString(t));
+        
     }
     
     
@@ -63,6 +68,11 @@ public class SerializerTests {
         assertEquals(t.getPriority(), Priority.MEDIUM);
         assertEquals(t.isDone(), true);
         assertEquals(t.getInfo(), "This is a String\\nwith multiple lines");
+        
+        str = "2|<<default>>|2|false|<<default>>";
+        t = PhtSerializer.parseTask(str);
+        assertEquals("", t.getName());
+        assertEquals("", t.getInfo());
     }
     
     

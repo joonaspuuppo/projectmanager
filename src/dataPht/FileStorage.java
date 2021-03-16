@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
@@ -114,7 +115,7 @@ public class FileStorage implements Storage {
 
 
     @Override
-    public List<String> listAllProjects() {
+    public String[] listAllProjects() {
         File storageDir = new File(getDirectory());
         HashSet<String> set = new HashSet<String>();
         ArrayList<String> projectNames = new ArrayList<String>();
@@ -126,7 +127,8 @@ public class FileStorage implements Storage {
                 set.add(projectName);
             }
         }
-        return projectNames;
+        String[] nameArray = new String[projectNames.size()];
+        return projectNames.toArray(nameArray);
     }
 
 
@@ -144,8 +146,15 @@ public class FileStorage implements Storage {
     
     @Override
     public boolean nameAlreadyExists(String name) {
-        List<String> projectNames = listAllProjects();
-        return projectNames.contains(name);
+        String[] projectNames = listAllProjects();
+        boolean result = false;
+        for (String projectName : projectNames) {
+            if (projectName.equals(name)) {
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
     
     

@@ -1,5 +1,6 @@
 package dataPht;
 
+import java.util.Arrays;
 
 /**
  * @author Valtteri Rajalainen, Joonas Puuppo
@@ -12,6 +13,7 @@ public class PhtSerializer {
     private static final String SEPARATOR_RE = "\\|";
     private static final String NEWLINE_ESCAPE = "<<newline>>";
     private static final String SEPARATOR_ESCAPE = "<<separator>>";
+    private static final String DEFAULT = "<<default>>";
     
     
     private static class SerializationException extends RuntimeException {
@@ -40,13 +42,13 @@ public class PhtSerializer {
         StringBuffer sb = new StringBuffer();
         sb.append(Integer.toString(t.getId()));
         sb.append(SEPARATOR);
-        sb.append(escapeSeparators(t.getName()));
+        sb.append(parseTaskNameOrInfo(t.getName()));
         sb.append(SEPARATOR);
         sb.append(priorityToString(t.getPriority()));
         sb.append(SEPARATOR);
         sb.append(t.isDone());
         sb.append(SEPARATOR);
-        sb.append(escapeSeparators(escapeNewlines(t.getInfo())));
+        sb.append(parseTaskNameOrInfo(t.getInfo()));
         return sb.toString();
     }
     
@@ -80,8 +82,8 @@ public class PhtSerializer {
         String info     = parts[I_INFO];
         
         Task task = new Task(parseInt(id));
-        task.rename(restoreSeparators(name));
-        task.setInfo(restoreSeparators(restoreNewlines(info)));
+        task.rename(restoreTaskNameOrInfo(name));
+        task.setInfo(restoreTaskNameOrInfo(info));
         task.setPriority(stringToPriority(priority));
         if (parseBoolean(done)) task.markAsDone();
         return task;
@@ -194,6 +196,24 @@ public class PhtSerializer {
     
     private static boolean parseBoolean(String str) {
             return Boolean.parseBoolean(str);
+    }
+    
+    
+    private static String parseTaskNameOrInfo(String str) {
+        if (str == null || str.equals("")) {
+            return DEFAULT;
+        }
+        String parsedName = escapeNewlines(str);
+        parsedName = escapeSeparators(parsedName);
+        return parsedName;
+    }
+    
+    
+    private static String restoreTaskNameOrInfo(String str) {
+        if (str.equals(DEFAULT)) return "";
+        String restored = restoreNewlines(str);
+        restored = restoreSeparators(restored);
+        return restored;
     }
     
 }
