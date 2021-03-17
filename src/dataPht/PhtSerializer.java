@@ -138,12 +138,12 @@ public class PhtSerializer {
     
     
     private static String restoreNewlines(String str) {
-        return str.replace(NEWLINE_ESCAPE, "\\n");
+        return str.replace(NEWLINE_ESCAPE, "\n");
     }
 
 
     private static String escapeNewlines(String str) {
-        return str.replace("\\n", NEWLINE_ESCAPE);
+        return str.replace("\n", NEWLINE_ESCAPE);
     }
     
     

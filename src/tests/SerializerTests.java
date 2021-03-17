@@ -31,7 +31,7 @@ public class SerializerTests {
         expectedResult = "1|do something|1|false|some task to be done";
         assertEquals(expectedResult, PhtSerializer.parseString(t));
         
-        t.setInfo("This is a String\\nwith multiple lines");
+        t.setInfo("This is a String\nwith multiple lines");
         expectedResult = "1|do something|1|false|This is a String<<newline>>with multiple lines";
         assertEquals(expectedResult, PhtSerializer.parseString(t));
         
@@ -67,7 +67,7 @@ public class SerializerTests {
         assertEquals(t.getName(), "task1");
         assertEquals(t.getPriority(), Priority.MEDIUM);
         assertEquals(t.isDone(), true);
-        assertEquals(t.getInfo(), "This is a String\\nwith multiple lines");
+        assertEquals(t.getInfo(), "This is a String\nwith multiple lines");
         
         str = "2|<<default>>|2|false|<<default>>";
         t = PhtSerializer.parseTask(str);
