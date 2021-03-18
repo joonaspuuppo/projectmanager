@@ -48,9 +48,7 @@ public class PhtGUIController implements Initializable {
     @FXML private TextArea taskInfoTextArea;
     
     private Project currentProject;
-    private Task currentTask; // null if no task is selected
-    
-//  PROJECT -----------------------------------------------------------------------------
+    private Task currentTask;
     
     /**
      * Setter for current project
@@ -59,26 +57,52 @@ public class PhtGUIController implements Initializable {
     public void setCurrentProject(Project p) {
         this.currentProject = p;
         projectNameLabel.setText(p.getName());
-        loadTasks();
-        refresh();
-        
+        refreshTasks();
+        Task t = getSelectedTask();
+        setCurrentTask(t);
     }
     
     /**
-     * Getter for current project
-     * @return current project
+     * Getter for current Project
+     * @return current Project
      */
     public Project getCurrentProject() {
         return this.currentProject;
     }
-      
+
+    /**
+     * Getter for current task
+     * @return current Task
+     */
+    public Task getCurrentTask() {
+        return this.currentTask;
+    }
+
+    /**
+     * @return current Task's ID or -1 if Task is null.
+     */
+    public int getCurrentTaskId() {
+        if (getCurrentTask() == null) return -1;
+        return this.currentTask.getId();
+    }
+
+    /**
+     * Set the current Task.
+     * @param task Task
+     */
+    public void setCurrentTask(Task task) {
+        resetTaskView();
+        this.currentTask = task;
+        updateTaskView(task);
+    }
+
+ 
     /**
      * "Move" back to the starting window to open a Project.
      * @throws IOException if the .fxml file is not found.
      */
     @FXML private void handleOpenProject() throws IOException {
         // TODO verify saving
-        
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("PhtStartGUIView.fxml"));
         
@@ -90,15 +114,13 @@ public class PhtGUIController implements Initializable {
         Stage primaryStage = (Stage) buttonAddTask.getScene().getWindow();
         primaryStage.setScene(startWindow);
     }
-         
+
+    
     @FXML private void handleCreateNewProject() {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Uusi projekti");
-        dialog.setHeaderText("Anna uuden projektin nimi");
-        dialog.setContentText("Projektin nimi:");
-        Optional<String> answer = dialog.showAndWait();
-        
-        String projectName = answer.isPresent() ? answer.get() : null;
+        String title = "Luo uusi projekti";
+        String header = "";
+        String context = "Projektin nimi:";
+        String projectName = askString(title, header, context);
         if (projectName == null) {
             displayError("Ole hyvä ja syötä nimi, jotta voit luoda uuden projektin.");
             return;
@@ -110,18 +132,14 @@ public class PhtGUIController implements Initializable {
             displayError("Virheellinen nimi projektille");
         }
     }
-     
+
+
     @FXML private void handleRenameProject() {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Nimeä uudelleen");
-        dialog.setHeaderText("Anna projektin uusi nimi");
-        dialog.setContentText("Uusi nimi:");
-        Optional<String> answer = dialog.showAndWait();
-        
-        String projectName = answer.isPresent() ? answer.get() : null;
-        if (projectName == null) {
-            return;
-        }
+        String title = "Nmeä uudelleen";
+        String header = "";
+        String context = "Uusi nimi:";
+        String projectName = askString(title, header, context);
+        if (projectName == null) return;
         try {
             ProjectManager.getInstance().renameCurrentProject(projectName);
             this.projectNameLabel.setText(projectName);
@@ -129,45 +147,56 @@ public class PhtGUIController implements Initializable {
             displayError("Virheellinen nimi projektille");
         }
     }
-    
+
+
     @FXML private void handleDeleteProject() {
-        Dialogs.showQuestionDialog("Poisto?", "Haluatko varmasti poistaa projektin?", "Kyllä", "Ei");
-        // TODO: delete project
+        Dialogs.showQuestionDialog(
+                "Poisto?",
+                "Haluatko varmasti poistaa projektin?",
+                "Kyllä",
+                "Ei"
+        );
+        // TODO:
+        // ProjectManager.deleteProject..
+        // Show start window
     }
-    
+
+
     @FXML private void handleSave() {
         save();
     }
 
-    private void save() {
-        ProjectManager.getInstance().saveCurrentProject();
-    }
-    
+
     @FXML private void handleExit() {
         save();
         Platform.exit();
     }
-    
-//  TASKS -----------------------------------------------------------------------------
-    
+
     /**
-     * Sets this.currentTask. t can be null. 
-     * @param t task
+     * Opens a dialog for deleting a task.
      */
-    public void setCurrentTask(Task t) {
-        this.currentTask = t;
-        refresh();
+    @FXML private void handleDeleteTask() {
+        if (getCurrentTask() == null) return;
+        Boolean confirmed = Dialogs.showQuestionDialog(
+                "Poisto?",
+                "Poistetaanko tehtävä?",
+                "Kyllä",
+                "Ei"
+        );
+        if (confirmed) {
+            getCurrentProject().removeTask(getCurrentTaskId());
+            resetTaskView();
+            refreshTasks();
+        }
     }
-    
+
+
     /**
      * Called when user interacts with taskList. 
      */
     @FXML private void handleTaskListSelection() {
-        if (taskList.getObjects().isEmpty()) {
-            setCurrentTask(null);
-        } else {
-            setCurrentTask(taskList.getSelectedObject());
-        }
+        Task task = getSelectedTask();
+        setCurrentTask(task);
     }
     
     /**
@@ -181,28 +210,202 @@ public class PhtGUIController implements Initializable {
      * Filter Tasks list by name of task
      */
     @FXML private void handleFilterTasksByName() {
-        if (taskSearchTextField.getText().equals("")) {
-            loadTasks();
+        String query = taskSearchTextField.getText();
+        query = query.toLowerCase().trim();
+        if (query.equals("")) {
+            refreshTasks();
             return;
         }
-        taskList.clear(); 
-        String query = taskSearchTextField.getText().toLowerCase().trim();
+        sortTaskListByName(query);
+    }
 
-        // lists all tasks with names containing the search query
-        for (Task task : this.currentProject.getAllTasks()) {
-            if (task.getName().toLowerCase().contains(query)) {
-                if (!task.isDone()) taskList.add(task.getName(), task);
-                if (task.isDone()) taskList.add(task.getName() + " (valmis)", task);
-            }
-        }
+    
+    @FXML private void handleFilterTasksByPriority() {
+        sortTaskListByPriority(); 
     }
 
     /**
-     * Filter Tasks list by Task priority
+     * Filter Tasks list by tag
      */
-    @FXML private void handleFilterTasksByPriority() {
+    @FXML private void handleFilterTasksByTag() { 
+        String query = taskSearchTextField.getText().trim();
+        sortTaskListByTag(query);
+    }
+    
+    /**
+     * Adds task to project.
+     */
+    @FXML private void handleAddTask() {
+        Task newTask = getCurrentProject().createTask();
+        String taskName = readTaskNameField();
+        if (!taskName.equals("")) newTask.rename(taskName);
+        setCurrentTask(newTask);
+        refreshTasks();
+    }
+    
+    /**
+     * Called when user types a key into taskInfoTextArea.
+     */
+    @FXML private void handleUpdateTaskInfo() {
+        Task task = getCurrentTask();
+        if (task != null) {
+            String newInfo = taskInfoTextArea.getText();
+            task.setInfo(newInfo); 
+        }
+    }
+    
+    /**
+     * Called when user clicks the "Mark as done" button.
+     */
+    @FXML private void handleMarkAsDone() {
+        Task task = getCurrentTask();
+        if (task != null) {
+            task.toggleDone();
+            updateTaskView(task);
+            refreshTasks();
+        }
+    }
+    
+    /**
+     * Opens a dialog for editing a Task.
+     */
+    @FXML private void handleEditTask() {
+        Task task = getCurrentTask();
+        if (task != null) {
+            PhtEditTaskDialogController.editTask(null, task, currentProject);
+            updateTaskView(task);
+            refreshTasks();
+        }
+    }
+
+
+    /**
+     * Show a dialog to inform errors.
+     */
+    private void displayError(String info) {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Virhe");
+        alert.setHeaderText(null);
+        alert.setContentText(info);
+        alert.showAndWait();
+    }
+
+
+    /**
+     * Show a dialog to ask userinput.
+     * @return The string user entered, or null if none was inserted. 
+     */
+    private String askString(String title, String header, String context) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle(title);
+        dialog.setHeaderText(header);
+        dialog.setContentText(context);
+        Optional<String> answer = dialog.showAndWait();
+        return answer.isPresent() ? answer.get() : null;
+    }
+
+
+    /**
+     * Read and reset the contents of the taskNameField.
+     * @return Contents of the textField.
+     */
+    private String readTaskNameField() {
+        String text = taskNameField.getText();
+        taskNameField.setText("");
+        return text;
+    }
+    
+    
+    /**
+     * Finds the taskList index of a given Task
+     * @param t Task
+     * @return index of Task or 0 if not found.
+     */
+    private int getTaskListIndex(Task t) {
+        if (t == null) return 0;
+        for (int i = 0; i < currentProject.getAllTasks().size(); i++) {
+            if (taskList.getObjects().get(i).getId() == t.getId()) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Refresh the taskList.
+     * Remembers the selected Task.
+     */
+    private void refreshTasks() {
+        List<Task> tasks = getCurrentProject().getAllTasks();
+        Task task = getSelectedTask();
+        updateTaskList(tasks);
+        int index = getTaskListIndex(task);
+        taskList.setSelectedIndex(index);
+    }
+    
+    /**
+     * Clear the taskList and insert all Tasks given into it.
+     * @param tasks List of Tasks
+     */
+    private void updateTaskList(List<Task> tasks) {
         taskList.clear();
+        for (Task task : tasks) {
+            if (!task.isDone()) taskList.add(task.getName(), task);
+        }
+        for (Task task : tasks) {
+            if (task.isDone()) taskList.add(task.getName() + " (valmis)", task);
+        }
+    }
+    
+    
+    private Task getSelectedTask() {
+        return taskList.getSelectedObject();
+    }
+    
+
+    /**
+     * Clear the Task view right side of the screen and set default values.
+     */
+    private void resetTaskView() {
+        taskNameLabel.setText("");
+        taskInfoTextArea.setText("");
+        taskPriorityLabel.setText("");
+        tagsLabel.setText("");
+        buttonMarkAsDone.setText("Merkitse valmiiksi");
+    }
+
+    
+    /**
+     * Insert values to the Task view right side
+     * of the screen based on the given Task's values.  
+     */
+    private void updateTaskView(Task task) {
+        if (currentTask == null) return;
+        taskNameLabel.setText(task.getName());
+        taskInfoTextArea.setText(task.getInfo());
+        taskPriorityLabel.setText(Utils.taskPriorityToString(task));
         
+        List<Tag> tags= getCurrentProject().getTagsFromTask(task.getId());
+        tagsLabel.setText(Utils.formatTags(tags));
+        
+        buttonMarkAsDone.setText(Utils.getDoneIndicatorString(task));
+        setTaskDisplayColor();
+    }
+    
+    
+    /**
+     * Sets label color depending on whether currentTask is done or not. 
+     */
+    public void setTaskDisplayColor() {
+        Color color = Utils.getTextFillColor(getCurrentTask());
+        taskNameLabel.setTextFill(color);
+        taskPriorityLabel.setTextFill(color);
+        tagsLabel.setTextFill(color);
+    }
+    
+    
+    private void sortTaskListByPriority() {
+        taskList.clear();
         // tasks listed from highest priority to lowest
         for(Task task : this.currentProject.getAllTasksByPriority(Priority.HIGH)) {
             if (!task.isDone()) taskList.add(task.getName(), task);
@@ -213,20 +416,15 @@ public class PhtGUIController implements Initializable {
         for(Task task : this.currentProject.getAllTasksByPriority(Priority.LOW)) {
             if (!task.isDone()) taskList.add(task.getName(), task);
         } 
-        
         // list tags marked as done at the end of the list (not in order of priority)
         for(Task task : this.currentProject.getAllTasks()) {
             if (task.isDone()) taskList.add(task.getName() + " (valmis)", task);
-        } 
+        }
     }
-
-    /**
-     * Filter Tasks list by tag
-     */
-    @FXML private void handleFilterTasksByTag() {
-        taskList.clear(); 
-        String query = taskSearchTextField.getText().toLowerCase().trim();
-        
+    
+    
+    private void sortTaskListByTag(String query) {
+        taskList.clear();
         // lists all tasks associated with a tag that user is searching for
         for (Task task : this.currentProject.getAllTasksByTag(query)) {
             if (!task.isDone()) taskList.add(task.getName(), task);
@@ -234,182 +432,23 @@ public class PhtGUIController implements Initializable {
         }
     }
     
-    /**
-     * Adds task to project.
-     */
-    @FXML private void handleAddTask() {
-        Task task = this.getCurrentProject().createTask();
-        // if task name is given by user then rename task, otherwise keep default task name
-        if (!taskNameField.getText().isBlank()) {
-            task.rename(taskNameField.getText());
-            taskNameField.setText("");
-        }
-        loadTasks();
-        refresh();
-    }
     
-    /**
-     * Called when user types a key into taskInfoTextArea.
-     */
-    @FXML private void handleUpdateTaskInfo() {
-        if (currentTask == null) return;
-        currentTask.setInfo(taskInfoTextArea.getText()); 
-    }
-    
-    /**
-     * Called when user clicks the "Mark as done" button.
-     */
-    @FXML private void handleMarkAsDone() {
-        if (currentTask == null) return;
-        Task t = currentTask;
-        if (t.isDone()) {
-            t.markAsIncomplete();
-        } else {
-            t.markAsDone();
-        }
-        loadTasks();
-        taskList.setSelectedIndex(getTaskListIndex(t));
-        setCurrentTask(taskList.getSelectedObject());
-        refresh();
-    }
-    
-    /**
-     * Opens a dialog for editing a Task.
-     */
-    @FXML private void handleEditTask() {
-        if (currentTask == null) return;
-        Task t = currentTask;
-        PhtEditTaskDialogController.editTask(null, t, currentProject);
-        
-        // taskList has to be updated in case taskName was changed
-        loadTasks();
-        
-        // selecting edited Task from taskList
-        taskList.setSelectedIndex(getTaskListIndex(t));
-        setCurrentTask(taskList.getSelectedObject());
-        refresh();
-    }
-    
-    /**
-     * Finds the taskList index of a given Task
-     * @param t task
-     * @return index of task or -1 if not found.
-     */
-    private int getTaskListIndex(Task t) {
-        for (int i = 0; i < currentProject.getAllTasks().size(); i++) {
-            if (taskList.getObjects().get(i).getId() == t.getId()) {
-                return i;
+    private void sortTaskListByName(String query) {
+        taskList.clear(); 
+        // lists all tasks with names containing the search query
+        for (Task task : this.currentProject.getAllTasks()) {
+            if (task.getName().toLowerCase().contains(query)) {
+                if (!task.isDone()) taskList.add(task.getName(), task);
+                if (task.isDone()) taskList.add(task.getName() + " (valmis)", task);
             }
-        }
-        return -1;
-    }
-    
-    /**
-     * Refreshes main window's right side to show selected Task's information
-     */
-    private void refresh() {
-        // if nothing is selected no task information is displayed.
-        if (currentTask == null) {
-            taskNameLabel.setText("");
-            taskInfoTextArea.setText("");
-            taskPriorityLabel.setText("");
-            tagsLabel.setText("");
-            buttonMarkAsDone.setText("Merkitse valmiiksi");
-            return;
-        }
-        taskNameLabel.setText(currentTask.getName());
-        taskInfoTextArea.setText(currentTask.getInfo());
-        taskPriorityLabel.setText(getPriorityAsString());
-        tagsLabel.setText(getTagsAsHashTags());
-        buttonMarkAsDone.setText(getMarkAsDoneButtonText());
-        setTaskDisplayColor();
-    }
-    
-    /**
-     * Loads taskList. Unless taskList is empty, selects the first Task on the list.
-     */
-    private void loadTasks() {
-        taskList.clear();
-        for (Task task : currentProject.getAllTasks()) {
-            if (!task.isDone()) taskList.add(task.getName(), task);
-        }
-        for (Task task : currentProject.getAllTasks()) {
-            if (task.isDone()) taskList.add(task.getName() + " (valmis)", task);
-        }
-        if (!taskList.getObjects().isEmpty()) {
-            taskList.setSelectedIndex(0);
-            setCurrentTask(taskList.getSelectedObject());
-        } else {
-            setCurrentTask(null);
         }
     }
 
-    /**
-     * Opens a dialog for deleting a task.
-     */
-    @FXML private void handleDeleteTask() {
-        if (currentTask == null) return;
-        Boolean confirmed = Dialogs.showQuestionDialog("Poisto?", "Poistetaanko tehtävä?", "Kyllä", "Ei");
-        if (confirmed) {
-            this.getCurrentProject().removeTask(currentTask.getId());
-            loadTasks();
-            refresh();
-        }
+
+    private void save() {
+        ProjectManager.getInstance().saveCurrentProject();
     }
-    
-    /**
-     * Gets the string representation of a Task's priority setting.
-     * Used to set taskPriorityLabel text.
-     * @return priority as string or empty string if medium priority is selected.
-     */
-    private String getPriorityAsString() {
-        if (currentTask.getPriority() == Priority.LOW) return "(kiireetön)";
-        if (currentTask.getPriority() == Priority.HIGH) return "(kiireellinen)";
-        return "";
-    }
-    
-    /**
-     * Gets a Task's tags as a String where a #-character precedes every tagName.
-     * @return tags as hashtags or an empty string if task has no tags.
-     */
-    private String getTagsAsHashTags() {
-        if (this.currentProject.getTagsFromTask(currentTask.getId()).isEmpty()) return "";
-        List<Tag> tags = this.currentProject.getTagsFromTask(currentTask.getId());
-        String tagsWithCommas = this.currentProject.getTagsAsString(tags);
-        String tagsAsHashTags = "#" + tagsWithCommas.replace(", ", "   #");
-        if (tagsAsHashTags.equals("#")) return ""; // in case tagsWithCommas is empty
-        return tagsAsHashTags;
-    }
-    
-    private String getMarkAsDoneButtonText() {
-        if (currentTask.isDone()) return "Merkitse keskeneräiseksi";
-        return "Merkitse valmiiksi";
-    }
-    
-    /**
-     * Sets label color depending on whether currentTask is done or not. 
-     */
-    public void setTaskDisplayColor() {
-        if (currentTask.isDone()) {
-            taskNameLabel.setTextFill(Color.GRAY);
-            taskPriorityLabel.setTextFill(Color.GRAY);
-            tagsLabel.setTextFill(Color.GRAY);
-        } else {
-            taskNameLabel.setTextFill(Color.BLACK);
-            taskPriorityLabel.setTextFill(Color.BLACK);
-            tagsLabel.setTextFill(Color.BLACK);
-        }
-    }
-    
-//  OTHER -----------------------------------------------------------------------------
-    
-    private void displayError(String info) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Virhe");
-        alert.setHeaderText(null);
-        alert.setContentText(info);
-        alert.showAndWait();
-    }
+
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {

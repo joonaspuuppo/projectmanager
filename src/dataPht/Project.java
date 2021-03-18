@@ -246,6 +246,7 @@ public class Project {
         String[] tagNames = tagString.split(",");
         ArrayList<Tag> tagsFromString = new ArrayList<>();
         for (String tagName : tagNames) {
+            if (tagName.equals("")) continue;
             tagsFromString.add(new Tag(tagName.trim()));
         }
         return tagsFromString;

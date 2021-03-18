@@ -91,4 +91,16 @@ public class Task {
         priority = p;
     }
 
+    
+    /**
+     * Toggle between done and undone.
+     */
+    public void toggleDone() {
+        if (isDone()) {
+            this.done = false;
+            return;
+        }
+        this.done = true;
+    }
+
 }
