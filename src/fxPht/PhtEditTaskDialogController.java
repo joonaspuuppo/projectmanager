@@ -37,7 +37,7 @@ public class PhtEditTaskDialogController implements ModalControllerInterface<Tas
     private RadioButtonChooser<Priority> taskPriorityChooser;
     
     private Project currentProject;
-    private Task task;
+    private Task editedTask;
     private Boolean confirmChanges = false;
     
     
@@ -50,11 +50,11 @@ public class PhtEditTaskDialogController implements ModalControllerInterface<Tas
     }
     
     /**
-     * Sets task that is edited
-     * @param t task
+     * Sets editedTask that is edited
+     * @param t editedTask
      */
     public void setTask(Task t) {
-        this.task = t;
+        this.editedTask = t;
     }
     
     /**
@@ -78,56 +78,32 @@ public class PhtEditTaskDialogController implements ModalControllerInterface<Tas
         ModalController.closeStage(confirmChangesButton);
     }
     
-    /**
-     * Sets confirmChanges
-     * @param value boolean value
-     */
-    public void setconfirmChanges(Boolean value) {
-        this.confirmChanges = value;
-    }
-    
-    
 
     @Override
     public Task getResult() {
-        Project p = this.getCurrentProject();
-        Task t = this.task;
-        if (this.confirmChanges == false) return t;
+        Project project = this.getCurrentProject();
+        Task task = this.editedTask;
+        if (this.confirmChanges == false) return task;
         
-        // renaming task
-        t.rename(editedTaskNameField.getText());
+        String newTaskName = editedTaskNameField.getText();
+        task.rename(newTaskName);
         
-        // removing old tags
-        while(!p.getTagsFromTask(t.getId()).isEmpty()) {
-            p.removeTagFromTask(p.getTagsFromTask(t.getId()).get(0).getName(), t);
-        }
-        
-        // adding new tags
-        List<Tag> newTags = p.readTagsFromString(editedTagsField.getText());
-        for (Tag tag : newTags) {
-            p.addTagToTask(tag.getName(), t);
-        }
-        
-        // updating priority
-        if (taskPriorityChooser.getSelectedIndex() == 2) {
-            t.setPriority(Priority.LOW);
-        } else if (taskPriorityChooser.getSelectedIndex() == 1) {
-            t.setPriority(Priority.MEDIUM);
-        } else {
-            t.setPriority(Priority.HIGH);
-        }
-        
-        return t;
+        clearTagsFromTask(project, task);
+        addNewTags(project, task);
+        updateTaskPriority(task);
+        return task;
     }
 
+    
     @Override
     public void handleShown() {
         // TODO Auto-generated method stub
-        List<Tag> tags = this.getCurrentProject().getTagsFromTask(this.task.getId());
+        List<Tag> tags = this.getCurrentProject().getTagsFromTask(this.editedTask.getId());
         editedTagsField.setText(this.getCurrentProject().getTagsAsString(tags));
         
     }
 
+    
     @Override
     public void setDefault(Task task) {
         this.setTask(task);
@@ -140,11 +116,54 @@ public class PhtEditTaskDialogController implements ModalControllerInterface<Tas
         } else {
             taskPriorityChooser.setSelectedIndex(0);
         }
-        
-        
     }
     
     
+    /**
+     * Sets confirmChanges
+     * @param value boolean value
+     */
+    public void setconfirmChanges(Boolean value) {
+        this.confirmChanges = value;
+    }
+    
+    
+    private void clearTagsFromTask(Project p, Task task) {
+        int taskId = task.getId();
+        List<Tag> tagList = p.getTagsFromTask(taskId);
+        while(!tagList.isEmpty()) {
+            Tag tag = tagList.remove(0);
+            p.removeTagFromTask(tag.getName(), task);
+        }
+    }
+    
+    
+    private void addNewTags(Project p, Task t) {
+        String tagString = editedTagsField.getText();
+        List<Tag> newTags = p.readTagsFromString(tagString);
+        for (Tag tag : newTags) {
+            p.addTagToTask(tag.getName(), t);
+        }
+    }
+    
+    
+    private void updateTaskPriority(Task t) {
+        Priority[] indexToPriority = {
+                Priority.HIGH,
+                Priority.MEDIUM,
+                Priority.LOW
+            };
+        int i = taskPriorityChooser.getSelectedIndex();
+        Priority prio = indexToPriority[i];
+        t.setPriority(prio);
+    }
+    
+
+    @Override
+    public void initialize(URL arg0, ResourceBundle arg1) {
+        // TODO Auto-generated method stub
+        
+    }
     
     /**
      * Opens a modal dialog for editing a task
@@ -154,15 +173,15 @@ public class PhtEditTaskDialogController implements ModalControllerInterface<Tas
      * @return - 
      */
     public static Task editTask(Stage modalityStage, Task task, Project project) {
+        URL url = PhtEditTaskDialogController.class.getResource("PhtEditTaskDialogView.fxml");
+        String title = "Muokkaa tehtävää"; 
         return ModalController.<Task, PhtEditTaskDialogController>showModal(
-                PhtEditTaskDialogController.class.getResource("PhtEditTaskDialogView.fxml"),
-                "Muokkaa tehtävää", modalityStage, task, ctrl -> ctrl.setCurrentProject(project));
-    }
-
-    @Override
-    public void initialize(URL arg0, ResourceBundle arg1) {
-        // TODO Auto-generated method stub
-        
+                url,
+                title,
+                modalityStage,
+                task,
+                ctrl -> ctrl.setCurrentProject(project)
+            );
     }
 
 
