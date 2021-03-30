@@ -75,7 +75,7 @@ public class ProjectManager {
      * -
      */
     public void removeCurrentProject() {
-        // TODO
+        this.storage.deleteProject(currentProject);
     }
     
     

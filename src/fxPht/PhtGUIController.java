@@ -149,16 +149,19 @@ public class PhtGUIController implements Initializable {
     }
 
 
-    @FXML private void handleDeleteProject() {
-        Dialogs.showQuestionDialog(
+    @FXML private void handleDeleteProject() throws IOException {
+        boolean delete = Dialogs.showQuestionDialog(
                 "Poisto?",
                 "Haluatko varmasti poistaa projektin?",
                 "Kyllä",
                 "Ei"
         );
-        // TODO:
-        // ProjectManager.deleteProject..
-        // Show start window
+        if (delete) {
+            save();
+            ProjectManager.getInstance().removeCurrentProject();
+            handleOpenProject();
+        }
+        
     }
 
 

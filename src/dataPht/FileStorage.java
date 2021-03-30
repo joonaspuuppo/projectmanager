@@ -134,9 +134,15 @@ public class FileStorage implements Storage {
 
     @Override
     public void deleteProject(Project project) {
-        // TODO Auto-generated method stub
+        String[] filePaths = generateFilePaths(project);
+        for (String filePath : filePaths) {
+            File projectFile = new File(filePath);
+            if (projectFile.delete() == false) {
+                String info = "Failed to delete the project";
+                throw new StorageException(info);
+            }
+        }
     }
-
 
     @Override
     public void renameProject(Project project) {
