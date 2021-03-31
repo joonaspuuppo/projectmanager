@@ -16,7 +16,7 @@ import java.util.Arrays;
 
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
- * @version 0.5 Mar 11, 2021
+ * @version 0.6 Apr 1, 2021
  * Concrete storage class. Saves data to files.
  */
 public class FileStorage implements Storage {

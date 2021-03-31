@@ -3,8 +3,8 @@ package dataPht;
 import java.util.Arrays;
 
 /**
- * @author Valtteri Rajalainen, Joonas Puuppo
- * @version 0.6, Mar 14, 2021
+ * @author Joonas Puuppo, Valtteri Rajalainen
+ * @version 0.6 Apr 1, 2021
  * Serialize Tasks into String format.
  */
 public class PhtSerializer {
