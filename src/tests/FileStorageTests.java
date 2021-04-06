@@ -252,6 +252,42 @@ public class FileStorageTests {
         assertEquals(expected, Arrays.toString(FS.getFilepathsForProject(p)));
     }
     
+    /**
+     * Test project deletion.
+     */
+    @Test
+    public void testProjectDeletion() {
+        clearTestDirectory();
+        Project p = generateDummyProject();
+        FS.save(p);
+        assertEquals("test", FS.listAllProjects()[0]);
+        FS.deleteProject(p);
+        assertEquals(0, FS.listAllProjects().length);
+        
+        p = generateDummyProject();
+        FS.save(p);
+        assertEquals("test", FS.listAllProjects()[0]);
+        FS.deleteProject("test");
+        assertEquals(0, FS.listAllProjects().length);
+    }
+    
+    
+    /**
+     * Test renaming of a project and its files.
+     */
+    @Test
+    public void testProjectRenaming() {
+        clearTestDirectory();
+        Project p = generateDummyProject();
+        FS.save(p);
+        FS.renameProject(p, "newName");
+        assertEquals("newName", p.getName());
+        String[] filepaths = FS.getFilepathsForProject(p);
+        assertTrue(filepaths[0].contains("newName"));
+        assertTrue(filepaths[1].contains("newName"));
+        assertTrue(filepaths[2].contains("newName"));
+        clearTestDirectory();
+    }
     
     /**
      * Set up a dummy project with known relations
