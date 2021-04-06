@@ -30,7 +30,7 @@ import javafx.stage.Stage;
 
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
- * @version 0.6 Apr 1, 2021
+ * @version 1.0 Apr 1, 2021
  * Controller of the main window.
  */
 public class PhtGUIController implements Initializable {
@@ -116,6 +116,9 @@ public class PhtGUIController implements Initializable {
     }
 
     
+    /**
+     * Handle event for creating a new project.
+     */
     @FXML private void handleCreateNewProject() {
         String title = "Luo uusi projekti";
         String header = "";
@@ -134,6 +137,9 @@ public class PhtGUIController implements Initializable {
     }
 
 
+    /**
+     * Handle event for renaming a project.
+     */
     @FXML private void handleRenameProject() {
         String title = "Nmeä uudelleen";
         String header = "";
@@ -149,6 +155,9 @@ public class PhtGUIController implements Initializable {
     }
 
 
+    /**
+     * Handle event for deleting a project.
+     */
     @FXML private void handleDeleteProject() throws IOException {
         boolean delete = Dialogs.showQuestionDialog(
                 "Poisto?",
@@ -164,12 +173,18 @@ public class PhtGUIController implements Initializable {
         
     }
 
-
+    
+    /**
+     * Hanlde event for saving.
+     */
     @FXML private void handleSave() {
         save();
     }
 
 
+    /**
+     * Handle event for creating a new project.
+     */
     @FXML private void handleExit() {
         save();
         Platform.exit();
@@ -195,6 +210,7 @@ public class PhtGUIController implements Initializable {
 
 
     /**
+     * Handle event for selecting tasks.
      * Called when user interacts with taskList. 
      */
     @FXML private void handleTaskListSelection() {
@@ -202,7 +218,9 @@ public class PhtGUIController implements Initializable {
         setCurrentTask(task);
     }
     
+    
     /**
+     * Handle event for searching tasks.
      * Called when user types a key into taskSearchField.
      */
     @FXML private void handleSearchTasks() {
@@ -210,6 +228,7 @@ public class PhtGUIController implements Initializable {
     }
     
     /**
+     * Handle event for filtering tasks by name.
      * Filter Tasks list by name of task
      */
     @FXML private void handleFilterTasksByName() {
@@ -223,11 +242,15 @@ public class PhtGUIController implements Initializable {
     }
 
     
+    /**
+     * Handle event for filtering tasks by priority.
+     */
     @FXML private void handleFilterTasksByPriority() {
         sortTaskListByPriority(); 
     }
 
     /**
+     * Handle event for filtering tasks by priority.
      * Filter Tasks list by tag
      */
     @FXML private void handleFilterTasksByTag() { 
@@ -236,6 +259,7 @@ public class PhtGUIController implements Initializable {
     }
     
     /**
+     * Handle event for adding tasks.
      * Adds task to project.
      */
     @FXML private void handleAddTask() {
@@ -247,6 +271,7 @@ public class PhtGUIController implements Initializable {
     }
     
     /**
+     * Handle updating task view.
      * Called when user types a key into taskInfoTextArea.
      */
     @FXML private void handleUpdateTaskInfo() {
@@ -258,6 +283,7 @@ public class PhtGUIController implements Initializable {
     }
     
     /**
+     * Handle event for toggling done.
      * Called when user clicks the "Mark as done" button.
      */
     @FXML private void handleMarkAsDone() {
@@ -270,6 +296,7 @@ public class PhtGUIController implements Initializable {
     }
     
     /**
+     * Handle event for editing tasks.
      * Opens a dialog for editing a Task.
      */
     @FXML private void handleEditTask() {
@@ -283,7 +310,7 @@ public class PhtGUIController implements Initializable {
 
 
     /**
-     * Show a dialog to inform errors.
+     * Show an error dialog to the user
      */
     private void displayError(String info) {
         Alert alert = new Alert(AlertType.INFORMATION);
@@ -361,6 +388,10 @@ public class PhtGUIController implements Initializable {
     }
     
     
+    /**
+     * Get the selected task.
+     * @return null if no Task selected, else the Task instance
+     */
     private Task getSelectedTask() {
         return taskList.getSelectedObject();
     }
@@ -407,6 +438,9 @@ public class PhtGUIController implements Initializable {
     }
     
     
+    /**
+     * Sort the task list by priority.
+     */
     private void sortTaskListByPriority() {
         taskList.clear();
         // tasks listed from highest priority to lowest
@@ -426,6 +460,9 @@ public class PhtGUIController implements Initializable {
     }
     
     
+    /**
+     * Sort the task list by tag.
+     */
     private void sortTaskListByTag(String query) {
         taskList.clear();
         // lists all tasks associated with a tag that user is searching for
@@ -436,6 +473,9 @@ public class PhtGUIController implements Initializable {
     }
     
     
+    /**
+     * Sort the task list by name.
+     */
     private void sortTaskListByName(String query) {
         taskList.clear(); 
         // lists all tasks with names containing the search query
@@ -447,12 +487,19 @@ public class PhtGUIController implements Initializable {
         }
     }
 
-
+    
+    /**
+     * Save.
+     */
     private void save() {
         ProjectManager.getInstance().saveCurrentProject();
     }
 
     
+    /**
+     * Initialize the GUI.
+     * Not used.
+     */
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         //

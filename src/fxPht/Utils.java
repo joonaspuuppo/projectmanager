@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
- * @version 0.6 Apr 1, 2021
+ * @version 1.0 Apr 1, 2021
  * Utility functions for UI.
  */
 public class Utils {

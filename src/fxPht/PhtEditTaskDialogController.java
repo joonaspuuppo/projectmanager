@@ -20,7 +20,7 @@ import javafx.stage.Stage;
 
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
- * @version 0.6 Apr 1, 2021
+ * @version 1.0 Apr 1, 2021
  */
 public class PhtEditTaskDialogController implements ModalControllerInterface<Task>, Initializable {
    
@@ -66,12 +66,19 @@ public class PhtEditTaskDialogController implements ModalControllerInterface<Tas
     } 
     
 
+    /**
+     * Handle event for confirming changes.
+     */
     @FXML
     private void handleConfirmChanges() {
         setconfirmChanges(true);
         ModalController.closeStage(confirmChangesButton);
     }
     
+    
+    /**
+     * Handle event for cancelling changes.
+     */
     @FXML
     private void handleCancel() {
         setconfirmChanges(false);
@@ -79,6 +86,10 @@ public class PhtEditTaskDialogController implements ModalControllerInterface<Tas
     }
     
 
+    /**
+     * Make the changes.
+     * @return edited Task instance
+     */
     @Override
     public Task getResult() {
         Project project = this.getCurrentProject();
@@ -95,15 +106,20 @@ public class PhtEditTaskDialogController implements ModalControllerInterface<Tas
     }
 
     
+    /**
+     * Load the task info to the form.
+     */
     @Override
     public void handleShown() {
-        // TODO Auto-generated method stub
         List<Tag> tags = this.getCurrentProject().getTagsFromTask(this.editedTask.getId());
         editedTagsField.setText(this.getCurrentProject().getTagsAsString(tags));
         
     }
 
     
+    /**
+     * Set the default values.
+     */
     @Override
     public void setDefault(Task task) {
         this.setTask(task);
@@ -127,7 +143,11 @@ public class PhtEditTaskDialogController implements ModalControllerInterface<Tas
         this.confirmChanges = value;
     }
     
-    
+    /**
+     * Clear all tags from task
+     * @param p Project instance
+     * @param t Task instance
+     */
     private void clearTagsFromTask(Project p, Task task) {
         int taskId = task.getId();
         List<Tag> tagList = p.getTagsFromTask(taskId);
@@ -138,6 +158,11 @@ public class PhtEditTaskDialogController implements ModalControllerInterface<Tas
     }
     
     
+    /**
+     * Add new tags to the task.
+     * @param p Project instance
+     * @param t Task instance
+     */
     private void addNewTags(Project p, Task t) {
         String tagString = editedTagsField.getText();
         List<Tag> newTags = p.readTagsFromString(tagString);
@@ -147,6 +172,10 @@ public class PhtEditTaskDialogController implements ModalControllerInterface<Tas
     }
     
     
+    /**
+     * Update the task's priority.
+     * @param t Task instance
+     */
     private void updateTaskPriority(Task t) {
         Priority[] indexToPriority = {
                 Priority.HIGH,
@@ -159,9 +188,13 @@ public class PhtEditTaskDialogController implements ModalControllerInterface<Tas
     }
     
 
+    /**
+     * Initialize the dialog.
+     * Not used.
+     */
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        // TODO Auto-generated method stub
+        // NOT USED
         
     }
     
@@ -170,7 +203,7 @@ public class PhtEditTaskDialogController implements ModalControllerInterface<Tas
      * @param modalityStage -
      * @param task the task that is edited
      * @param project current project
-     * @return - 
+     * @return Task instance 
      */
     public static Task editTask(Stage modalityStage, Task task, Project project) {
         URL url = PhtEditTaskDialogController.class.getResource("PhtEditTaskDialogView.fxml");

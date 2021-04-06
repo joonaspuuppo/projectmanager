@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
- * @version 0.6 Apr 1, 2021
+ * @version 1.0 Apr 1, 2021
  * Controller of the start window.
  */
 public class PhtStartGUIController implements Initializable {
@@ -42,12 +42,19 @@ public class PhtStartGUIController implements Initializable {
     }
     
     
+    /**
+     * Initialize the controller.
+     * Not used.
+     */
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         // TODO Auto-generated method stub
     }
     
     
+    /**
+     * Handle event for creating a new project.
+     */
     @FXML private void handleCreateNewProject() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Uusi projekti");
@@ -72,6 +79,9 @@ public class PhtStartGUIController implements Initializable {
     }
     
     
+    /**
+     * Handle event for opening a new project.
+     */
     @FXML private void handleOpenProject() {
         String projectName = listChooser.getSelectedText();
         if (projectName == null) {
@@ -107,6 +117,10 @@ public class PhtStartGUIController implements Initializable {
     }
     
     
+    /**
+     * Display an error dialog to the user.
+     * @param info Message to be displayed.
+     */
     private void displayError(String info) {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Virhe");

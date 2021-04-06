@@ -9,15 +9,27 @@ import javafx.fxml.FXMLLoader;
 
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
- * @version 0.6 Apr 1, 2021
+ * @version 1.0 Apr 1, 2021
  * Main entrypoint to the application.
  */
 public class PhtMain extends Application {
-	@Override
+	
+    
+    /**
+     * Main entry to the application.
+     * @param args Not in use.
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
+    
+    /**
+     * Launch the GUI.
+     */
+    @Override
 	public void start(Stage primaryStage) {
 		try {
-		    
-		    FXMLLoader startWindowLoader = new FXMLLoader();
+			FXMLLoader startWindowLoader = new FXMLLoader();
 		    startWindowLoader.setLocation(getClass().getResource("PhtStartGUIView.fxml"));
 	        
 	        BorderPane startPane = (BorderPane)startWindowLoader.load();
@@ -37,12 +49,5 @@ public class PhtMain extends Application {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	/**
-	 * @param args Not in use.
-	 */
-	public static void main(String[] args) {
-		launch(args);
 	}
 }
