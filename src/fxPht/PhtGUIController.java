@@ -384,7 +384,7 @@ public class PhtGUIController implements Initializable {
             if (!task.isDone()) taskList.add(task.getName(), task);
         }
         for (Task task : tasks) {
-            if (task.isDone()) taskList.add(task.getName() + " (valmis)", task);
+            if (task.isDone()) taskList.add(task.getName() + " ✓", task);
         }
     }
     
