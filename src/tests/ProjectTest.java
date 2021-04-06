@@ -277,9 +277,42 @@ public class ProjectTest {
     @Test
     public void testReadTagsFromString() {
         Project p = generateDummyProject();
+        
         String tagsAsString = "tag3, tag2, tag1";
-        List<Tag> expected = p.getAllTags();
+        String expected = "[tag3, tag2, tag1]";
         List<Tag> tagList = p.readTagsFromString(tagsAsString);
-        assertEquals(tagListToStringList(expected), tagListToStringList(tagList));
+        assertEquals(expected, listToString(tagList));
+        
+        p = generateDummyProject();
+        tagsAsString = "tag3, tag2,,";
+        expected = "[tag3, tag2]";
+        tagList = p.readTagsFromString(tagsAsString);
+        assertEquals(expected, listToString(tagList));
+        
+        p = generateDummyProject();
+        tagsAsString = "tag3, ,";
+        expected = "[tag3]";
+        tagList = p.readTagsFromString(tagsAsString);
+        assertEquals(expected, listToString(tagList));
+        
+        
+        p = generateDummyProject();
+        tagsAsString = "tag3, #tag2";
+        expected = "[tag3, tag2]";
+        tagList = p.readTagsFromString(tagsAsString);
+        assertEquals(expected, listToString(tagList));
+    }
+    
+    
+    private String listToString(List<Tag> list) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("[");
+        for (Tag item : list) {
+            String str = item.getName();
+            sb.append(str + ", ");
+        }
+        sb.delete(sb.length() - 2, sb.length());
+        sb.append("]");
+        return sb.toString();
     }
 }
