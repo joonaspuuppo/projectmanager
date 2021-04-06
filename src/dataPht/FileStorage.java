@@ -94,7 +94,6 @@ public class FileStorage implements Storage {
         saveTags(usedTags, tagFile);
     }
 
-
     @Override
     public Project getProject(String name) {
         if (!nameAlreadyExists(name)) {
@@ -143,10 +142,26 @@ public class FileStorage implements Storage {
             }
         }
     }
+    
+    @Override
+    public void deleteProject(String projectName) {
+        String[] filePaths = generateFilePaths(projectName);
+        for (String filePath : filePaths) {
+            File projectFile = new File(filePath);
+            if (projectFile.delete() == false) {
+                String info = "Failed to delete the project";
+                throw new StorageException(info);
+            }
+        }
+    }
 
     @Override
-    public void renameProject(Project project) {
-        // TODO Auto-generated method stub
+    public void renameProject(Project project, String newName) {
+        String oldName = project.getName();
+        project.setName(newName);
+        save(project);
+        deleteProject(oldName);
+        
     }
     
     
@@ -169,11 +184,31 @@ public class FileStorage implements Storage {
     }
     
     
+    /**
+     * Generates filepaths based on a given project's name.
+     * @param p project
+     * @return filepaths
+     */
     protected String[] generateFilePaths(Project p) {
         int numberOfPaths = FILE_PATH_FORMATS.length;
         String[] paths = new String[numberOfPaths];
         for (int i = 0; i < numberOfPaths; i++) {
             String filename = FILE_PATH_FORMATS[i].replace(PROJECT_NAME_ESCAPE, p.getName());
+            paths[i] = joinpath(filename);
+        }
+        return paths;
+    }
+    
+    /**
+     * Generates filepaths based on a given project name.
+     * @param projectName name of project
+     * @return filepaths
+     */
+    protected String[] generateFilePaths(String projectName) {
+        int numberOfPaths = FILE_PATH_FORMATS.length;
+        String[] paths = new String[numberOfPaths];
+        for (int i = 0; i < numberOfPaths; i++) {
+            String filename = FILE_PATH_FORMATS[i].replace(PROJECT_NAME_ESCAPE, projectName);
             paths[i] = joinpath(filename);
         }
         return paths;

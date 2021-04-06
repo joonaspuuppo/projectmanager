@@ -56,10 +56,16 @@ public class ProjectManager {
     
     
     /**
-     * @param name -
+     * Renames current project.
+     * @param name new name for project
+     * @throws IllegalArgumentException When name is invalid
      */
-    public void renameCurrentProject(String name) {
-        // TODO
+    public void renameCurrentProject(String name) throws IllegalArgumentException {
+        if (!isValidProjectName(name)) {
+            String errorInfo = "Not a valid name for a project.";
+            throw new IllegalArgumentException(errorInfo);
+        }
+        this.storage.renameProject(currentProject, name);
     }
     
     

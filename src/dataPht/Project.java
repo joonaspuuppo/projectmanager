@@ -42,6 +42,13 @@ public class Project {
         return name;
     }
     
+    /**
+     * Sets project's name.
+     * @param name new name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
     
     /**
      * @return A blank task.

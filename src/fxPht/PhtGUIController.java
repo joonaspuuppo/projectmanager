@@ -147,6 +147,7 @@ public class PhtGUIController implements Initializable {
         String projectName = askString(title, header, context);
         if (projectName == null) return;
         try {
+            save();
             ProjectManager.getInstance().renameCurrentProject(projectName);
             this.projectNameLabel.setText(projectName);
         } catch (IllegalArgumentException e) {

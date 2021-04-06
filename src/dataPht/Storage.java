@@ -34,9 +34,16 @@ public interface Storage {
     
     
     /**
-     * @param project Project to be renamed.
+     * @param projectName Name of project to be deleted.
      */
-    public void renameProject(Project project);
+    public void deleteProject(String projectName);
+    
+    
+    /**
+     * @param project Project to be renamed.
+     * @param newName new name for project
+     */
+    public void renameProject(Project project, String newName);
     
    
     /**
