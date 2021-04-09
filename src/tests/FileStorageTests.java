@@ -14,6 +14,7 @@ import org.junit.jupiter.api.condition.*;
 
 import dataPht.Priority;
 import dataPht.Project;
+import dataPht.StorageException;
 import dataPht.Task;
 
 
@@ -57,7 +58,11 @@ public class FileStorageTests {
     @Test
     public void testSaving() {
         Project p = generateDummyProject();
-        FS.save(p);
+        try {
+            FS.save(p);
+        } catch (StorageException e) {
+            e.printStackTrace();
+        }
         
         String[] tasks = {
                 "1|task1|2|false|info1",
@@ -117,29 +122,33 @@ public class FileStorageTests {
         };
         FS.writeLinesToFile(tasks, taskFile);
         FS.writeLinesToFile(relations, relationsFile);
-        Project p = FS.getProject(PROJECT_NAME);
-        assertEquals(PROJECT_NAME, p.getName());
-        
-        assertEquals(4, p.getAllTasks().size());
-        Task t1 = p.getTask(1);
-        Task t2 = p.getTask(2);
-        Task t3 = p.getTask(3);
-        assertTrue(p.getTask(4) != null);
-        
-        List<Task> tagList1 = p.getAllTasksByTag(TAG1);
-        List<Task> tagList2 = p.getAllTasksByTag(TAG2);
-        List<Task> tagList3 = p.getAllTasksByTag(TAG3);
-        
-        assertEquals(1, tagList1.size());
-        assertTrue(tagList1.contains(t1));
-        
-        assertEquals(2, tagList2.size());
-        assertTrue(tagList2.contains(t1));
-        assertTrue(tagList2.contains(t2));
-        
-        assertEquals(2, tagList3.size());
-        assertTrue(tagList3.contains(t2));
-        assertTrue(tagList3.contains(t3));
+        try {
+            Project p = FS.getProject(PROJECT_NAME);
+            assertEquals(PROJECT_NAME, p.getName());
+            
+            assertEquals(4, p.getAllTasks().size());
+            Task t1 = p.getTask(1);
+            Task t2 = p.getTask(2);
+            Task t3 = p.getTask(3);
+            assertTrue(p.getTask(4) != null);
+            
+            List<Task> tagList1 = p.getAllTasksByTag(TAG1);
+            List<Task> tagList2 = p.getAllTasksByTag(TAG2);
+            List<Task> tagList3 = p.getAllTasksByTag(TAG3);
+            
+            assertEquals(1, tagList1.size());
+            assertTrue(tagList1.contains(t1));
+            
+            assertEquals(2, tagList2.size());
+            assertTrue(tagList2.contains(t1));
+            assertTrue(tagList2.contains(t2));
+            
+            assertEquals(2, tagList3.size());
+            assertTrue(tagList3.contains(t2));
+            assertTrue(tagList3.contains(t3));
+        } catch (StorageException e) {
+            e.printStackTrace();
+        }
     }
     
     
@@ -158,22 +167,30 @@ public class FileStorageTests {
      */
     @Test
     public void testProjectListing() {
-        assertTrue(FS.listAllProjects().length == 0);
+        try {
+            assertTrue(FS.listAllProjects().length == 0);
+        } catch (StorageException e) {
+            e.printStackTrace();
+        }
         
         String[] testNames = new String[] {"test_project1", "test_project2"};
         FS.makeTestFiles(testNames);
         
-        String[] names = FS.listAllProjects();
-        assertEquals(testNames.length, names.length);
-        for (String name : testNames) {
-            boolean found = false;
-            for (String pName : names) {
-                if (pName.equals(name)) {
-                    found = true;
-                    break;
+        try {
+            String[] names = FS.listAllProjects();
+            assertEquals(testNames.length, names.length);
+            for (String name : testNames) {
+                boolean found = false;
+                for (String pName : names) {
+                    if (pName.equals(name)) {
+                        found = true;
+                        break;
+                    }
                 }
+                assertTrue(found);
             }
-            assertTrue(found);
+        } catch (StorageException e) {
+            e.printStackTrace();
         }
     }
     
@@ -192,15 +209,19 @@ public class FileStorageTests {
                 };
         FS.makeTestFiles(testNames);
         
-        assertTrue(FS.nameAlreadyExists("project001"));
-        assertTrue(FS.nameAlreadyExists("project002"));
-        assertTrue(FS.nameAlreadyExists("project003"));
-        assertTrue(FS.nameAlreadyExists("project004"));
-        assertTrue(FS.nameAlreadyExists("project005"));
+        try {
+            assertTrue(FS.nameAlreadyExists("project001"));
+            assertTrue(FS.nameAlreadyExists("project002"));
+            assertTrue(FS.nameAlreadyExists("project003"));
+            assertTrue(FS.nameAlreadyExists("project004"));
+            assertTrue(FS.nameAlreadyExists("project005"));
         
-        assertFalse(FS.nameAlreadyExists("project006"));
-        assertFalse(FS.nameAlreadyExists("project000"));
-        assertFalse(FS.nameAlreadyExists("asd"));
+            assertFalse(FS.nameAlreadyExists("project006"));
+            assertFalse(FS.nameAlreadyExists("project000"));
+            assertFalse(FS.nameAlreadyExists("asd"));
+        } catch (StorageException e) {
+            e.printStackTrace();
+        }
     }
     
     
@@ -259,16 +280,21 @@ public class FileStorageTests {
     public void testProjectDeletion() {
         clearTestDirectory();
         Project p = generateDummyProject();
-        FS.save(p);
-        assertEquals("test", FS.listAllProjects()[0]);
-        FS.deleteProject(p);
-        assertEquals(0, FS.listAllProjects().length);
         
-        p = generateDummyProject();
-        FS.save(p);
-        assertEquals("test", FS.listAllProjects()[0]);
-        FS.deleteProject("test");
-        assertEquals(0, FS.listAllProjects().length);
+        try {
+            FS.save(p);
+            assertEquals("test", FS.listAllProjects()[0]);
+            FS.deleteProject(p);
+            assertEquals(0, FS.listAllProjects().length);
+        
+            p = generateDummyProject();
+            FS.save(p);
+            assertEquals("test", FS.listAllProjects()[0]);
+            FS.deleteProject("test");
+            assertEquals(0, FS.listAllProjects().length);
+        } catch (StorageException e) {
+            e.printStackTrace();
+        }
     }
     
     
@@ -279,8 +305,14 @@ public class FileStorageTests {
     public void testProjectRenaming() {
         clearTestDirectory();
         Project p = generateDummyProject();
-        FS.save(p);
-        FS.renameProject(p, "newName");
+        
+        try {
+            FS.save(p);
+            FS.renameProject(p, "newName");
+        } catch (StorageException e) {
+            e.printStackTrace();
+        }
+        
         assertEquals("newName", p.getName());
         String[] filepaths = FS.getFilepathsForProject(p);
         assertTrue(filepaths[0].contains("newName"));

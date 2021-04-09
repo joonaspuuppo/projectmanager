@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import dataPht.Priority;
 import dataPht.Project;
 import dataPht.ProjectManager;
+import dataPht.StorageException;
 import dataPht.Tag;
 import dataPht.Task;
 import fi.jyu.mit.fxgui.*;
@@ -102,7 +103,6 @@ public class PhtGUIController implements Initializable {
      * @throws IOException if the .fxml file is not found.
      */
     @FXML private void handleOpenProject() throws IOException {
-        // TODO verify saving
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("PhtStartGUIView.fxml"));
         
@@ -131,8 +131,12 @@ public class PhtGUIController implements Initializable {
         try {
             Project project = ProjectManager.getInstance().createNewProject(projectName);
             setCurrentProject(project);
+        
         } catch (IllegalArgumentException e) {
             displayError("Virheellinen nimi projektille");
+        
+        } catch (StorageException e) {
+            displayError(e.getInfo());
         }
     }
 
@@ -145,13 +149,19 @@ public class PhtGUIController implements Initializable {
         String header = "";
         String context = "Uusi nimi:";
         String projectName = askString(title, header, context);
+        
         if (projectName == null) return;
+        
         try {
             save();
             ProjectManager.getInstance().renameCurrentProject(projectName);
             this.projectNameLabel.setText(projectName);
+        
         } catch (IllegalArgumentException e) {
             displayError("Virheellinen nimi projektille");
+        
+        } catch (StorageException e) {
+            displayError(e.getInfo());
         }
     }
 
@@ -167,8 +177,12 @@ public class PhtGUIController implements Initializable {
                 "Ei"
         );
         if (delete) {
-            save();
-            ProjectManager.getInstance().removeCurrentProject();
+            try {
+                save();
+                ProjectManager.getInstance().removeCurrentProject();
+            } catch (StorageException e) {
+                displayError(e.getInfo());
+            }
             handleOpenProject();
         }
         
@@ -179,7 +193,11 @@ public class PhtGUIController implements Initializable {
      * Hanlde event for saving.
      */
     @FXML private void handleSave() {
-        save();
+        try {
+            save();
+        } catch (StorageException e) {
+            displayError(e.getInfo());
+        }
     }
 
 
@@ -187,7 +205,11 @@ public class PhtGUIController implements Initializable {
      * Handle event for creating a new project.
      */
     @FXML private void handleExit() {
-        save();
+        try {
+            save();
+        } catch (StorageException e) {
+            displayError(e.getInfo());
+        }
         Platform.exit();
     }
 
@@ -492,7 +514,7 @@ public class PhtGUIController implements Initializable {
     /**
      * Save.
      */
-    private void save() {
+    private void save() throws StorageException {
         ProjectManager.getInstance().saveCurrentProject();
     }
 

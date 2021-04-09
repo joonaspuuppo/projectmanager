@@ -11,25 +11,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
- * @version 0.6 Apr 1, 2021
+ * @version 1.0 Apr 1, 2021
  * Concrete storage class. Saves data to files.
  */
 public class FileStorage implements Storage {
-    
-    private class StorageException extends RuntimeException {
-        
-        private static final long serialVersionUID = 1L;
-        
-        public StorageException(String info) {
-            super(info);
-        }
-    }
-    
     
     /**
      * The directory used to store all data.
@@ -69,18 +58,15 @@ public class FileStorage implements Storage {
     };
     
     
-    /**
-     * Setup the storage directory.
-     * This means that a new directory is created if
-     * existing ones aren't found.
-     */
-    public FileStorage() {
+    @Override
+    public void initialize() throws StorageException {
+        //Throws StorageException which is "passed" to the user.
         setupStorageDirectory();
     }
 
     
     @Override
-    public void save(Project project) {
+    public void save(Project project) throws StorageException {
         List<Task> tasks = project.getAllTasks();
         DynamicList<RelationEntry> relations = project.getRelations();
         String[] filepaths = generateFilePaths(project);
@@ -89,24 +75,25 @@ public class FileStorage implements Storage {
         String tagFile       = filepaths[1];
         String relationsFile = filepaths[2];
         
+        //Throws StorageException, which is "passed" to the caller
         saveTasks(tasks, taskFile);
         HashSet<String> usedTags = saveRelations(relations, relationsFile);
         saveTags(usedTags, tagFile);
     }
 
     @Override
-    public Project getProject(String name) {
+    public Project getProject(String name) throws StorageException {
         if (!nameAlreadyExists(name)) {
-            String info = "Project could not be opened";
+            String info = "Project doesn't exist";
             throw new StorageException(info);    
         }
         Project project = new Project(name);
         String[] filepaths = generateFilePaths(project);
         
         String taskFile      = filepaths[0];
-        //String tagFile       = filepaths[1];
         String relationsFile = filepaths[2];
         
+        //Throws StorageException, which is "passed" to the caller
         loadTasks(taskFile, project);
         generateRelations(relationsFile, project);
         return project;
@@ -114,8 +101,14 @@ public class FileStorage implements Storage {
 
 
     @Override
-    public String[] listAllProjects() {
+    public String[] listAllProjects() throws StorageException {
         File storageDir = new File(getDirectory());
+        
+        if (!storageDir.exists()) {
+            String info = "Tallennettu data on poistettu tai korruptoitunut.";
+            throw new StorageException(info);
+        }
+        
         HashSet<String> set = new HashSet<String>();
         ArrayList<String> projectNames = new ArrayList<String>();
         
@@ -132,33 +125,31 @@ public class FileStorage implements Storage {
 
 
     @Override
-    public void deleteProject(Project project) {
-        String[] filePaths = generateFilePaths(project);
-        for (String filePath : filePaths) {
-            File projectFile = new File(filePath);
-            if (projectFile.delete() == false) {
-                String info = "Failed to delete the project";
-                throw new StorageException(info);
-            }
-        }
+    public void deleteProject(Project project) throws StorageException {
+        String projectName = project.getName();
+        //Throws StorageException, which is "passed" to the caller
+        deleteProject(projectName);
     }
     
     @Override
-    public void deleteProject(String projectName) {
+    public void deleteProject(String projectName) throws StorageException {
         String[] filePaths = generateFilePaths(projectName);
+        
         for (String filePath : filePaths) {
             File projectFile = new File(filePath);
-            if (projectFile.delete() == false) {
-                String info = "Failed to delete the project";
+            boolean deletionFailed = !projectFile.delete();
+            if (deletionFailed) {
+                String info = "Projektin poisto epäonnistui";
                 throw new StorageException(info);
             }
         }
     }
 
     @Override
-    public void renameProject(Project project, String newName) {
+    public void renameProject(Project project, String newName) throws StorageException {
         String oldName = project.getName();
         project.setName(newName);
+        //Throws StorageException, which is "passed" to the caller
         save(project);
         deleteProject(oldName);
         
@@ -166,8 +157,10 @@ public class FileStorage implements Storage {
     
     
     @Override
-    public boolean nameAlreadyExists(String name) {
+    public boolean nameAlreadyExists(String name) throws StorageException {
+        //Throws StorageException, which is "passed" to the caller
         String[] projectNames = listAllProjects();
+        
         boolean result = false;
         for (String projectName : projectNames) {
             if (projectName.equals(name)) {
@@ -179,6 +172,9 @@ public class FileStorage implements Storage {
     }
     
     
+    /**
+     * @return Filepath to the data directory as a String.
+     */
     protected String getDirectory() {
         return STORAGE_DIRECTORY;
     }
@@ -190,13 +186,8 @@ public class FileStorage implements Storage {
      * @return filepaths
      */
     protected String[] generateFilePaths(Project p) {
-        int numberOfPaths = FILE_PATH_FORMATS.length;
-        String[] paths = new String[numberOfPaths];
-        for (int i = 0; i < numberOfPaths; i++) {
-            String filename = FILE_PATH_FORMATS[i].replace(PROJECT_NAME_ESCAPE, p.getName());
-            paths[i] = joinpath(filename);
-        }
-        return paths;
+        String projectName = p.getName();
+        return generateFilePaths(projectName);
     }
     
     /**
@@ -215,6 +206,11 @@ public class FileStorage implements Storage {
     }
     
     
+    /**
+     * Extract the Project's name from a filepath.
+     * @param file Filepath as a String.
+     * @return Project's name as a String.
+     */
     protected String extractProjectName(File file) {
         String projectName = null;
         String filename = file.getName();
@@ -227,24 +223,39 @@ public class FileStorage implements Storage {
     }
     
     
-    protected void setupStorageDirectory() {
+    /**
+     * Ensure that the data directory exists.
+     * New directory is created if it doesn't exist.
+     * @throws StorageException When the data directory can't be created.
+     */
+    protected void setupStorageDirectory() throws StorageException {
         File storageDir = new File(getDirectory()); 
         if (!storageDir.exists()) {
             boolean OK = storageDir.mkdir();
             if (!OK) {
-                String info = "Failed to initialize the storage";
+                String info = "Ohjelman tallentamisen alustus epäonnistui.\n"
+                        + "Ole hyvä ja tarkista, että sinulla on tarvittavat oikeudet uusien tiedostojen luomiseen.";
                 throw new StorageException(info);
             }
         }
     }
     
     
+    /**
+     * @param filename Name of the file.
+     * @return Filepath to the data directory as a String.
+     */
     protected String joinpath(String filename) {
         return getDirectory() + FILE_SEPARATOR + filename;
     }
     
     
-    protected void saveTasks(List<Task> tasks, String filepath) {
+    /**
+     * @param tasks List of tasks used in the Project.
+     * @param filepath Filepath as a String.
+     * @throws StorageException Wen saving fails.
+     */
+    protected void saveTasks(List<Task> tasks, String filepath) throws StorageException {
         FileOutputStream stream = openWriteStream(filepath);
         try (PrintStream out = new PrintStream(stream)) {
             for (Task t : tasks) {
@@ -254,7 +265,14 @@ public class FileStorage implements Storage {
         }
     }
     
-    protected HashSet<String> saveRelations(DynamicList<RelationEntry> entries, String filepath) {
+    
+    /**
+     * @param entries A DynamicList containing all the Realtion Entry instances used in the Project.
+     * @param filepath Filepath as a String.
+     * @return A HashSet instance that holds all used tag names as a String.
+     * @throws StorageException If saving fails.
+     */
+    protected HashSet<String> saveRelations(DynamicList<RelationEntry> entries, String filepath) throws StorageException {
         HashSet<String> usedTags = new HashSet<String>();
         FileOutputStream stream = openWriteStream(filepath);
         try (PrintStream out = new PrintStream(stream)) {
@@ -269,7 +287,12 @@ public class FileStorage implements Storage {
     }
     
     
-    protected void saveTags(HashSet<String> usedTags, String filepath) {
+    /**
+     * @param usedTags HashSet of the used tag names.
+     * @param filepath Filepath as a String.
+     * @throws StorageException If writing fails.
+     */
+    protected void saveTags(HashSet<String> usedTags, String filepath) throws StorageException {
         FileOutputStream stream = openWriteStream(filepath);
         try (PrintStream out = new PrintStream(stream)) {
             for (String tag : usedTags) {
@@ -279,7 +302,12 @@ public class FileStorage implements Storage {
     }
     
     
-    protected void loadTasks(String filepath, Project p) {
+    /**
+     * @param filepath Filepath as a String.
+     * @param p Project instance where the tasks are loaded.
+     * @throws StorageException If reading fails.
+     */
+    protected void loadTasks(String filepath, Project p) throws StorageException {
         try (FileInputStream stream = openReadStream(filepath);
                Scanner in = new Scanner(stream)) {
                while (in.hasNextLine()) {
@@ -288,12 +316,18 @@ public class FileStorage implements Storage {
                    p.insertTask(t);
                }
         } catch (IOException e) {
-            e.printStackTrace();
+            String info = "Tiedoston luku epäonnistui";
+            throw new StorageException(info);
         }
     }
 
     
-    protected void generateRelations(String filepath, Project p) {
+    /**
+     * @param filepath Filepath as a String.
+     * @param p Project instance where the realtions are loaded.
+     * @throws StorageException If anything fails.
+     */
+    protected void generateRelations(String filepath, Project p) throws StorageException {
         try (FileInputStream stream = openReadStream(filepath);
                 Scanner in = new Scanner(stream)) {
                 while (in.hasNextLine()) {
@@ -302,30 +336,47 @@ public class FileStorage implements Storage {
                     Task t = p.getTask(entry.getTaskId());
                     p.addTagToTask(entry.getTagName(), t);
                 }
-         } catch (IOException e) {
-             e.printStackTrace();
+         
+        } catch (IOException e) {
+             String info = "Tiedostoon tallennus epäonnistui";
+             throw new StorageException(info);
+         
+         } catch (PhtSerializer.SerializationException e) {
+             String info = "Tiedostoon tallennus epäonnistui";
+             throw new StorageException(info);
          }
     }
     
     
-    protected FileOutputStream openWriteStream(String filepath) {
+    /**
+     * @param filepath Filepath as a String.
+     * @return FileOutputStream instance that can be used to write to the file.
+     * @throws StorageException When file is not found
+     */
+    protected FileOutputStream openWriteStream(String filepath) throws StorageException {
         FileOutputStream stream = null;
         try {
             stream = new FileOutputStream(new File(filepath));
+        
         } catch (FileNotFoundException e) {
-            String info = String.format("Failed to locate file: %s", filepath);
+            String info = "Tiedostoon tallennus epäonnistui";
             throw new StorageException(info);
         }
         return stream;
     }
     
     
-    protected FileInputStream openReadStream(String filepath) {
+    /**
+     * @param filepath Filepath as a String.
+     * @return FileInputStream instance that can be used to read the file.
+     * @throws StorageException When the file isn't found.
+     */
+    protected FileInputStream openReadStream(String filepath) throws StorageException {
         FileInputStream stream = null;
         try {
             stream = new FileInputStream(new File(filepath));
         } catch (FileNotFoundException e) {
-            String info = String.format("Failed to locate file: %s", filepath);
+            String info = "Tiedoston luku epäonnistui";
             throw new StorageException(info);
         }
         return stream;

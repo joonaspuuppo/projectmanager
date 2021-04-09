@@ -1,6 +1,7 @@
 package dataPht;
 
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.regex.*;
 
 
@@ -10,7 +11,7 @@ import java.util.regex.*;
  */
 public class ProjectManager {
     
-    private static final ProjectManager INSTANCE = new ProjectManager();
+    private static ProjectManager instance = null;
     
     private Storage storage = new FileStorage();
     private Project currentProject;
@@ -20,8 +21,15 @@ public class ProjectManager {
      * Ensure that only one instance is created.
      */
     public ProjectManager() {
-        if (INSTANCE != null) {
+        if (instance != null) {
             throw new RuntimeException();
+        }
+        try {
+            this.storage.initialize();
+        } catch (StorageException e) {
+            String info = e.getInfo();
+            System.out.println(info);
+            System.exit(1);
         }
     }
     
@@ -31,14 +39,18 @@ public class ProjectManager {
      * @return The instance of this class.
      */
     public static ProjectManager getInstance() {
-        return ProjectManager.INSTANCE;
+        if (instance == null) {
+            instance = new ProjectManager();
+        }
+        return ProjectManager.instance;
     }
     
     
     /**
      * @return An array of all Project names created.
+     * @throws StorageException If any errors occur.
      */
-    public String[] listAllProjects() {
+    public String[] listAllProjects() throws StorageException {
         return this.storage.listAllProjects();
     }
     
@@ -46,8 +58,9 @@ public class ProjectManager {
     /**
      * @param name Name of the Project.
      * @return Project loaded form storage.
+     * @throws StorageException If any errors occur.
      */
-    public Project openProject(String name) {
+    public Project openProject(String name) throws StorageException {
         Project project = this.storage.getProject(name);
         this.currentProject = project;
         return project;
@@ -59,8 +72,9 @@ public class ProjectManager {
      * Renames current project.
      * @param name new name for project
      * @throws IllegalArgumentException When name is invalid
+     * @throws StorageException If any errors occur.
      */
-    public void renameCurrentProject(String name) throws IllegalArgumentException {
+    public void renameCurrentProject(String name) throws IllegalArgumentException, StorageException {
         if (!isValidProjectName(name)) {
             String errorInfo = "Not a valid name for a project.";
             throw new IllegalArgumentException(errorInfo);
@@ -71,16 +85,17 @@ public class ProjectManager {
     
     /**
      * Writes the current Prject to Storage device.
+     * @throws StorageException If any errors occur.
      */
-    public void saveCurrentProject() {
+    public void saveCurrentProject() throws StorageException {
         this.storage.save(currentProject);
     }
     
     
     /**
-     * -
+     * @throws StorageException If any errors occur.
      */
-    public void removeCurrentProject() {
+    public void removeCurrentProject() throws StorageException {
         this.storage.deleteProject(currentProject);
     }
     
@@ -91,8 +106,9 @@ public class ProjectManager {
      * @param name Name for the Project.
      * @return A Project instance.
      * @throws IllegalArgumentException When name is invalid.
+     * @throws StorageException If any errors occur.
      */
-    public Project createNewProject(String name) throws IllegalArgumentException {
+    public Project createNewProject(String name) throws IllegalArgumentException, StorageException {
         if (!isValidProjectName(name)) {
             String errorInfo = "Not a valid name for a project.";
             throw new IllegalArgumentException(errorInfo);
@@ -117,8 +133,9 @@ public class ProjectManager {
      * 
      * @param name Name of the Project
      * @return boolean
+     * @throws StorageException If the Storage lookup fails.
      */
-    public boolean isValidProjectName(String name) {
+    public boolean isValidProjectName(String name) throws StorageException {
         if (name.isBlank())                     return false;
         if (startsWithWhitespace(name))         return false;
         if (endsWithWhitespace(name))           return false;
@@ -130,7 +147,7 @@ public class ProjectManager {
     }
     
     
-    private boolean nameAlreadyExists(String name) {
+    private boolean nameAlreadyExists(String name) throws StorageException{
         return storage.nameAlreadyExists(name);
     }
 

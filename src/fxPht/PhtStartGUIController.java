@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 
 import dataPht.Project;
 import dataPht.ProjectManager;
+import dataPht.StorageException;
 import fi.jyu.mit.fxgui.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -37,8 +38,12 @@ public class PhtStartGUIController implements Initializable {
      * Load all stored project names to the UI.
      */
     public void loadProjects() {
-        String[] rows = ProjectManager.getInstance().listAllProjects(); 
-        listChooser.setRivit(rows);
+        try {
+            String[] rows = ProjectManager.getInstance().listAllProjects(); 
+            listChooser.setRivit(rows);
+        } catch (StorageException e) {
+            displayError(e.getInfo());
+        }
     }
     
     
@@ -70,11 +75,16 @@ public class PhtStartGUIController implements Initializable {
         try {
             Project project = pm.createNewProject(projectName);
             openProjectToMainWindow(project);
+        
         } catch (IllegalArgumentException e) {
             displayError("Virheellinen nimi projektille");
+        
         } catch (IOException e) {
             //raised only when the .fxml file isn't found
             displayError("Odottamaton virhe...");
+        
+        } catch (StorageException e) {
+            displayError(e.getInfo());
         }
     }
     
@@ -88,12 +98,16 @@ public class PhtStartGUIController implements Initializable {
             displayError("Ole hyvä ja valitse avattava projekti.");
             return;   
         }
-        Project project = ProjectManager.getInstance().openProject(projectName);
         try {
+            Project project = ProjectManager.getInstance().openProject(projectName);
             openProjectToMainWindow(project);
+        
         } catch (IOException e) {
             //raised only when the .fxml file isn't found
             displayError("Odottamaton virhe...");
+        
+        } catch (StorageException e) {
+            displayError(e.getInfo());
         }
     }
     

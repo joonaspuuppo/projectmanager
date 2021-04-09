@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 
 import dataPht.ProjectManager;
+import dataPht.StorageException;
 
 /**
  * @author varajala
@@ -47,8 +48,11 @@ public class ProjectManagerTest {
         };
         ProjectManager pm = ProjectManager.getInstance();
         for (String name : validNames) {
-            if (!pm.isValidProjectName(name)) System.out.println(name);
-            assertTrue(pm.isValidProjectName(name));
+            try {
+                assertTrue(pm.isValidProjectName(name));
+            } catch (StorageException e) {
+                e.printStackTrace();
+            }
         }
     }
     
@@ -82,8 +86,11 @@ public class ProjectManagerTest {
         };
         ProjectManager pm = ProjectManager.getInstance();
         for (String name : invalidNames) {
-            if (pm.isValidProjectName(name)) System.out.println(name);
-            assertFalse(pm.isValidProjectName(name));
+            try {
+                assertFalse(pm.isValidProjectName(name));
+            } catch (StorageException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

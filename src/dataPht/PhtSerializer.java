@@ -1,6 +1,5 @@
 package dataPht;
 
-import java.util.Arrays;
 
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
@@ -16,12 +15,17 @@ public class PhtSerializer {
     private static final String DEFAULT = "<<default>>";
     
     
-    private static class SerializationException extends RuntimeException {
+    /**
+     * Exception thrown if the serialization fails.
+     */
+    public static class SerializationException extends RuntimeException {
         
         private static final long serialVersionUID = 1L;
         
-        public SerializationException(String info) {
-            super(info);
+        
+        @SuppressWarnings("javadoc")
+        public SerializationException() {
+            super();
         }
     }
     
@@ -71,8 +75,7 @@ public class PhtSerializer {
         
         String[] parts = line.split(SEPARATOR_RE);
         if (parts.length != COLUMNS) {
-            String info = "Failed to serialize Task";
-            throw new SerializationException(info); 
+            throw new SerializationException(); 
         }
         
         String id       = parts[I_ID];
@@ -125,8 +128,7 @@ public class PhtSerializer {
         
         String[] parts = line.split(SEPARATOR_RE);
         if (parts.length != COLUMNS) {
-            String info = "Failed to serialize RelationEntry";
-            throw new SerializationException(info); 
+            throw new SerializationException(); 
         }
         
         String taskId   = parts[I_TASK_ID];
@@ -188,8 +190,7 @@ public class PhtSerializer {
         try {
             return Integer.parseInt(str);
         } catch (NumberFormatException e) {
-            String info = "Failed to serialize Task ID";
-            throw new SerializationException(info);
+            throw new SerializationException();
         }
     }
     

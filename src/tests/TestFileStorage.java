@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 import dataPht.FileStorage;
 import dataPht.Project;
+import dataPht.StorageException;
 
 
 /**
@@ -39,6 +40,11 @@ public class TestFileStorage extends FileStorage {
      */
     public TestFileStorage() {
         super();
+        try {
+            initialize();
+        } catch (StorageException e) {
+            e.printStackTrace();
+        }
     }
     
     
@@ -135,18 +141,32 @@ public class TestFileStorage extends FileStorage {
                 String line = in.nextLine();
                 lines.add(line);
             }
-        } catch (IOException e) {
+        } catch (IOException | StorageException e) {
             e.printStackTrace();
         }
         return lines;
     }
     
     
+    /**
+     * @param lines Array of lines to be written.
+     * @param filepath Filepath as a String.
+     */
     public void writeLinesToFile(String[] lines, String filepath) {
-        FileOutputStream stream = openWriteStream(filepath);
-        try (PrintStream out = new PrintStream(stream)) {
+        FileOutputStream stream;
+        @SuppressWarnings("resource")
+        PrintStream out = null;
+        try {
+            stream = openWriteStream(filepath);
+            out = new PrintStream(stream);
             for (String line : lines) {
                 out.println(line);
+            }
+        } catch (StorageException e) {
+            e.printStackTrace();
+        } finally {
+            if (out != null) {
+                out.close();
             }
         }
     }
