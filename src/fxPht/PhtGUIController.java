@@ -161,6 +161,7 @@ public class PhtGUIController implements Initializable {
             displayError("Virheellinen nimi projektille");
         
         } catch (StorageException e) {
+            //TODO revert back to opening stage, since this project is corrupt?
             displayError(e.getInfo());
         }
     }
@@ -181,6 +182,8 @@ public class PhtGUIController implements Initializable {
                 save();
                 ProjectManager.getInstance().removeCurrentProject();
             } catch (StorageException e) {
+                //TODO some files are missing or renamed by the user.
+                //Still delete them to avoid this exception...
                 displayError(e.getInfo());
             }
             handleOpenProject();
@@ -196,6 +199,7 @@ public class PhtGUIController implements Initializable {
         try {
             save();
         } catch (StorageException e) {
+            //TODO revert back to opening stage, since this project is corrupt?
             displayError(e.getInfo());
         }
     }

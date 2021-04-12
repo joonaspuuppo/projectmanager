@@ -114,6 +114,7 @@ public class FileStorage implements Storage {
         
         for (File file : storageDir.listFiles()) {
             String projectName = extractProjectName(file);
+            if (projectName == null) continue;
             if (!set.contains(projectName)) {
                 projectNames.add(projectName);
                 set.add(projectName);
@@ -338,11 +339,11 @@ public class FileStorage implements Storage {
                 }
          
         } catch (IOException e) {
-             String info = "Tiedostoon tallennus epäonnistui";
+             String info = "Tiedoston luku epäonnistui";
              throw new StorageException(info);
          
          } catch (PhtSerializer.SerializationException e) {
-             String info = "Tiedostoon tallennus epäonnistui";
+             String info = "Tiedoston luku epäonnistui";
              throw new StorageException(info);
          }
     }

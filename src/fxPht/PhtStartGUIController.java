@@ -42,6 +42,7 @@ public class PhtStartGUIController implements Initializable {
             String[] rows = ProjectManager.getInstance().listAllProjects(); 
             listChooser.setRivit(rows);
         } catch (StorageException e) {
+            //TODO exit from the program to avoid further errors?
             displayError(e.getInfo());
         }
     }
@@ -104,6 +105,7 @@ public class PhtStartGUIController implements Initializable {
         
         } catch (IOException e) {
             //raised only when the .fxml file isn't found
+            //TODO exit from the program to avoid further errors?
             displayError("Odottamaton virhe...");
         
         } catch (StorageException e) {
