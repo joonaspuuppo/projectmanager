@@ -1,6 +1,7 @@
 package dataPht;
 
 /**
+ * A task within a project.
  * @author Joonas Puuppo, Valtteri Rajalainen
  * @version 0.6 Apr 1, 2021
  */
@@ -11,6 +12,7 @@ public class Task {
     private Priority priority;
     
     /**
+     * Constructor for a task. Default values used unless set by user.
      * @param id Task id given by Project instance.
      */
     public Task(int id) {
@@ -22,6 +24,7 @@ public class Task {
     }
     
     /**
+     * Gets the task's ID.
      * @return id
      */
     public int getId() {
@@ -29,6 +32,7 @@ public class Task {
     }
     
     /**
+     * Gets name of task.
      * @return name
      */
     public String getName() {
@@ -36,6 +40,7 @@ public class Task {
     }
     
     /**
+     * Renames a task.
      * @param newName name
      */
     public void rename(String newName) {
@@ -43,7 +48,8 @@ public class Task {
     }
     
     /**
-     * @return done
+     * Checks if a task is done.
+     * @return true/false
      */
     public Boolean isDone() {
         return done;
@@ -64,6 +70,7 @@ public class Task {
     }
     
     /**
+     * Gets task's info.
      * @return info
      */
     public String getInfo() {
@@ -71,13 +78,15 @@ public class Task {
     }
     
     /**
-     * @param info info
+     * Sets task's info.
+     * @param info task's info.
      */
     public void setInfo(String info) {
         this.info = info;
     }
     
     /**
+     * Gets task's priority.
      * @return priority
      */
     public Priority getPriority() {
@@ -85,6 +94,7 @@ public class Task {
     }
     
     /**
+     * Sets task's priority.
      * @param p priority
      */
     public void setPriority (Priority p) {

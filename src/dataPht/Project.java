@@ -36,6 +36,7 @@ public class Project {
     
     
     /**
+     * Gets the name of the project.
      * @return Name of the Project.
      */
     public String getName() {
@@ -51,6 +52,7 @@ public class Project {
     }
     
     /**
+     * Creates a blank task.
      * @return A blank task.
      */
     public Task createTask() {
@@ -74,6 +76,11 @@ public class Project {
     }
     
     
+    /**
+     * Creates a tag with a given name.
+     * @param tagName name of tag
+     * @return tag
+     */
     private Tag createTag(String tagName) {
         Tag tag = new Tag(tagName);
         tags.put(tagName, tag);
@@ -81,6 +88,11 @@ public class Project {
     }
     
     
+    /**
+     * Checks if a tag already exists.
+     * @param tagName name of tag
+     * @return true/false
+     */
     private boolean tagExists(String tagName) {
         return tags.containsKey(tagName);
     }
@@ -112,6 +124,7 @@ public class Project {
     
     
     /**
+     * Gets a list of all tasks in the project.
      * @return List of all tasks in the Project.
      */
     public List<Task> getAllTasks() {
@@ -121,6 +134,7 @@ public class Project {
     
     
     /**
+     * Gets a list of all tags in a project.
      * @return List of all Tags in the Project.
      */
     public List<Tag> getAllTags() {
@@ -158,6 +172,7 @@ public class Project {
     
     
     /**
+     * Gets all tasks associated with a given tag.
      * @param tagName Name of the Tag
      * @return List of Tasks associated with the given Tag.
      */
@@ -177,6 +192,7 @@ public class Project {
     
     
     /**
+     * Gets all tasks with a given priority.
      * @param prio priority
      * @return a list containing all tasks with specified priority
      */
@@ -192,6 +208,7 @@ public class Project {
     
     
     /**
+     * Gets tags associated with a given task.
      * @param id Task id.
      * @return List of Tags associated with the given Task.
      */

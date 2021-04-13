@@ -10,6 +10,7 @@ public class RelationEntry {
     
     
     /**
+     * Constructor for a relation entry.
      * @param taskId Id of the task.
      * @param tagName Name of the tag.
      */
@@ -21,6 +22,7 @@ public class RelationEntry {
 
     
     /**
+     * Gets name of tag.
      * @return Tag name
      */
     public String getTagName() {
@@ -30,6 +32,7 @@ public class RelationEntry {
 
     
     /**
+     * Gets taskID.
      * @return taskID
      */
     public int getTaskId() {

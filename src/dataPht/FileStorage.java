@@ -174,6 +174,7 @@ public class FileStorage implements Storage {
     
     
     /**
+     * Gets the directory used for storing project data.
      * @return Filepath to the data directory as a String.
      */
     protected String getDirectory() {
@@ -243,6 +244,7 @@ public class FileStorage implements Storage {
     
     
     /**
+     * Gets a full filepath to the data directory.
      * @param filename Name of the file.
      * @return Filepath to the data directory as a String.
      */
@@ -252,9 +254,10 @@ public class FileStorage implements Storage {
     
     
     /**
+     * Saves all tasks to file.
      * @param tasks List of tasks used in the Project.
      * @param filepath Filepath as a String.
-     * @throws StorageException Wen saving fails.
+     * @throws StorageException When saving fails.
      */
     protected void saveTasks(List<Task> tasks, String filepath) throws StorageException {
         FileOutputStream stream = openWriteStream(filepath);
@@ -268,6 +271,7 @@ public class FileStorage implements Storage {
     
     
     /**
+     * Saves relations to file. 
      * @param entries A DynamicList containing all the Realtion Entry instances used in the Project.
      * @param filepath Filepath as a String.
      * @return A HashSet instance that holds all used tag names as a String.
@@ -289,6 +293,7 @@ public class FileStorage implements Storage {
     
     
     /**
+     * Saves tags to file.
      * @param usedTags HashSet of the used tag names.
      * @param filepath Filepath as a String.
      * @throws StorageException If writing fails.
@@ -304,6 +309,7 @@ public class FileStorage implements Storage {
     
     
     /**
+     * Loads tasks to a project instance.
      * @param filepath Filepath as a String.
      * @param p Project instance where the tasks are loaded.
      * @throws StorageException If reading fails.
@@ -324,6 +330,7 @@ public class FileStorage implements Storage {
 
     
     /**
+     * Generates relations to a project instance.
      * @param filepath Filepath as a String.
      * @param p Project instance where the realtions are loaded.
      * @throws StorageException If anything fails.
@@ -350,6 +357,7 @@ public class FileStorage implements Storage {
     
     
     /**
+     * Gets a FileOutputStream used for writing to the file.
      * @param filepath Filepath as a String.
      * @return FileOutputStream instance that can be used to write to the file.
      * @throws StorageException When file is not found
@@ -368,6 +376,7 @@ public class FileStorage implements Storage {
     
     
     /**
+     * Gets a FileInputStream used for reading from the file.
      * @param filepath Filepath as a String.
      * @return FileInputStream instance that can be used to read the file.
      * @throws StorageException When the file isn't found.

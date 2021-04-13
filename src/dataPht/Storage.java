@@ -15,6 +15,7 @@ public interface Storage {
     public void initialize() throws StorageException;
     
     /**
+     * Saves the project.
      * @param project Project to be saved.
      * @throws StorageException If anything fails.
      */
@@ -22,6 +23,7 @@ public interface Storage {
     
     
     /**
+     * Gets the project with the given name. 
      * @param name Name of the wanted Project.
      * @throws StorageException If anything fails.
      * @return the Project instance.
@@ -30,6 +32,7 @@ public interface Storage {
     
     
     /**
+     * Lists all saved projects.
      * @throws StorageException If anything fails.
      * @return String array of all saved projects.
      */
@@ -37,6 +40,7 @@ public interface Storage {
     
     
     /**
+     * Deletes given project.
      * @param project Project to be deleted.
      * @throws StorageException If anything fails.
      */
@@ -44,6 +48,7 @@ public interface Storage {
     
     
     /**
+     * Deletes project with the given projectName attribute.
      * @param projectName Name of project to be deleted.
      * @throws StorageException If anything fails.
      */
@@ -51,6 +56,7 @@ public interface Storage {
     
     
     /**
+     * Renames the given project.
      * @param project Project to be renamed.
      * @param newName new name for project
      * @throws StorageException If anything fails.
@@ -59,6 +65,7 @@ public interface Storage {
     
    
     /**
+     * Checks if a projectName is already in use. 
      * @param name Name of the project.
      * @return true/false
      * @throws StorageException If anything fails.

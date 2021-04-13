@@ -46,6 +46,7 @@ public class DynamicList<T> {
 
 
     /**
+     * Gets the current item count of the list.
      * @return Number of items stored currently in the list. 
      */
     public int count() {
@@ -54,6 +55,7 @@ public class DynamicList<T> {
     
     
     /**
+     * Appends item to the list. Expands list if needed.
      * @param item Refrence to be appended to the list.
      */
     public void append(T item) {
@@ -136,11 +138,19 @@ public class DynamicList<T> {
     }
     
     
+    /**
+     * Calculates whether the list needs to be expanded.
+     * @return true if expansion is needed, false if not.
+     */
     private boolean expansionNeeded() {
         return (double)count / (double)size > EXPAND_THRESHOLD;
     }
     
     
+    /**
+     * Calculates whether the list needs to be shrinked.
+     * @return true if shrinking is needed, false if not.
+     */
     private boolean shrinkNeeded() {
         boolean result = false;
         if ((double)count / (double)size < SHRINK_THRESHOLD && size > START_SIZE) {
@@ -200,6 +210,10 @@ public class DynamicList<T> {
     }
     
     
+    /**
+     * Copies items from an array.
+     * @param items array from which items are copied.
+     */
     private void copyItemsFrom(T[] items) {
         for (int i = 0; i < items.length; i++) {
             data[i] = items[i];
@@ -207,6 +221,11 @@ public class DynamicList<T> {
     }
     
     
+    /**
+     * Pop item using a negative index.
+     * @param index negative index of item to be popped.
+     * @return the item in the given index
+     */
     private T popWithNegativeIndex(int index) {
         if (Math.abs(index) > count) {
             throw new IndexOutOfBoundsException();
@@ -215,6 +234,12 @@ public class DynamicList<T> {
     }
     
     
+    /**
+     * Gets item with a given index.
+     * @param index index of item
+     * @return the item with the given index
+     * @throws IndexOutOfBoundsException
+     */
     private T getByNegativeIndex(int index) throws IndexOutOfBoundsException {
         if (Math.abs(index) > count) {
             throw new IndexOutOfBoundsException();

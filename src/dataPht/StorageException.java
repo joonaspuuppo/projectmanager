@@ -12,6 +12,7 @@ public class StorageException extends Exception {
     private String info;
     
     /**
+     * Constructor for StorageException.
      * @param info An error message ready to be shown to the user directly.
      */
     public StorageException(String info) {
@@ -20,6 +21,7 @@ public class StorageException extends Exception {
     }
 
     /**
+     * Gets info of a StorageException.
      * @return The information on this error.
      * This can be displayed to the user directly.
      */

@@ -1,6 +1,7 @@
 package dataPht;
 
 /**
+ * Tag associated with one or more tasks within a project.
  * @author Joonas Puuppo, Valtteri Rajalainen
  * @version 0.6 Apr 1, 2021
  */
@@ -17,6 +18,7 @@ public class Tag {
     }
     
     /**
+     * Gets name of tag.
      * @return name
      */
     public String getName() {

@@ -2,6 +2,7 @@ package dataPht;
 
 
 /**
+ * Priority levels for tasks.
  * @author Joonas Puuppo, Valtteri Rajalainen
  * @version 0.6 Apr 1, 2021
  */

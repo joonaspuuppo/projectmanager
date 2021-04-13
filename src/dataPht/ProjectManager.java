@@ -1,6 +1,5 @@
 package dataPht;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.regex.*;
 
@@ -47,6 +46,7 @@ public class ProjectManager {
     
     
     /**
+     * Lists all projects.
      * @return An array of all Project names created.
      * @throws StorageException If any errors occur.
      */
@@ -56,6 +56,7 @@ public class ProjectManager {
     
     
     /**
+     * Opens a given project.
      * @param name Name of the Project.
      * @return Project loaded form storage.
      * @throws StorageException If any errors occur.
@@ -93,6 +94,7 @@ public class ProjectManager {
     
     
     /**
+     * Removes current project.
      * @throws StorageException If any errors occur.
      */
     public void removeCurrentProject() throws StorageException {
