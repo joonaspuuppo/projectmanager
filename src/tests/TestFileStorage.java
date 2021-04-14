@@ -15,9 +15,6 @@ import dataPht.StorageException;
 
 
 /**
- * @author Valtteri Rajalainen, Joonas Puuppo
- * @version 0.6, Mar 15, 2021
- * 
  * <b> == ONLY FOR TESTING == </b>
  * 
  * A wrapper class for FileStorage to gain access
@@ -29,6 +26,9 @@ import dataPht.StorageException;
  * When creating Project instances, filepath or anything else for testing,
  * make sure that all names are safe for the filesystem.
  * Storage implementations don't perform any checks for safety of the input.  
+ * @author Joonas Puuppo, Valtteri Rajalainen
+ * @version 1.0 Apr 14, 2021
+ *
  */
 public class TestFileStorage extends FileStorage {
 

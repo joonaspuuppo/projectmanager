@@ -11,8 +11,8 @@ import dataPht.RelationEntry;
 
 /**
  * Testing PhtSerializer.
- * @author Joonas Puuppo
- * @version Apr 14, 2021
+ * @author Joonas Puuppo, Valtteri Rajalainen
+ * @version 1.0 Apr 14, 2021
  */
 public class SerializerTests {
     

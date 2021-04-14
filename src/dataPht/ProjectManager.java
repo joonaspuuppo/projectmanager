@@ -7,7 +7,7 @@ import java.util.regex.*;
 /**
  * Class for passing data between file storage and a project.
  * @author Joonas Puuppo, Valtteri Rajalainen
- * @version 0.6 Apr 1, 2021
+ * @version 1.0 Apr 14, 2021
  * valtteri.a.rajalainen@student.jyu.fi
  * joonas.a.j.puuppo@student.jyu.fi
  */

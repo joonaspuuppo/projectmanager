@@ -9,8 +9,8 @@ import dataPht.StorageException;
 
 /**
  * Testing ProjectManager.
- * @author varajala
- * @version Feb 19, 2021
+ * @author Joonas Puuppo, Valtteri Rajalainen
+ * @version 1.0 Apr 14, 2021
  */
 public class ProjectManagerTest {
     

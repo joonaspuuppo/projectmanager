@@ -17,9 +17,9 @@ import dataPht.Task;
 
 
 /**
- * @author Valtteri Rajalainen, Joonas Puuppo
- * @version Mar 15, 2021
  * Unit tests for storing data in files.
+ * @author Joonas Puuppo, Valtteri Rajalainen
+ * @version 1.0 Apr 14, 2021
  */
 public class FileStorageTests {
     
