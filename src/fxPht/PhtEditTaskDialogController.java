@@ -20,6 +20,8 @@ import javafx.stage.Stage;
 
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
+ * valtteri.a.rajalainen@student.jyu.fi
+ * joonas.a.j.puuppo@student.jyu.fi
  * @version 1.0 Apr 1, 2021
  */
 public class PhtEditTaskDialogController implements ModalControllerInterface<Task>, Initializable {
