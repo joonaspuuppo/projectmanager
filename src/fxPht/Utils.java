@@ -9,11 +9,11 @@ import javafx.scene.paint.Color;
 
 
 /**
+ * Utility functions for UI.
  * @author Joonas Puuppo, Valtteri Rajalainen
  * @version 1.0 Apr 1, 2021
  * valtteri.a.rajalainen@student.jyu.fi
  * joonas.a.j.puuppo@student.jyu.fi
- * Utility functions for UI.
  */
 public class Utils {
 
@@ -47,6 +47,7 @@ public class Utils {
     }
 
     /**
+     * Gets text fill color based on whether task is done or not.
      * @param task Task
      * @return Color for text in UI based on if Task is done or not.
      */
@@ -59,6 +60,7 @@ public class Utils {
     }
 
     /**
+     * Gets string for the "mark as done" button based on whether task is done or not.
      * @param task Task
      * @return A string that can be displayed in 'mark as done' - button.
      */

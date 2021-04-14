@@ -2,7 +2,6 @@ package fxPht;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -22,11 +21,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 /**
+ * Controller of the start window.
  * @author Joonas Puuppo, Valtteri Rajalainen
  * @version 1.0 Apr 1, 2021
  * valtteri.a.rajalainen@student.jyu.fi
  * joonas.a.j.puuppo@student.jyu.fi
- * Controller of the start window.
  */
 public class PhtStartGUIController implements Initializable {
 
@@ -56,7 +55,7 @@ public class PhtStartGUIController implements Initializable {
      */
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        // TODO Auto-generated method stub
+        // NOT USED
     }
     
     

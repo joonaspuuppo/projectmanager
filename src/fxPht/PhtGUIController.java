@@ -30,11 +30,11 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
+ * Controller of the main window.
  * @author Joonas Puuppo, Valtteri Rajalainen
  * @version 1.0 Apr 1, 2021
  * valtteri.a.rajalainen@student.jyu.fi
  * joonas.a.j.puuppo@student.jyu.fi
- * Controller of the main window.
  */
 public class PhtGUIController implements Initializable {
     
@@ -195,7 +195,7 @@ public class PhtGUIController implements Initializable {
 
     
     /**
-     * Hanlde event for saving.
+     * Handle event for saving.
      */
     @FXML private void handleSave() {
         try {
@@ -279,8 +279,7 @@ public class PhtGUIController implements Initializable {
     }
 
     /**
-     * Handle event for filtering tasks by priority.
-     * Filter Tasks list by tag
+     * Handle event for filtering tasks by tag.
      */
     @FXML private void handleFilterTasksByTag() { 
         String query = taskSearchTextField.getText().trim();
@@ -531,6 +530,6 @@ public class PhtGUIController implements Initializable {
      */
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        //
+        // NOT USED
     }
 }

@@ -19,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 /**
+ * Modal dialog for editing a task.
  * @author Joonas Puuppo, Valtteri Rajalainen
  * valtteri.a.rajalainen@student.jyu.fi
  * joonas.a.j.puuppo@student.jyu.fi
