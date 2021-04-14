@@ -4,6 +4,8 @@ package dataPht;
 /**
  * @author Joonas Puuppo, Valtteri Rajalainen
  * @version 0.6 Apr 1, 2021
+ * valtteri.a.rajalainen@student.jyu.fi
+ * joonas.a.j.puuppo@student.jyu.fi
  * Serialize Tasks into String format.
  */
 public class PhtSerializer {

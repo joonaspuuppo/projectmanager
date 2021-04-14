@@ -3,6 +3,8 @@ package dataPht;
 /**
  * @author Valtteri Rajalainen
  * @version 1.0 Apr 9, 2021
+ * valtteri.a.rajalainen@student.jyu.fi
+ * joonas.a.j.puuppo@student.jyu.fi
  * An exception thrown from all errors occuring while handling the storage.s 
  */
 public class StorageException extends Exception {
