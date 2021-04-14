@@ -9,6 +9,11 @@ import dataPht.Task;
 import dataPht.RelationEntry;
 
 
+/**
+ * Testing PhtSerializer.
+ * @author Joonas Puuppo
+ * @version Apr 14, 2021
+ */
 public class SerializerTests {
     
     /**
@@ -76,6 +81,9 @@ public class SerializerTests {
     }
     
     
+    /**
+     * Testing RelationEntry parsing.
+     */
     @Test
     public void testEntryParsing() {
         RelationEntry e = new RelationEntry(1, "tag");

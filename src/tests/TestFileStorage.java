@@ -55,6 +55,7 @@ public class TestFileStorage extends FileStorage {
     
     
     /**
+     * Gets test directory.
      * @return The filepath of the testing directory 
      */
     public String getTestDirectory() {
@@ -73,7 +74,7 @@ public class TestFileStorage extends FileStorage {
     
     
     /**
-     * Remove all files from the testing storage directory
+     * Removes all files from the testing storage directory
      */
     public void deleteAllFiles() {
         File dir = new File(getDirectory());
@@ -84,9 +85,10 @@ public class TestFileStorage extends FileStorage {
     
     
     /**
+     * Gets filepaths for given project.
      * @param p Project instance
      * @return String array of all different filepaths the
-     * FielStorage uses to store data for the given Project.
+     * FieldStorage uses to store data for the given Project.
      */
     public String[] getFilepathsForProject(Project p) {
         return generateFilePaths(p);
@@ -94,6 +96,7 @@ public class TestFileStorage extends FileStorage {
     
     
     /**
+     * Extracts project name from filepath.
      * @param filepath A filepath in the test storage directory
      * @return the name of the project, extracted from the filename
      */
@@ -103,6 +106,11 @@ public class TestFileStorage extends FileStorage {
     } 
     
     
+    /**
+     * Generates filepath for testing.
+     * @param filename name of file
+     * @return Filepath to the data directory as a String.
+     */
     public String generateTestFilepath(String filename) {
         return joinpath(filename);
     }
@@ -129,6 +137,7 @@ public class TestFileStorage extends FileStorage {
     }
     
     /**
+     * Reads lines from file.
      * @param filename Filename
      * @return List of lines in the file
      */
@@ -149,6 +158,7 @@ public class TestFileStorage extends FileStorage {
     
     
     /**
+     * Writes lines to file.
      * @param lines Array of lines to be written.
      * @param filepath Filepath as a String.
      */

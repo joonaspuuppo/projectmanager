@@ -3,7 +3,6 @@ package tests;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.*;
 
-import dataPht.Priority;
 import dataPht.Project;
 import dataPht.StorageException;
 import dataPht.Task;
@@ -21,7 +19,7 @@ import dataPht.Task;
 /**
  * @author Valtteri Rajalainen, Joonas Puuppo
  * @version Mar 15, 2021
- * Unittests for Storing data in files.
+ * Unit tests for storing data in files.
  */
 public class FileStorageTests {
     
@@ -55,6 +53,9 @@ public class FileStorageTests {
     }
     
     
+    /**
+     * Test saving a project.
+     */
     @Test
     public void testSaving() {
         Project p = generateDummyProject();
@@ -102,6 +103,9 @@ public class FileStorageTests {
     }
     
     
+    /**
+     * Test loading a project from file.
+     */
     @Test
     public void testLoading() {
         String taskFile = FS.generateTestFilepath(PROJECT_NAME + ".tasks.dat");

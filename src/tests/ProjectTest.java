@@ -13,6 +13,8 @@ import dataPht.Tag;
 
 
 /**
+ * Testing Project. 
+ * Tests also cover Task, Tag and RelationEntry.
  * @author varajala
  * @version Feb 19, 2021
  */

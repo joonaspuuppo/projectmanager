@@ -9,6 +9,7 @@ import dataPht.DynamicList;
 
 
 /**
+ * Testing DynamicList.
  * @author Joonas Puuppo, Valtteri Rajalainen
  * @version 0.5 Mar 11, 2021
  */
