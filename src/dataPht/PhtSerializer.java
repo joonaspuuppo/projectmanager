@@ -2,11 +2,11 @@ package dataPht;
 
 
 /**
+ * Serializes Tasks into String format.
  * @author Joonas Puuppo, Valtteri Rajalainen
  * @version 0.6 Apr 1, 2021
  * valtteri.a.rajalainen@student.jyu.fi
  * joonas.a.j.puuppo@student.jyu.fi
- * Serialize Tasks into String format.
  */
 public class PhtSerializer {
     
@@ -25,7 +25,10 @@ public class PhtSerializer {
         private static final long serialVersionUID = 1L;
         
         
-        @SuppressWarnings("javadoc")
+        
+        /**
+         * Constructor for SerializationException. 
+         */
         public SerializationException() {
             super();
         }
@@ -42,7 +45,7 @@ public class PhtSerializer {
      * Separators are escaped in NAME & INFO.
      * 
      * @param t Task
-     * @return a String representig a task
+     * @return a String representing a task
      */
     public static String parseString(Task t) {
         StringBuffer sb = new StringBuffer();
@@ -141,26 +144,53 @@ public class PhtSerializer {
     }
     
     
+    /**
+     * Restores line breaks.
+     * Used when reading task data from file.
+     * @param str string
+     * @return string with line breaks.
+     */
     private static String restoreNewlines(String str) {
         return str.replace(NEWLINE_ESCAPE, "\n");
     }
 
 
+    /**
+     * Removes line breaks from string.
+     * Used when writing task data to file.
+     * @param str string
+     * @return string without line breaks.
+     */
     private static String escapeNewlines(String str) {
         return str.replace("\n", NEWLINE_ESCAPE);
     }
     
     
+    /**
+     * Restores separator characters to string
+     * @param str string
+     * @return string with separators
+     */
     private static String restoreSeparators(String str) {
         return str.replace(SEPARATOR_ESCAPE, SEPARATOR);
     }
     
     
+    /**
+     * Escapes separators in string
+     * @param str string
+     * @return string with separators escaped
+     */
     private static String escapeSeparators(String str) {
         return str.replace(SEPARATOR, SEPARATOR_ESCAPE);
     }
     
     
+    /**
+     * Gets string representation of priority settings
+     * @param p priority
+     * @return string representation of priority setting
+     */
     private static String priorityToString(Priority p) {
         switch (p) {
             case HIGH:
@@ -175,6 +205,11 @@ public class PhtSerializer {
     }
     
     
+    /**
+     * Gets priority setting from string.
+     * @param str string
+     * @return priority setting
+     */
     private static Priority stringToPriority(String str) {
         switch (str) {
             case "3":
@@ -188,6 +223,12 @@ public class PhtSerializer {
         }
     }
     
+    /**
+     * Parses integer from string.
+     * @param str string
+     * @return integer parsed from string
+     * @throws SerializationException if parsing fails
+     */
     private static int parseInt(String str) {
         try {
             return Integer.parseInt(str);
@@ -197,11 +238,21 @@ public class PhtSerializer {
     }
     
     
+    /**
+     * Parses boolean from string.
+     * @param str string
+     * @return boolean value
+     */
     private static boolean parseBoolean(String str) {
             return Boolean.parseBoolean(str);
     }
     
     
+    /**
+     * Used for parsing task name or info from string.
+     * @param str string
+     * @return task name or info as string with escaped line breaks and separators.
+     */
     private static String parseTaskNameOrInfo(String str) {
         if (str == null || str.equals("")) {
             return DEFAULT;
@@ -212,6 +263,11 @@ public class PhtSerializer {
     }
     
     
+    /**
+     * Used for restoring line breaks and separators to task name or info.
+     * @param str string
+     * @return string with line breaks and separators restored
+     */
     private static String restoreTaskNameOrInfo(String str) {
         if (str.equals(DEFAULT)) return "";
         String restored = restoreNewlines(str);
