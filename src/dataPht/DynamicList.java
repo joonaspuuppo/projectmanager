@@ -1,6 +1,7 @@
 package dataPht;
 
 /**
+ * Dynamic list used for storing Relation entries.
  * @author Joonas Puuppo, Valtteri Rajalainen
  * valtteri.a.rajalainen@student.jyu.fi
  * joonas.a.j.puuppo@student.jyu.fi
