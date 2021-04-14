@@ -5,6 +5,7 @@ import java.util.regex.*;
 
 
 /**
+ * Class for passing data between file storage and a project.
  * @author Joonas Puuppo, Valtteri Rajalainen
  * @version 0.6 Apr 1, 2021
  * valtteri.a.rajalainen@student.jyu.fi
@@ -151,16 +152,23 @@ public class ProjectManager {
     }
     
     
+    /**
+     * @see #isValidProjectName(String)
+     */
     private boolean nameAlreadyExists(String name) throws StorageException{
         return storage.nameAlreadyExists(name);
     }
 
-
+    /**
+     * @see #isValidProjectName(String)
+     */
     private boolean endsWithDot(String name) {
         return name.endsWith(".");
     }
 
-
+    /**
+     * @see #isValidProjectName(String)
+     */
     private boolean containsReservedNames(String name) {
         final String[] RESERVED_NAMES = {
                 "CON", "PRN", "AUX", "NUL",
@@ -178,7 +186,9 @@ public class ProjectManager {
         return false;
     }
 
-
+    /**
+     * @see #isValidProjectName(String)
+     */
     private boolean containsReservedCharacters(String name) {
         final String RESTRICTED_CHARS = "<|>|:|\"|/|\\||\\?|\\*|-|\\\\";
         Pattern pattern = Pattern.compile(RESTRICTED_CHARS);
@@ -186,13 +196,17 @@ public class ProjectManager {
         return matcher.find();
     }
 
-
+    /**
+     * @see #isValidProjectName(String)
+     */
     private boolean endsWithWhitespace(String name) {
         char last = name.charAt(name.length()-1);
         return Character.isWhitespace(last);
     }
 
-
+    /**
+     * @see #isValidProjectName(String)
+     */
     private boolean startsWithWhitespace(String name) {
         char first = name.charAt(0);
         return Character.isWhitespace(first);

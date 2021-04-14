@@ -2,9 +2,9 @@ package dataPht;
 
 
 /**
+ * Interface for all external data storing.
  * @author Joonas Puuppo, Valtteri Rajalainen
  * @version 1.0 Apr 1, 2021
- * Interface for all external data storing.
  * valtteri.a.rajalainen@student.jyu.fi
  * joonas.a.j.puuppo@student.jyu.fi 
  */
