@@ -344,6 +344,7 @@ public class FileStorage implements Storage {
                     String line = in.nextLine();
                     RelationEntry entry = PhtSerializer.parseRelationEntry(line);
                     Task t = p.getTask(entry.getTaskId());
+                    if (t == null) continue; // temporary bugfix
                     p.addTagToTask(entry.getTagName(), t);
                 }
          
