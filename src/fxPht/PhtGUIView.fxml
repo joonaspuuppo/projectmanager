@@ -10,6 +10,7 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -64,6 +65,9 @@
                                              <HBox.margin>
                                                 <Insets bottom="5.0" right="5.0" top="5.0" />
                                              </HBox.margin>
+                                             <tooltip>
+                                                <Tooltip text="Etsi tehtävää projektista. Jos haluat hakea tagin tai prioriteetin perusteella, klikkaa &quot;Suodata&quot;." />
+                                             </tooltip>
                                           </TextField>
                                           <MenuBar>
                                             <menus>
@@ -78,6 +82,9 @@
                                              <padding>
                                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                              </padding>
+                                             <tooltip>
+                                                <Tooltip text="Nimi: näyttää tehtävät, joiden nimi sisältää hakusanan.&#10;Tagi: näyttää tehtävät, joilla on haettu tagi.&#10;Prioriteetti: Järjestää keskeneräiset tehtävät prioriteetin mukaan tärkeysjärjestykseen." />
+                                             </tooltip>
                                           </MenuBar>
                                        </children>
                                     </HBox>
@@ -105,6 +112,9 @@
                                                    <padding>
                                                       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                    </padding>
+                                                   <tooltip>
+                                                      <Tooltip text="Lisää uuden tehtävän.&#10;Jos ylläoleva kenttä on tyhjä, tehtävälle annetaan oletusnimi." wrapText="true" />
+                                                   </tooltip>
                                                 </Button>
                                              </children>
                                           </AnchorPane>
