@@ -483,7 +483,7 @@ public class PhtGUIController implements Initializable {
         } 
         // list tags marked as done at the end of the list (not in order of priority)
         for(Task task : this.currentProject.getAllTasks()) {
-            if (task.isDone()) taskList.add(task.getName() + " (valmis)", task);
+            if (task.isDone()) taskList.add(task.getName() + " ✓", task);
         }
     }
     
@@ -496,7 +496,7 @@ public class PhtGUIController implements Initializable {
         // lists all tasks associated with a tag that user is searching for
         for (Task task : this.currentProject.getAllTasksByTag(query)) {
             if (!task.isDone()) taskList.add(task.getName(), task);
-            if (task.isDone()) taskList.add(task.getName() + " (valmis)", task);
+            if (task.isDone()) taskList.add(task.getName() + " ✓", task);
         }
     }
     
@@ -510,7 +510,7 @@ public class PhtGUIController implements Initializable {
         for (Task task : this.currentProject.getAllTasks()) {
             if (task.getName().toLowerCase().contains(query)) {
                 if (!task.isDone()) taskList.add(task.getName(), task);
-                if (task.isDone()) taskList.add(task.getName() + " (valmis)", task);
+                if (task.isDone()) taskList.add(task.getName() + " ✓", task);
             }
         }
     }
