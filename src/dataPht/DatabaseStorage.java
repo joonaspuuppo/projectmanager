@@ -3,6 +3,8 @@ package dataPht;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 
 public class DatabaseStorage implements Storage {
@@ -40,8 +42,23 @@ public class DatabaseStorage implements Storage {
 
     @Override
     public String[] listAllProjects() throws StorageException {
-        // TODO Auto-generated method stub
-        return null;
+        File storageDir = new File(getDirectory());
+        
+        if (!storageDir.exists()) {
+            String info = "Tallennettu data on poistettu tai korruptoitunut.";
+            throw new StorageException(info);
+        }
+        
+        ArrayList<String> projectNames = new ArrayList<String>();
+        
+        for (File file : storageDir.listFiles()) {
+            String projectName = file.getName();
+            if (projectName != null) {
+                projectNames.add(projectName);
+            }
+        }
+        String[] nameArray = new String[projectNames.size()];
+        return projectNames.toArray(nameArray);
     }
 
 

@@ -63,6 +63,32 @@ public class DatabaseTests {
         }
     }
     
+    
+    @Test
+    public void testListingProjects() {
+        String[] projectNames = {"test1", "test2", "test3"};
+        
+        try {
+            String[] results = DS.listAllProjects();
+            assertTrue(results.length == 0);
+        } catch (StorageException e) {
+            e.printStackTrace();
+        }
+        
+        DS.makeTestFiles(projectNames);
+        
+        try {
+            String[] results = DS.listAllProjects();
+            assertTrue(results.length == projectNames.length);
+            List<String> nameList = Arrays.asList(projectNames);
+            for (String name : projectNames) {
+                assertTrue(nameList.contains(name));
+            }
+        } catch (StorageException e) {
+            e.printStackTrace();
+        }
+    }
+    
     /**
      * Set up a dummy project with known relations
      * between data to test the queries.
