@@ -20,6 +20,33 @@ public class DatabaseStorage implements Storage {
      * A separator String used to separate 'columns' inside the files.
      */
     protected final String FILE_SEPARATOR = System.getProperty("file.separator");
+    
+    /**
+     * The SQL tables and columns used to stored Project's data.
+     * New database is created for each Project.
+     */
+    protected final String[][] TABLES = {
+            
+            {"tasks",
+                "id INT NOT NULL, "
+                + "name TEXT NOT NULL, "
+                + "info TEXT NOT NULL, "
+                + "done INT NOT NULL, "
+                + "priority INT NOT NULL, "
+                + "UNIQUE(id)"
+              }, 
+              
+              {"tags",
+               "name TEXT NOT NULL, "
+               + "UNIQUE(name)"
+              }, 
+              
+              {"relations",
+                "taskid INT NOT NULL, "
+                + "tagname TEXT NOT NULL"
+              }
+          
+    }; 
 
     
     @Override
@@ -154,31 +181,11 @@ public class DatabaseStorage implements Storage {
      */
     protected void createTables(Connection conn) {
         String sql;
-        String[][] tables = {
-                {"tasks",
-                  "id INT NOT NULL, "
-                  + "name TEXT NOT NULL, "
-                  + "info TEXT NOT NULL, "
-                  + "done INT NOT NULL, "
-                  + "priority INT NOT NULL, "
-                  + "UNIQUE(id)"
-                }, 
-                
-                {"tags",
-                 "name TEXT NOT NULL, "
-                 + "UNIQUE(name)"
-                }, 
-                
-                {"relations",
-                  "taskid INT NOT NULL, "
-                  + "tagname TEXT NOT NULL"
-                }
-            };
         
         try {
             Statement st = conn.createStatement();
         
-            for (String[] table : tables) {
+            for (String[] table : TABLES) {
                 String name = table[0];
                 String tableSQL = table[1];
                 sql = String.format("CREATE TABLE IF NOT EXISTS %s (%s);", name, tableSQL);
