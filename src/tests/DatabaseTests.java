@@ -89,6 +89,33 @@ public class DatabaseTests {
         }
     }
     
+    
+    @Test
+    public void testNameValidation() {
+        String[] testNames = new String[] {
+                "project001",
+                "project002",
+                "project003",
+                "project004",
+                "project005",
+                };
+        DS.makeTestFiles(testNames);
+        
+        try {
+            assertTrue(DS.nameAlreadyExists("project001"));
+            assertTrue(DS.nameAlreadyExists("project002"));
+            assertTrue(DS.nameAlreadyExists("project003"));
+            assertTrue(DS.nameAlreadyExists("project004"));
+            assertTrue(DS.nameAlreadyExists("project005"));
+        
+            assertFalse(DS.nameAlreadyExists("project006"));
+            assertFalse(DS.nameAlreadyExists("project000"));
+            assertFalse(DS.nameAlreadyExists("asd"));
+        } catch (StorageException e) {
+            e.printStackTrace();
+        }
+    }
+    
     /**
      * Set up a dummy project with known relations
      * between data to test the queries.

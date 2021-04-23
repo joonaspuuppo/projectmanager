@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 
 public class DatabaseStorage implements Storage {
@@ -29,7 +30,36 @@ public class DatabaseStorage implements Storage {
 
     @Override
     public void save(Project project) throws StorageException {
-        // TODO Auto-generated method stub
+        String errorInfo = "Tallennus epäonnistui.";
+        Connection conn = null;
+        
+        try {
+            conn = createConnection(project.getName());
+            createTables(conn);
+        
+            List<Task> taskList = project.getAllTasks();
+            List<Tag> tagList = project.getAllTags();
+            DynamicList<RelationEntry> relationsList = project.getRelations();
+            
+            saveTasks(conn, taskList);
+            saveTags(conn, tagList);
+            saveRelations(conn, relationsList);
+        
+            conn.close();
+            
+        } catch (Exception e) {
+           throw new StorageException(errorInfo);
+       
+        } finally {
+           if (conn != null) {
+               try {
+                   conn.close();
+               } catch (SQLException e) {
+                  String info = "Tietokannan yhteyttä ei voida sulkea.";
+                  throw new StorageException(info);
+               }
+           }
+       }
     }
 
 
@@ -86,8 +116,17 @@ public class DatabaseStorage implements Storage {
 
     @Override
     public boolean nameAlreadyExists(String name) throws StorageException {
-        // TODO Auto-generated method stub
-        return false;
+        //Throws StorageException, which is "passed" to the caller
+        String[] projectNames = listAllProjects();
+        
+        boolean result = false;
+        for (String projectName : projectNames) {
+            if (projectName.equals(name)) {
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
     
     
@@ -108,6 +147,43 @@ public class DatabaseStorage implements Storage {
         return conn;
     }
     
+    
+    /**
+     * Check if the needed tables exist, and create them if not.
+     * @param conn Connection object to the database.
+     */
+    protected void createTables(Connection conn) {
+        //
+    }
+    
+    
+    /**
+     * @param conn Connection object ot the database.
+     * @param tasks List of all saved Tasks.
+     * @throws StorageException If the writing fails.
+     */
+    protected void saveTasks(Connection conn, List<Task> tasks) throws StorageException {
+        //
+    }
+    
+    
+    /**
+     * @param conn Connection object ot the database.
+     * @param tags List of all saved Tags.
+     * @throws StorageException If the writing fails.
+     */
+    protected void saveTags(Connection conn, List<Tag> tags) throws StorageException {
+        //
+    }
+    
+    /**
+     * @param conn Connection object ot the database.
+     * @param relations List of all saved RelationEntries.
+     * @throws StorageException If the writing fails.
+     */
+    protected void saveRelations(Connection conn, DynamicList<RelationEntry> relations) throws StorageException {
+        //
+    }
     
     /**
      * Ensure that the data directory exists.
