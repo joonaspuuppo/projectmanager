@@ -153,7 +153,46 @@ public class DatabaseStorage implements Storage {
      * @param conn Connection object to the database.
      */
     protected void createTables(Connection conn) {
-        //
+        String sql;
+        String[][] tables = {
+                {"tasks",
+                  "id INT NOT NULL, "
+                  + "name TEXT NOT NULL, "
+                  + "info TEXT NOT NULL, "
+                  + "done INT NOT NULL, "
+                  + "priority INT NOT NULL, "
+                  + "UNIQUE(id)"
+                }, 
+                
+                {"tags",
+                 "name TEXT NOT NULL, "
+                 + "UNIQUE(name)"
+                }, 
+                
+                {"relations",
+                  "taskid INT NOT NULL, "
+                  + "tagname TEXT NOT NULL"
+                }
+            };
+        
+        try {
+            Statement st = conn.createStatement();
+        
+            for (String[] table : tables) {
+                String name = table[0];
+                String tableSQL = table[1];
+                sql = String.format("CREATE TABLE IF NOT EXISTS %s (%s);", name, tableSQL);
+                st.executeUpdate(sql);
+                
+                sql = String.format("DELETE FROM %s WHERE 1=1;", name);
+                st.executeUpdate(sql);
+            }
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            //String info = "";
+            //throw new StorageException(info);
+        }
     }
     
     
@@ -163,7 +202,30 @@ public class DatabaseStorage implements Storage {
      * @throws StorageException If the writing fails.
      */
     protected void saveTasks(Connection conn, List<Task> tasks) throws StorageException {
-        //
+        String sql;
+        try {
+            Statement st = conn.createStatement();
+        
+            for (Task t : tasks) {
+                int id = t.getId();
+                String name = t.getName();
+                String info = t.getInfo();
+                int done = t.isDone() ? 0 : 1;
+                int priority = 0;
+                if (t.getPriority() == Priority.MEDIUM) priority = 1;
+                else if (t.getPriority() == Priority.HIGH) priority = 2;
+                
+                sql = "INSERT INTO tasks (id, name, info, done, priority) "
+                      + "VALUES (%d, '%s', '%s', %d, %d);";
+                sql = String.format(sql, id, name, info, done, priority);
+                st.executeUpdate(sql);
+            }
+            
+            st.close();
+        } catch (SQLException e) {
+            String info = "";
+            throw new StorageException(info);
+        }
     }
     
     

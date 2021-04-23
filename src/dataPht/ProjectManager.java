@@ -190,7 +190,7 @@ public class ProjectManager {
      * @see #isValidProjectName(String)
      */
     private boolean containsReservedCharacters(String name) {
-        final String RESTRICTED_CHARS = "<|>|:|\"|/|\\||\\?|\\*|-|\\\\";
+        final String RESTRICTED_CHARS = "<|>|:|;|\"|/|\\||\\?|\\*|-|\\\\";
         Pattern pattern = Pattern.compile(RESTRICTED_CHARS);
         Matcher matcher = pattern.matcher(name);
         return matcher.find();

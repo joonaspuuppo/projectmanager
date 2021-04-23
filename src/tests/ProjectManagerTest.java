@@ -84,6 +84,7 @@ public class ProjectManagerTest {
                 "\n",
                 "\nProjekti",
                 "\tProjekti",
+                "Pro;jekti",
         };
         ProjectManager pm = ProjectManager.getInstance();
         for (String name : invalidNames) {
