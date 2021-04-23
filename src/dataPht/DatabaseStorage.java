@@ -178,8 +178,9 @@ public class DatabaseStorage implements Storage {
     /**
      * Check if the needed tables exist, and create them if not.
      * @param conn Connection object to the database.
+     * @throws StorageException If table creation fails.
      */
-    protected void createTables(Connection conn) {
+    protected void createTables(Connection conn) throws StorageException {
         String sql;
         
         try {
@@ -196,9 +197,8 @@ public class DatabaseStorage implements Storage {
             }
             st.close();
         } catch (SQLException e) {
-            e.printStackTrace();
-            //String info = "";
-            //throw new StorageException(info);
+            String info = "Odottamaton virhe. Ei vooitu alustaa tietokantaa projektille.";
+            throw new StorageException(info);
         }
     }
     
@@ -230,7 +230,7 @@ public class DatabaseStorage implements Storage {
             
             st.close();
         } catch (SQLException e) {
-            String info = "";
+            String info = "Tallentaminen epäonnistui.";
             throw new StorageException(info);
         }
     }
@@ -242,7 +242,22 @@ public class DatabaseStorage implements Storage {
      * @throws StorageException If the writing fails.
      */
     protected void saveTags(Connection conn, List<Tag> tags) throws StorageException {
-        //
+        String sql;
+        try {
+            Statement st = conn.createStatement();
+        
+            for (Tag t : tags) {
+                String name = t.getName();                
+                sql = "INSERT INTO tags (name) VALUES ('%s');";
+                sql = String.format(sql, name);
+                st.executeUpdate(sql);
+            }
+            
+            st.close();
+        } catch (SQLException e) {
+            String info = "Tallentaminen epäonnistui.";
+            throw new StorageException(info);
+        }
     }
     
     /**

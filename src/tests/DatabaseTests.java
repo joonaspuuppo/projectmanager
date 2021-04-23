@@ -148,12 +148,12 @@ public class DatabaseTests {
             e1.printStackTrace();
         }
         verifyTasks(conn, p);
+        
+        verifyTags(conn, p);
+        verifyRelations(conn, p);
             
         /*
-            st = conn.createStatement();
-            sql = "SELECT * FROM tags";
-            st.executeQuery(sql);
-            st.close();
+            
         
             st = conn.createStatement();
             sql = "SELECT * FROM relations";
@@ -203,6 +203,31 @@ public class DatabaseTests {
         } catch (Exception e) {
            fail();
         }
+    }
+    
+    
+    private void verifyTags(Connection conn, Project p) {
+        try {
+            Statement st = conn.createStatement();
+            String sql = "SELECT * FROM tags";
+            ResultSet rows = st.executeQuery(sql);
+            st.close();
+            
+            int tagCount = 0;
+            while (rows.next()) {
+                tagCount += 1;
+                String name = rows.getString("name");
+                assertTrue(p.getAllTags().contains(name));
+                
+            }
+            assertEquals(p.getAllTags().size(), tagCount);
+        } catch (SQLException e) {
+            fail();
+        }
+    }
+    
+    private void verifyRelations(Connection conn, Project p) {
+        //
     }
     
     /**
