@@ -58,10 +58,8 @@ public class DatabaseStorage implements Storage {
     @Override
     public void save(Project project) throws StorageException {
         String errorInfo = "Tallennus epäonnistui.";
-        Connection conn = null;
         
-        try {
-            conn = createConnection(project.getName());
+        try (Connection conn = createConnection(project.getName())) {
             createTables(conn);
         
             List<Task> taskList = project.getAllTasks();
@@ -77,16 +75,7 @@ public class DatabaseStorage implements Storage {
         } catch (Exception e) {
            throw new StorageException(errorInfo);
        
-        } finally {
-           if (conn != null) {
-               try {
-                   conn.close();
-               } catch (SQLException e) {
-                  String info = "Tietokannan yhteyttä ei voida sulkea.";
-                  throw new StorageException(info);
-               }
-           }
-       }
+        }
     }
 
 
@@ -183,9 +172,9 @@ public class DatabaseStorage implements Storage {
     protected void createTables(Connection conn) throws StorageException {
         String sql;
         
-        try {
-            Statement st = conn.createStatement();
-        
+        //Statement can be created with usafe String.format.
+        //No userinput is used.
+        try (Statement st = conn.createStatement()) {
             for (String[] table : TABLES) {
                 String name = table[0];
                 String tableSQL = table[1];
@@ -197,7 +186,7 @@ public class DatabaseStorage implements Storage {
             }
             st.close();
         } catch (SQLException e) {
-            String info = "Odottamaton virhe. Ei vooitu alustaa tietokantaa projektille.";
+            String info = "Odottamaton virhe. Ei voitu alustaa tietokantaa projektille.";
             throw new StorageException(info);
         }
     }
@@ -209,23 +198,24 @@ public class DatabaseStorage implements Storage {
      * @throws StorageException If the writing fails.
      */
     protected void saveTasks(Connection conn, List<Task> tasks) throws StorageException {
-        String sql;
-        try {
-            Statement st = conn.createStatement();
-        
+        String sql = "INSERT INTO tasks (id, name, info, done, priority) "
+                     + "VALUES (?, ?, ?, ?, ?);";
+        try (PreparedStatement st = conn.prepareStatement(sql)) {
             for (Task t : tasks) {
                 int id = t.getId();
                 String name = t.getName();
                 String info = t.getInfo();
-                int done = t.isDone() ? 0 : 1;
+                int done = t.isDone() ? 1 : 0;
                 int priority = 0;
                 if (t.getPriority() == Priority.MEDIUM) priority = 1;
                 else if (t.getPriority() == Priority.HIGH) priority = 2;
                 
-                sql = "INSERT INTO tasks (id, name, info, done, priority) "
-                      + "VALUES (%d, '%s', '%s', %d, %d);";
-                sql = String.format(sql, id, name, info, done, priority);
-                st.executeUpdate(sql);
+                st.setInt(1, id);
+                st.setString(2, name);
+                st.setString(3, info);
+                st.setInt(4, done);
+                st.setInt(5, priority);
+                st.executeUpdate();
             }
             
             st.close();
@@ -242,15 +232,13 @@ public class DatabaseStorage implements Storage {
      * @throws StorageException If the writing fails.
      */
     protected void saveTags(Connection conn, List<Tag> tags) throws StorageException {
-        String sql;
-        try {
-            Statement st = conn.createStatement();
+        String sql = "INSERT INTO tags (name) VALUES (?);";
+        try (PreparedStatement st = conn.prepareStatement(sql)) {
         
             for (Tag t : tags) {
-                String name = t.getName();                
-                sql = "INSERT INTO tags (name) VALUES ('%s');";
-                sql = String.format(sql, name);
-                st.executeUpdate(sql);
+                String name = t.getName();
+                st.setString(1, name);
+                st.executeUpdate();
             }
             
             st.close();
@@ -266,7 +254,22 @@ public class DatabaseStorage implements Storage {
      * @throws StorageException If the writing fails.
      */
     protected void saveRelations(Connection conn, DynamicList<RelationEntry> relations) throws StorageException {
-        //
+        String sql = "INSERT INTO relations (taskid, tagname) VALUES (?, ?);";
+        try (PreparedStatement st = conn.prepareStatement(sql)) {
+            for (int i = 0; i < relations.count(); i++) {
+                RelationEntry re = relations.get(i);
+                String tagname = re.getTagName();          
+                int taskid = re.getTaskId();
+                st.setInt(1, taskid);
+                st.setString(2, tagname);
+                st.executeUpdate();
+            }
+            
+            st.close();
+        } catch (SQLException e) {
+            String info = "Tallentaminen epäonnistui.";
+            throw new StorageException(info);
+        }
     }
     
     /**

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.List;
 import java.sql.*;
 
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.condition.*;
 import dataPht.Priority;
 import dataPht.Project;
 import dataPht.StorageException;
+import dataPht.Tag;
 import dataPht.Task;
 
 
@@ -26,6 +28,7 @@ public class DatabaseTests {
     private static final String TAG1 = "tag1";
     private static final String TAG2 = "tag2";
     private static final String TAG3 = "tag3";
+    private static final String[] TAG_NAMES = {TAG1, TAG2, TAG3};
     
     /**
      * Remove the testing directory and all of its contents.
@@ -127,12 +130,13 @@ public class DatabaseTests {
         try {
             DS.save(p);
         } catch (StorageException e) {
+            System.out.println(e.getInfo());
             e.printStackTrace();
         }
         
-        Connection conn = DS.connect(p.getName());
-        
-        verifyTasks(conn, p);
+        verifyTasks(p);
+        verifyTags(p);
+        verifyRelations(p);
         
         Task t1 = p.getTask(1);
         t1.markAsDone();
@@ -142,43 +146,28 @@ public class DatabaseTests {
         t2.setInfo("Some information...");
         t2.rename("some other task");
         
-        try {
+       try {
             DS.save(p);
         } catch (StorageException e1) {
             e1.printStackTrace();
         }
-        verifyTasks(conn, p);
-        
-        verifyTags(conn, p);
-        verifyRelations(conn, p);
-            
-        /*
-            
-        
-            st = conn.createStatement();
-            sql = "SELECT * FROM relations";
-            st.executeQuery(sql);
-            st.close();
-       */
-        
-       try {
-           conn.close();
-       } catch (SQLException e) {
-           // TODO Auto-generated catch block
-           e.printStackTrace();
-       }
+        verifyTasks(p);
+        verifyTags(p);
+        verifyRelations(p);
     }
 
 
-    private void verifyTasks(Connection conn, Project p) {
+    private void verifyTasks(Project p) {
         try {
+            Connection conn = DS.connect(p.getName());
             ResultSet rows;
             Statement st = conn.createStatement();
             String sql = "SELECT * FROM tasks";
             rows = st.executeQuery(sql);
-            st.close();
             
+            int taskCount = 0;
             while (rows.next()) {
+                taskCount += 1;
                 int id = rows.getInt("id");
                 String name = rows.getString("name");
                 String info = rows.getString("info");
@@ -199,35 +188,88 @@ public class DatabaseTests {
                 
                 if (t.isDone()) assertTrue(done == 1);
                 else if (!t.isDone()) assertTrue(done == 0);
+                
             }
+            assertEquals(p.getAllTasks().size(), taskCount);
+            st.close();
+            conn.close();
         } catch (Exception e) {
            fail();
         }
     }
     
     
-    private void verifyTags(Connection conn, Project p) {
+    private void verifyTags(Project p) {
         try {
+            Connection conn = DS.connect(p.getName());
             Statement st = conn.createStatement();
             String sql = "SELECT * FROM tags";
             ResultSet rows = st.executeQuery(sql);
-            st.close();
             
             int tagCount = 0;
+            boolean found;
             while (rows.next()) {
                 tagCount += 1;
+                found = false;
                 String name = rows.getString("name");
-                assertTrue(p.getAllTags().contains(name));
-                
+                for (String tagName : TAG_NAMES) {
+                    if (tagName.equals(name)) {
+                        assertTrue(true);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) fail();
             }
             assertEquals(p.getAllTags().size(), tagCount);
+            st.close();
+            conn.close();
         } catch (SQLException e) {
             fail();
         }
     }
     
-    private void verifyRelations(Connection conn, Project p) {
-        //
+    private void verifyRelations(Project p) {
+        Hashtable<String, List<Task>> relations = new Hashtable<String, List<Task>>();
+        for (Tag t : p.getAllTags()) {
+            List<Task> tasks = p.getAllTasksByTag(t.getName());
+            relations.put(t.getName(), tasks);
+        }
+        
+        try {
+            Connection conn = DS.connect(p.getName());
+            Statement st = conn.createStatement();
+            String sql = "SELECT * FROM relations";
+            ResultSet rows = st.executeQuery(sql);
+            
+            int relationCount = 0;
+            boolean found;
+            while (rows.next()) {
+                relationCount += 1;
+                found = false;
+                int taskid = rows.getInt("taskid");
+                String tagname = rows.getString("tagname");
+                List<Task> tasks = relations.get(tagname);
+                if (tasks == null) {
+                    found = true;
+                    continue;
+                }
+                for (Task t : tasks) {
+                    int id = t.getId();
+                    if (id == taskid) {
+                        found = true;
+                        break;
+                    }
+                }
+                
+                if (!found) fail();
+            }
+            assertEquals(p.getRelations().count(), relationCount);
+            st.close();
+            conn.close();
+        } catch (SQLException e) {
+            fail();
+        }
     }
     
     /**
