@@ -107,7 +107,7 @@ public class PhtSerializer {
         Task t = new Task(parseInt(taskAsArray[0]));
         t.rename(taskAsArray[1]);
         t.setInfo(taskAsArray[2]);
-        if (parseBoolean(taskAsArray[3])) t.markAsDone();
+        if (parseInt(taskAsArray[3]) == 1) t.markAsDone();
         t.setPriority(stringToPriority(taskAsArray[4]));
         
         
