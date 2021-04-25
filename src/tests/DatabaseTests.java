@@ -182,9 +182,9 @@ public class DatabaseTests {
                 assertEquals(t.getName(), name);
                 assertEquals(t.getInfo(), info);
                 
-                if (t.getPriority() == Priority.LOW) assertTrue(priority == 0);
-                else if (t.getPriority() == Priority.MEDIUM) assertTrue(priority == 1);
-                else if (t.getPriority() == Priority.HIGH) assertTrue(priority == 2);
+                if (t.getPriority() == Priority.LOW) assertTrue(priority == 1);
+                else if (t.getPriority() == Priority.MEDIUM) assertTrue(priority == 2);
+                else if (t.getPriority() == Priority.HIGH) assertTrue(priority == 3);
                 
                 if (t.isDone()) assertTrue(done == 1);
                 else if (!t.isDone()) assertTrue(done == 0);
