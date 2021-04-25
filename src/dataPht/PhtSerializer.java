@@ -97,6 +97,23 @@ public class PhtSerializer {
         return task;
     }
     
+    /**
+     * Constructs a task from an array.
+     * Used when reading project data from SQL database.
+     * @param taskAsArray String array of task data
+     * @return task
+     */
+    public static Task parseTask(String[] taskAsArray) {
+        Task t = new Task(parseInt(taskAsArray[0]));
+        t.rename(taskAsArray[1]);
+        t.setInfo(taskAsArray[2]);
+        if (parseBoolean(taskAsArray[3])) t.markAsDone();
+        t.setPriority(stringToPriority(taskAsArray[4]));
+        
+        
+        
+        return t;
+    }
     
     /**
      * Serialize a RelationEntry to a String.

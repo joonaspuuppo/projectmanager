@@ -15,7 +15,7 @@ public class ProjectManager {
     
     private static ProjectManager instance = null;
     
-    private Storage storage = new FileStorage();
+    private Storage storage = new DatabaseStorage();
     private Project currentProject;
     
     

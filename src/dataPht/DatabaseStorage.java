@@ -1,15 +1,18 @@
 package dataPht;
-
 import java.io.File;
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
-
+/**
+ * Class for storing data in an SQL database.
+ * Each project has its own database.
+ * @author Joonas Puuppo, Valtteri Rajalainen
+ * valtteri.a.rajalainen@student.jyu.fi
+ * joonas.a.j.puuppo@student.jyu.fi 
+ * @version 1.1 Apr 25, 2021
+ */
 public class DatabaseStorage implements Storage {
-    
     
     /**
      * The directory used to store all data.
@@ -48,7 +51,7 @@ public class DatabaseStorage implements Storage {
           
     }; 
 
-    
+
     @Override
     public void initialize() throws StorageException {
         setupStorageDirectory();
@@ -81,8 +84,54 @@ public class DatabaseStorage implements Storage {
 
     @Override
     public Project getProject(String name) throws StorageException {
-        // TODO Auto-generated method stub
-        return null;
+        if (!nameAlreadyExists(name)) {
+            String info = "Project doesn't exist";
+            throw new StorageException(info);    
+        }
+        Project project = new Project(name);
+        
+        //Throws StorageException, which is "passed" to the caller
+        loadTasks(project);
+        generateRelations(project);
+        return project;
+    }
+
+    private void generateRelations(Project project) throws StorageException {
+        try (Connection con = createConnection(project.getName());
+                PreparedStatement sql = con.prepareStatement("SELECT * FROM relations")) {
+            try (ResultSet results = sql.executeQuery() ) {  
+                while (results.next()) {
+                    RelationEntry entry = new RelationEntry(results.getInt(1), results.getString(2));
+                    Task t = project.getTask(entry.getTaskId());
+                    project.addTagToTask(entry.getTagName(), t);
+                }
+            }
+        } catch (SQLException e) {
+            String info = "Tietokannan lukeminen epäonnistui.";
+            throw new StorageException(info);
+        }
+        
+    }
+
+
+    private void loadTasks(Project project) throws StorageException {
+        try (Connection con = createConnection(project.getName());
+            PreparedStatement sql = con.prepareStatement("SELECT * FROM tasks")) {
+                try (ResultSet results = sql.executeQuery() ) {  
+                    while (results.next()) {
+                        String[] taskAsArray = new String[5];
+                        for (int i = 0; i < 5; i++) {
+                            taskAsArray[i] = results.getString(i+1);
+                        }
+                        Task t = PhtSerializer.parseTask(taskAsArray);
+                        project.insertTask(t);
+                    }
+                }
+        } catch (SQLException e) {
+              String info = "Tietokantaan yhdistäminen epäonnistui.";
+              throw new StorageException(info);
+        }
+        
     }
 
 
@@ -99,8 +148,9 @@ public class DatabaseStorage implements Storage {
         
         for (File file : storageDir.listFiles()) {
             String projectName = file.getName();
-            if (projectName != null) {
-                projectNames.add(projectName);
+            String projectNameWithoutFileExtension = projectName.replace(".db", "");
+            if (projectNameWithoutFileExtension != null) {
+                projectNames.add(projectNameWithoutFileExtension);
             }
         }
         String[] nameArray = new String[projectNames.size()];
@@ -108,25 +158,32 @@ public class DatabaseStorage implements Storage {
     }
 
 
+
     @Override
     public void deleteProject(Project project) throws StorageException {
-        // TODO Auto-generated method stub
-
+        deleteProject(project.getName());
     }
 
 
     @Override
     public void deleteProject(String projectName) throws StorageException {
-        // TODO Auto-generated method stub
-
+        if (nameAlreadyExists(projectName)) {
+            File databaseFile = new File(joinpath(projectName) + ".db");
+            if (databaseFile.delete() == false) {
+                String info = "Projektin poisto epäonnistui";
+                throw new StorageException(info);
+            }
+        }
     }
 
 
     @Override
-    public void renameProject(Project project, String newName)
-            throws StorageException {
-        // TODO Auto-generated method stub
-
+    public void renameProject(Project project, String newName) throws StorageException {
+        String oldName = project.getName();
+        project.setName(newName);
+        //Throws StorageException, which is "passed" to the caller
+        save(project);
+        deleteProject(oldName);
     }
 
 
@@ -144,7 +201,6 @@ public class DatabaseStorage implements Storage {
         }
         return result;
     }
-    
     
     /**
      * @param databaseName name of the database.
@@ -189,11 +245,12 @@ public class DatabaseStorage implements Storage {
             String info = "Odottamaton virhe. Ei voitu alustaa tietokantaa projektille.";
             throw new StorageException(info);
         }
+        
     }
     
     
     /**
-     * @param conn Connection object ot the database.
+     * @param conn Connection object of the database.
      * @param tasks List of all saved Tasks.
      * @throws StorageException If the writing fails.
      */
@@ -206,9 +263,9 @@ public class DatabaseStorage implements Storage {
                 String name = t.getName();
                 String info = t.getInfo();
                 int done = t.isDone() ? 1 : 0;
-                int priority = 0;
-                if (t.getPriority() == Priority.MEDIUM) priority = 1;
-                else if (t.getPriority() == Priority.HIGH) priority = 2;
+                int priority = 1;
+                if (t.getPriority() == Priority.MEDIUM) priority = 2;
+                else if (t.getPriority() == Priority.HIGH) priority = 3;
                 
                 st.setInt(1, id);
                 st.setString(2, name);
@@ -249,7 +306,7 @@ public class DatabaseStorage implements Storage {
     }
     
     /**
-     * @param conn Connection object ot the database.
+     * @param conn Connection object of the database.
      * @param relations List of all saved RelationEntries.
      * @throws StorageException If the writing fails.
      */
