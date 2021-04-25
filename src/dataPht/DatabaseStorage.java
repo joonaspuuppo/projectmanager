@@ -148,7 +148,7 @@ public class DatabaseStorage implements Storage {
         
         for (File file : storageDir.listFiles()) {
             String projectName = file.getName();
-            String projectNameWithoutFileExtension = projectName.replace(".db", "");
+            String projectNameWithoutFileExtension = projectName.replaceFirst("[.][^.]+$", "");
             if (projectNameWithoutFileExtension != null) {
                 projectNames.add(projectNameWithoutFileExtension);
             }

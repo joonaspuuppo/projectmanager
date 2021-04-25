@@ -119,7 +119,6 @@ public class DatabaseTests {
         }
     }
     
-    
     /**
      * Test saving a project.
      */
@@ -154,6 +153,98 @@ public class DatabaseTests {
         verifyTasks(p);
         verifyTags(p);
         verifyRelations(p);
+    }
+    
+    /**
+     * Test loading a project from database.
+     */
+    @Test
+    public void testLoading() {
+        String projectName = "loadingtest";
+        Project p = generateDummyProject(projectName);
+        try {
+            DS.save(p);
+        } catch (StorageException e) {
+            System.out.println(e.getInfo());
+            e.printStackTrace();
+        }
+        try {
+            p = DS.getProject(projectName);
+            assertEquals(projectName, p.getName());
+            
+            assertEquals(4, p.getAllTasks().size());
+            Task t1 = p.getTask(1);
+            Task t2 = p.getTask(2);
+            Task t3 = p.getTask(3);
+            assertTrue(p.getTask(4) != null);
+            
+            List<Task> tagList1 = p.getAllTasksByTag(TAG1);
+            List<Task> tagList2 = p.getAllTasksByTag(TAG2);
+            List<Task> tagList3 = p.getAllTasksByTag(TAG3);
+            
+            assertEquals(1, tagList1.size());
+            assertTrue(tagList1.contains(t1));
+            
+            assertEquals(2, tagList2.size());
+            assertTrue(tagList2.contains(t1));
+            assertTrue(tagList2.contains(t2));
+            
+            assertEquals(2, tagList3.size());
+            assertTrue(tagList3.contains(t2));
+            assertTrue(tagList3.contains(t3));
+        } catch (StorageException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Test project deletion.
+     */
+    @Test
+    public void testProjectDeletion() {
+        Project p = generateDummyProject("deletingtest");
+        
+        try {
+            DS.save(p);
+            assertEquals("deletingtest", DS.listAllProjects()[0]);
+            DS.deleteProject(p);
+            assertEquals(0, DS.listAllProjects().length);
+        
+            p = generateDummyProject("deletingtest");
+            DS.save(p);
+            assertEquals("deletingtest", DS.listAllProjects()[0]);
+            DS.deleteProject("deletingtest");
+            assertEquals(0, DS.listAllProjects().length);
+        } catch (StorageException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    /**
+     * Test renaming of a project.
+     */
+    @Test
+    public void testProjectRenaming() {
+        String projectName = "renamingtest";
+        Project p = generateDummyProject(projectName);
+        
+        try {
+            DS.save(p);
+            DS.renameProject(p, "newName");
+        } catch (StorageException e) {
+            e.printStackTrace();
+        }
+        
+        assertEquals("newName", p.getName());
+        
+        try {
+            assertTrue(DS.nameAlreadyExists("newName"));
+            assertFalse(DS.nameAlreadyExists("renamingtest"));
+            assertTrue(DS.listAllProjects()[0].equals("newName"));
+        } catch (StorageException e) {
+            e.printStackTrace();
+        }
     }
 
 
