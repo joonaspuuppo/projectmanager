@@ -96,6 +96,11 @@ public class DatabaseStorage implements Storage {
         return project;
     }
 
+    /**
+     * Generates relations between Tasks and Tags within a given project.
+     * @param project given project
+     * @throws StorageException when SQL connection fails.
+     */
     private void generateRelations(Project project) throws StorageException {
         try (Connection con = createConnection(project.getName());
                 PreparedStatement sql = con.prepareStatement("SELECT * FROM relations")) {
@@ -114,6 +119,11 @@ public class DatabaseStorage implements Storage {
     }
 
 
+    /**
+     * Loads Tasks to a given Project.
+     * @param project given project
+     * @throws StorageException when SQL connection fails.
+     */
     private void loadTasks(Project project) throws StorageException {
         try (Connection con = createConnection(project.getName());
             PreparedStatement sql = con.prepareStatement("SELECT * FROM tasks")) {
@@ -203,6 +213,7 @@ public class DatabaseStorage implements Storage {
     }
     
     /**
+     * Creates a Connection to a specified database.
      * @param databaseName name of the database.
      * @return The sql.Connection.
      * @throws StorageException Thrown if connection can't be established.
@@ -250,6 +261,7 @@ public class DatabaseStorage implements Storage {
     
     
     /**
+     * Saves Tasks to a given database.
      * @param conn Connection object of the database.
      * @param tasks List of all saved Tasks.
      * @throws StorageException If the writing fails.
@@ -284,6 +296,7 @@ public class DatabaseStorage implements Storage {
     
     
     /**
+     * Saves tags to a given database.
      * @param conn Connection object ot the database.
      * @param tags List of all saved Tags.
      * @throws StorageException If the writing fails.
@@ -306,6 +319,7 @@ public class DatabaseStorage implements Storage {
     }
     
     /**
+     * Saves relations between Tasks and Tags to a given database.
      * @param conn Connection object of the database.
      * @param relations List of all saved RelationEntries.
      * @throws StorageException If the writing fails.
