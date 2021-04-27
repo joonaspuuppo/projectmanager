@@ -80,6 +80,25 @@ public class SerializerTests {
         assertEquals("", t.getInfo());
     }
     
+    /**
+     * Test parsing a task from a String array.
+     */
+    @Test
+    public void testTaskParsingFromArray() {
+        String[] taskAsArray = new String[5];
+        taskAsArray[0] = "1";
+        taskAsArray[1] = "do something";
+        taskAsArray[2] = "some task to be done";
+        taskAsArray[3] = "0";
+        taskAsArray[4] = "1";
+        
+        Task t = PhtSerializer.parseTask(taskAsArray);
+        assertEquals(t.getId(), 1);
+        assertEquals(t.getName(), "do something");
+        assertEquals(t.getPriority(), Priority.LOW);
+        assertEquals(t.isDone(), false);
+        assertEquals(t.getInfo(), "some task to be done");
+    }
     
     /**
      * Testing RelationEntry parsing.
