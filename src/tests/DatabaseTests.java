@@ -11,7 +11,6 @@ import java.sql.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.*;
 
 import dataPht.Priority;
 import dataPht.Project;
@@ -20,6 +19,14 @@ import dataPht.Tag;
 import dataPht.Task;
 
 
+/**
+ * Tests for DatabaseStorage.
+ * @author Joonas Puuppo, Valtteri Rajalainen
+ * valtteri.a.rajalainen@student.jyu.fi
+ * joonas.a.j.puuppo@student.jyu.fi 
+ * @version 1.1 Apr 27, 2021
+ *
+ */
 public class DatabaseTests {
         
     private static final TestDatabaseStorage DS = new TestDatabaseStorage();
@@ -51,22 +58,24 @@ public class DatabaseTests {
     }
     
     
+    /**
+     * Tests SQL connection to database.
+     */
     @Test
     public void testConnection() {
         DS.makeTestFiles(new String[] {"testdb.db"});
-        Connection conn = DS.connect("testdb");
-        assertTrue(conn != null);
-        
-        if (conn == null) return;
-        try {
-            conn.close();
+        try (Connection conn = DS.connect("testdb")) {
+            assertTrue(conn != null);
+            if (conn == null) return;
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
     
     
+    /**
+     * Test listing projects. 
+     */
     @Test
     public void testListingProjects() {
         String[] projectNames = {"test1", "test2", "test3"};
@@ -93,6 +102,9 @@ public class DatabaseTests {
     }
     
     
+    /**
+     * Test checking if project name is already in use.
+     */
     @Test
     public void testNameValidation() {
         String[] testNames = new String[] {
@@ -248,14 +260,15 @@ public class DatabaseTests {
     }
 
 
+    /**
+     * Verifies task data in database.
+     * @param p project
+     */
     private void verifyTasks(Project p) {
-        try {
-            Connection conn = DS.connect(p.getName());
-            ResultSet rows;
-            Statement st = conn.createStatement();
-            String sql = "SELECT * FROM tasks";
-            rows = st.executeQuery(sql);
-            
+        String sql = "SELECT * FROM tasks";
+        try (Connection conn = DS.connect(p.getName()); 
+             Statement st = conn.createStatement();
+             ResultSet rows = st.executeQuery(sql)) { 
             int taskCount = 0;
             while (rows.next()) {
                 taskCount += 1;
@@ -282,21 +295,21 @@ public class DatabaseTests {
                 
             }
             assertEquals(p.getAllTasks().size(), taskCount);
-            st.close();
-            conn.close();
         } catch (Exception e) {
            fail();
         }
     }
     
     
+    /**
+     * Verifies tag data in database.
+     * @param p project
+     */
     private void verifyTags(Project p) {
-        try {
-            Connection conn = DS.connect(p.getName());
-            Statement st = conn.createStatement();
-            String sql = "SELECT * FROM tags";
-            ResultSet rows = st.executeQuery(sql);
-            
+        String sql = "SELECT * FROM tags";
+        try (Connection conn = DS.connect(p.getName());
+             Statement st = conn.createStatement();
+             ResultSet rows = st.executeQuery(sql)) {
             int tagCount = 0;
             boolean found;
             while (rows.next()) {
@@ -313,13 +326,15 @@ public class DatabaseTests {
                 if (!found) fail();
             }
             assertEquals(p.getAllTags().size(), tagCount);
-            st.close();
-            conn.close();
         } catch (SQLException e) {
             fail();
         }
     }
     
+    /**
+     * Verifies relation data in database.
+     * @param p project
+     */
     private void verifyRelations(Project p) {
         Hashtable<String, List<Task>> relations = new Hashtable<String, List<Task>>();
         for (Tag t : p.getAllTags()) {
@@ -327,12 +342,10 @@ public class DatabaseTests {
             relations.put(t.getName(), tasks);
         }
         
-        try {
-            Connection conn = DS.connect(p.getName());
-            Statement st = conn.createStatement();
-            String sql = "SELECT * FROM relations";
-            ResultSet rows = st.executeQuery(sql);
-            
+        String sql = "SELECT * FROM relations";
+        try (Connection conn = DS.connect(p.getName());
+             Statement st = conn.createStatement();
+             ResultSet rows = st.executeQuery(sql);) {
             int relationCount = 0;
             boolean found;
             while (rows.next()) {
@@ -351,13 +364,10 @@ public class DatabaseTests {
                         found = true;
                         break;
                     }
-                }
-                
+                } 
                 if (!found) fail();
             }
             assertEquals(p.getRelations().count(), relationCount);
-            st.close();
-            conn.close();
         } catch (SQLException e) {
             fail();
         }
