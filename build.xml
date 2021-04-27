@@ -31,6 +31,7 @@
             <zipfileset excludes="META-INF/*.SF" src="${dir.workspace}/jar/fxgui.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="${dir.workspace}/jar/Graphics.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="${dir.workspace}/jar/Music.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.workspace}/sqlite-jdbc-3.34.0.jar"/>
         </jar>
     </target>
 </project>
