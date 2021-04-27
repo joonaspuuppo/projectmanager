@@ -22,7 +22,7 @@
                   <Font name="System Bold" size="25.0" />
                </font>
             </Label>
-            <Label layoutX="10.0" layoutY="10.0" lineSpacing="5.0" text="v1.0 | © Joonas Puuppo &amp; Valtteri Rajalainen 2021" textAlignment="CENTER" textFill="#00000097" wrapText="true">
+            <Label layoutX="10.0" layoutY="10.0" lineSpacing="5.0" text="v1.1 | © Joonas Puuppo &amp; Valtteri Rajalainen 2021" textAlignment="CENTER" textFill="#00000097" wrapText="true">
                <font>
                   <Font size="14.0" />
                </font>

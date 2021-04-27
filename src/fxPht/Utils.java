@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
 /**
  * Utility functions for UI.
  * @author Joonas Puuppo, Valtteri Rajalainen
- * @version 1.0 Apr 14, 2021
+ * @version 1.1 Apr 27, 2021
  * valtteri.a.rajalainen@student.jyu.fi
  * joonas.a.j.puuppo@student.jyu.fi
  */

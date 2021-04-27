@@ -21,7 +21,7 @@ import dataPht.StorageException;
  * make sure that all names are safe for the filesystem.
  * Storage implementations don't perform any checks for safety of the input.  
  * @author Joonas Puuppo, Valtteri Rajalainen
- * @version 1.0 Apr 14, 2021
+ * @version 1.1 Apr 27, 2021
  */
 public class TestDatabaseStorage extends DatabaseStorage {
     

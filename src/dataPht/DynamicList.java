@@ -5,7 +5,7 @@ package dataPht;
  * @author Joonas Puuppo, Valtteri Rajalainen
  * valtteri.a.rajalainen@student.jyu.fi
  * joonas.a.j.puuppo@student.jyu.fi
- * @version 1.0 Apr 14, 2021
+ * @version 1.1 Apr 27, 2021
  * @param <T> Type of objects in the list
  */
 public class DynamicList<T> {

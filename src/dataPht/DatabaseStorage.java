@@ -10,7 +10,7 @@ import java.util.List;
  * @author Joonas Puuppo, Valtteri Rajalainen
  * valtteri.a.rajalainen@student.jyu.fi
  * joonas.a.j.puuppo@student.jyu.fi 
- * @version 1.1 Apr 25, 2021
+ * @version 1.1 Apr 27, 2021
  */
 public class DatabaseStorage implements Storage {
     
@@ -71,10 +71,8 @@ public class DatabaseStorage implements Storage {
             
             saveTasks(conn, taskList);
             saveTags(conn, tagList);
-            saveRelations(conn, relationsList);
+            saveRelations(conn, relationsList); 
         
-            conn.close();
-            
         } catch (Exception e) {
            throw new StorageException(errorInfo);
        
@@ -102,20 +100,18 @@ public class DatabaseStorage implements Storage {
      * @throws StorageException when SQL connection fails.
      */
     private void generateRelations(Project project) throws StorageException {
-        try (Connection con = createConnection(project.getName());
-                PreparedStatement sql = con.prepareStatement("SELECT * FROM relations")) {
-            try (ResultSet results = sql.executeQuery() ) {  
+        try (Connection conn = createConnection(project.getName());
+             PreparedStatement sql = conn.prepareStatement("SELECT * FROM relations");
+             ResultSet results = sql.executeQuery()) {  
                 while (results.next()) {
                     RelationEntry entry = new RelationEntry(results.getInt(1), results.getString(2));
                     Task t = project.getTask(entry.getTaskId());
                     project.addTagToTask(entry.getTagName(), t);
                 }
-            }
         } catch (SQLException e) {
             String info = "Tietokannan lukeminen epäonnistui.";
             throw new StorageException(info);
         }
-        
     }
 
 
@@ -125,18 +121,17 @@ public class DatabaseStorage implements Storage {
      * @throws StorageException when SQL connection fails.
      */
     private void loadTasks(Project project) throws StorageException {
-        try (Connection con = createConnection(project.getName());
-            PreparedStatement sql = con.prepareStatement("SELECT * FROM tasks")) {
-                try (ResultSet results = sql.executeQuery() ) {  
-                    while (results.next()) {
-                        String[] taskAsArray = new String[5];
-                        for (int i = 0; i < 5; i++) {
-                            taskAsArray[i] = results.getString(i+1);
-                        }
-                        Task t = PhtSerializer.parseTask(taskAsArray);
-                        project.insertTask(t);
-                    }
+        try (Connection conn = createConnection(project.getName());
+             PreparedStatement sql = conn.prepareStatement("SELECT * FROM tasks");
+             ResultSet results = sql.executeQuery()) {  
+            while (results.next()) {
+                String[] taskAsArray = new String[5];
+                for (int i = 0; i < 5; i++) {
+                    taskAsArray[i] = results.getString(i+1);
                 }
+                Task t = PhtSerializer.parseTask(taskAsArray);
+                project.insertTask(t);
+            }
         } catch (SQLException e) {
               String info = "Tietokantaan yhdistäminen epäonnistui.";
               throw new StorageException(info);
