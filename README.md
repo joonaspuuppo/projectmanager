@@ -1,6 +1,5 @@
-# pohja
+# Project Manager
 
-Pohja kevään 2021 harjoitustöiden GIT-repoille
+A simple project manager.
 
-Lue käyttöohjeet TIMistä: <https://tim.jyu.fi/view/kurssit/tie/ohj2/tyokalut/git/ohj2git#fork>
-
+Created in collaboration with Valtteri Rajalainen as a part of the "Ohjelmointi 2" course at University of Jyväskylä in 2021.
